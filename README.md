@@ -4,7 +4,11 @@ This is a [DBOS app](https://docs.dbos.dev/) bootstrap for local development
 
 ## Getting Started
 
+### Enable docker ipv6
+Follow steps 1 to 3 of [how to docker ipv6](https://docs.docker.com/config/daemon/ipv6/).
+
 ```bash
+npm run install
 npm run build
 docker compose up
 ```
