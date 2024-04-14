@@ -10,6 +10,7 @@ Follow steps 1 to 3 of [how to docker ipv6](https://docs.docker.com/config/daemo
 ```bash
 npm run install
 npm run build
+cp .env.tpl .env
 docker compose up
 ```
 To see that it's working, visit this URL in your browser: [`http://localhost:3000/db/version`](http://localhost:3000/db/version).
