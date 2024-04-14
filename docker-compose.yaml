@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  app:
+    image: app/latest
+    container_name: app
+    build:
+      context: app
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./app/dbos-config.yaml:/home/node/app/dbos-config.yaml
+      - ./app/dist:/home/node/app/dist
+    environment:
+      DB_NAME: ${APP_DB_NAME}
+      DB_USER: ${APP_DB_USER}
+      DB_PASSWORD: ${APP_DB_PASSWORD}
+    networks:
+      - ip6net
+  db:
+    image: postgres-ssl:14.6
+    build:
+      context: db
+    shm_size: 128mb
+    container_name: db
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/create_db.sh:/docker-entrypoint-initdb.d/create_db.sh
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      APP_DB: ${APP_DB_NAME}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+
+    networks:
+      - ip6net
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+   ip6net:
+     enable_ipv6: true
+     ipam:
+       config:
+         - subnet: 2001:0DB8::/112
