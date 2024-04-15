@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dbos-app
+  namespace: {{ .Values.namespace }}
+
 spec:
   selector:
     matchLabels:
@@ -36,7 +38,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /dbos
+              path: /
               port: 3000
               scheme: HTTP
             periodSeconds: 10
@@ -46,7 +48,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /dbos
+              path: /
               port: 3000
               scheme: HTTP
             periodSeconds: 10
