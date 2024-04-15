@@ -7,8 +7,7 @@ metadata:
 
 spec:
   ports:
-    - name: "3000"
-      port: 3000
+    - port: 3000
       targetPort: 3000
   selector:
     service: dbos-app

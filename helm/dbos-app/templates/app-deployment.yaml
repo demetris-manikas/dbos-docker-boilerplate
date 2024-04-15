@@ -20,6 +20,12 @@ spec:
       containers:
         - name: dbos-app
           image: "localhost:32000/dbos-app:latest"
+          envFrom:
+            - configMapRef:
+                name: env-configmap
+            - secretRef:
+                name: env-secrets
+
           resources:
             requests:
               memory: "1Gi"
@@ -30,7 +36,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /
+              path: /dbos
               port: 3000
               scheme: HTTP
             periodSeconds: 10
@@ -40,7 +46,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /
+              path: /dbos
               port: 3000
               scheme: HTTP
             periodSeconds: 10
