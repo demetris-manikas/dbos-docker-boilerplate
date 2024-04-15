@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbos-app
+spec:
+  selector:
+    matchLabels:
+      service: dbos-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        service: dbos-app
+    spec:
+      containers:
+        - name: dbos-app
+          image: "localhost:32000/dbos-app:latest"
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: 1
+            limits:
+              memory: "4Gi"
+              cpu: 2
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 3000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+            initialDelaySeconds: 60
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 3000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+            initialDelaySeconds: 60
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+      restartPolicy: Always
+status: {}

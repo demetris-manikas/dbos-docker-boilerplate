@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbos-db
+  labels:
+    service: dbos-db
+
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    service: dbos-db

@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   app:
-    image: app/latest
-    container_name: app
+    image: localhost:32000/dbos-app:latest
+    container_name: dbos-app
     build:
       context: app
     ports:
@@ -18,15 +18,15 @@ services:
     networks:
       - ip6net
   db:
-    image: postgres-ssl:14.6
+    container_name: dbos-db
+    image: localhost:32000/dbos-db:latest
     build:
       context: db
     shm_size: 128mb
-    container_name: db
     restart: always
-    volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./db/create_db.sh:/docker-entrypoint-initdb.d/create_db.sh
+    # volumes:
+    #   - db_data:/var/lib/postgresql/data
+    #   - ./db/create_db.sh:/docker-entrypoint-initdb.d/create_db.sh
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

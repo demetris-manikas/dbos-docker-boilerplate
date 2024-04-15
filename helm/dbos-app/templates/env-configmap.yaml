@@ -1,0 +1,9 @@
+# Use config map for not-secret configuration data
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-configmap
+data:
+  APP_NAME: Mans Not Hot
+  APP_ENV: production
