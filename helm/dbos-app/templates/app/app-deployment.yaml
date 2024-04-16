@@ -21,14 +21,14 @@ spec:
         service: {{ $.Release.Name }}-app
     spec:
       volumes:
-        - name: dbos-app-dev
+        - name: {{ $.Release.Name }}-app-dev
           persistentVolumeClaim:
-            claimName: dbos-app-dev-pvc
+            claimName: {{ $.Release.Name }}-app-dev-pvc
       containers:
         - name: {{ $.Release.Name }}-app
           image: {{ .Values.registry }}/{{ .Values.images.app }}
           volumeMounts:
-            - name: dbos-app-dev
+            - name: {{ $.Release.Name }}-app-dev
               mountPath: /home/node/app
           envFrom:
             - configMapRef:

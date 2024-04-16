@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolume
 
 metadata:
-  name: dbos-app-dev
+  name: {{ $.Release.Name }}-app-dev
   labels:
     type: local
 
@@ -14,4 +14,4 @@ spec:
   accessModes:
     - ReadOnlyMany
   hostPath:
-    path: "/home/demetris/projects/dbos-docker-tpl/app"
+    path: {{ .Values.dev.appDir }}

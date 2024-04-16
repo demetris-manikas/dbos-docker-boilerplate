@@ -3,11 +3,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 
 metadata:
-  name: dbos-app-dev-pvc
+  name: {{ $.Release.Name }}-app-dev-pvc
 
 spec:
   storageClassName: manual
   accessModes:
     - ReadOnlyMany
-  volumeName: dbos-app-dev
+  volumeName: {{ $.Release.Name }}-app-dev
   resources: { requests: { storage: 1Gi } }
