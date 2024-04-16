@@ -3,12 +3,12 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: dbos-db
+  name: {{ $.Release.Name }}-db
 
 spec:
   selector:
     matchLabels:
-      service: dbos-db
+      service: {{ $.Release.Name }}-db
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,15 +18,15 @@ spec:
   template:
     metadata:
       labels:
-        service: dbos-db
+        service: {{ $.Release.Name }}-db
     spec:
       volumes:
         - name: dbos-db-data
           persistentVolumeClaim:
             claimName: dbos-db-data-pvc
       containers:
-        - name: dbos-db
-          image: "localhost:32000/dbos-db:latest"
+        - name: {{ $.Release.Name }}-db
+          image: {{ .Values.registry }}/{{ .Values.images.db }}
           volumeMounts:
             - name: dbos-db-data
               mountPath: /var/lib/postgresql
@@ -45,7 +45,7 @@ spec:
               memory: "4G"
               cpu: 2
           ports:
-            - containerPort: 5432
+            - containerPort: {{ .Values.db.port | default 5432}}
 
           imagePullPolicy: Always
       restartPolicy: Always

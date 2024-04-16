@@ -1,72 +1,29 @@
 namespace: dbos-app
 
-registry:
-  url: localhost:32000
+registry: localhost:32000
 
 images:
   db: dbos-db:latest
   app: dbos-app:latest
 
 ingress:
-  name: "dbos-app-ingress"
   className: "nginx"
   hosts:
     - host: dbos
       paths:
         - path: /
           pathType: Prefix
-          service: dbos-app
+          service: app
           port: 3000
   tls: []
 
+app:
+  port: 3000
+  targetPort: 3000
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
+db:
+  port: 5432
+  targetPort: 5432
 
 secrets:
   POSTGRES_USER: postgres

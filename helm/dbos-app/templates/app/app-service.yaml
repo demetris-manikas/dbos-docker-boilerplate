@@ -3,14 +3,14 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: dbos-app
+  name: {{ $.Release.Name }}-app
 
   labels:
-    service: dbos-app
+    service: {{ $.Release.Name }}-app
 
 spec:
   ports:
-    - port: 3000
-      targetPort: 3000
+    - port: {{ .Values.app.port | default 3000}}
+      targetPort: {{ .Values.app.targetPort | default 3000}}
   selector:
-    service: dbos-app
+    service: {{ $.Release.Name }}-app

@@ -6,5 +6,5 @@ metadata:
   name: env-configmap
 
 data:
-  APP_NAME: Mans Not Hot
+  APP_DB_HOSTNAME: {{ $.Release.Name }}-db
   APP_ENV: production

@@ -23,3 +23,5 @@ Congratulations! You just launched a DBOS application.
 - To learn how to deploy your application to DBOS Cloud, visit our [cloud quickstart](https://docs.dbos.dev/getting-started/quickstart-cloud/)
 - To learn more about DBOS, take a look at [our documentation](https://docs.dbos.dev/) or our [source code](https://github.com/dbos-inc/dbos-sdk).
 
+
+microk8s kubectl create token default

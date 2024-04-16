@@ -1,7 +1,9 @@
 #!/bin/sh
 
-cwd=$(pwd)
+contents_changed () {
+    while read foo; do
+        npm --prefix ../app run build
+    done
+}
 
-inotifywait -mr \
-  --timefmt '%d/%m/%y %H:%M' --format '%T %w %f' \
-  -e close_write ../app/dist | microk8s.kubectl set env deployment/dbos-app DATE=$() -n dbos-app
+inotifywait -mr --format '%:e %f' -e 'create,delete,close_write' ../app/src | contents_changed
