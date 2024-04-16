@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dbos-app
-  namespace: {{ .Values.namespace }}
+
   labels:
     service: dbos-app
 

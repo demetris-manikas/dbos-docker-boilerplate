@@ -24,9 +24,8 @@ services:
       context: db
     shm_size: 128mb
     restart: always
-    # volumes:
-    #   - db_data:/var/lib/postgresql/data
-    #   - ./db/create_db.sh:/docker-entrypoint-initdb.d/create_db.sh
+    volumes:
+      - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

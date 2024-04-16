@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dbos-app
-  namespace: {{ .Values.namespace }}
+
 
 spec:
   selector:
@@ -19,15 +19,21 @@ spec:
       labels:
         service: dbos-app
     spec:
+      volumes:
+        - name: dbos-app-dev
+          persistentVolumeClaim:
+            claimName: dbos-app-dev-pvc
       containers:
         - name: dbos-app
           image: "localhost:32000/dbos-app:latest"
+          volumeMounts:
+            - name: dbos-app-dev
+              mountPath: /home/node/app
           envFrom:
             - configMapRef:
                 name: env-configmap
             - secretRef:
                 name: app-db-secrets
-
           resources:
             requests:
               memory: "1Gi"
