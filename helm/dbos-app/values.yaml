@@ -29,7 +29,6 @@ dev:
   appDir: "/home/demetris/projects/dbos-docker-tpl/app"
   homeDir: "/tmp/"
 
-
 secrets:
   db:
     POSTGRES_USER: postgres
