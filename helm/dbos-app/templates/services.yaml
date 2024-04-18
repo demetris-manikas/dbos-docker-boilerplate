@@ -1,0 +1,15 @@
+{{- range $key, $service := .Values.services }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-{{ $key }}
+  labels:
+    service: {{ $.Release.Name }}-{{ $key }}
+spec:
+  ports:
+    - port: {{ $service.port }}
+      targetPort: {{ $service.targetPort }}
+  selector:
+    service: {{ $.Release.Name }}-{{ $key }}
+---
+{{- end }}

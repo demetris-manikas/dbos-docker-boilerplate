@@ -45,7 +45,7 @@ spec:
               memory: "4G"
               cpu: 2
           ports:
-            - containerPort: {{ .Values.db.port | default 5432}}
+            - containerPort: {{ .Values.services.db.port}}
 
           imagePullPolicy: Always
       restartPolicy: Always

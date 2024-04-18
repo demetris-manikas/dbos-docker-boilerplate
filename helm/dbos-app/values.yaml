@@ -17,13 +17,13 @@ ingress:
           port: 3000
   tls: []
 
-app:
-  port: 3000
-  targetPort: 3000
-
-db:
-  port: 5432
-  targetPort: 5432
+services:
+  app:
+      port: 3000
+      targetPort: 3000
+  db:
+      port: 5432
+      targetPort: 5432
 
 dev:
   appDir: "/home/demetris/projects/dbos-docker-tpl/app"
