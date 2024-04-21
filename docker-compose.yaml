@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: localhost:32000/dbos-app:latest
+    image: ${REGISTRY}dbos-app:latest
     container_name: dbos-app
     build:
       context: app
@@ -12,27 +12,36 @@ services:
       - ./app/dbos-config.yaml:/home/node/app/dbos-config.yaml
       - ./app/dist:/home/node/app/dist
     environment:
-      DB_NAME: ${APP_DB_NAME}
-      DB_USER: ${APP_DB_USER}
-      DB_PASSWORD: ${APP_DB_PASSWORD}
+      APP_DB_HOSTNAME: dbos-db
+      APP_DB_NAME: ${APP_DB_NAME}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - ip6net
   db:
     container_name: dbos-db
-    image: localhost:32000/dbos-db:latest
+    image: ${REGISTRY}dbos-db:latest
     build:
       context: db
     shm_size: 128mb
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "psql -c 'SELECT version()'"]
+      interval: 1s
+      timeout: 10s
+      retries: 3
+      start_period: 1s
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      APP_DB: ${APP_DB_NAME}
+      APP_DB_NAME: ${APP_DB_NAME}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
-
     networks:
       - ip6net
 

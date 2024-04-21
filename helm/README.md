@@ -1,1 +1,0 @@
-microk8s.kubectl config view --raw > ~/.kube/config
