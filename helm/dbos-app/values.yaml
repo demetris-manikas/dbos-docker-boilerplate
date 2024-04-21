@@ -1,0 +1,37 @@
+registry: localhost:32000
+
+images:
+  db: dbos-db:latest
+  app: dbos-app:latest
+
+ingress:
+  className: "nginx"
+  hosts:
+    - host: dbos
+      paths:
+        - path: /
+          pathType: Prefix
+          service: app
+          port: 3000
+  tls: []
+
+services:
+  app:
+      port: 3000
+      targetPort: 3000
+  db:
+      port: 5432
+      targetPort: 5432
+
+dev:
+  appDir: "/home/demetris/projects/dbos-docker-tpl/app"
+  homeDir: "/tmp/"
+
+secrets:
+  db:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+  app:
+    APP_DB_USER: app
+    APP_DB_NAME: app
+    APP_DB_PASSWORD: app

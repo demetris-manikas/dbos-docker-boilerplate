@@ -1,3 +1,5 @@
+REGISTRY=
+
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 

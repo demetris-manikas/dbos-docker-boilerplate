@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: {{ $.Release.Name }}-app
+
+spec:
+  selector:
+    matchLabels:
+      service: {{ $.Release.Name }}-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        service: {{ $.Release.Name }}-app
+    spec:
+      volumes:
+        - name: {{ $.Release.Name }}-app-dev
+          persistentVolumeClaim:
+            claimName: {{ $.Release.Name }}-app-dev-pvc
+      containers:
+        - name: {{ $.Release.Name }}-app
+          image: {{ .Values.registry }}/{{ .Values.images.app }}
+          volumeMounts:
+            - name: {{ $.Release.Name }}-app-dev
+              mountPath: /home/node/app
+          envFrom:
+            - configMapRef:
+                name: env-configmap
+            - secretRef:
+                name: app-db-secrets
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: 1
+            limits:
+              memory: "4Gi"
+              cpu: 2
+          livenessProbe:
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 10
+            initialDelaySeconds: 1
+            timeoutSeconds: 3
+            httpGet:
+              path: /
+              port: {{ .Values.services.app.port}}
+              scheme: HTTP
+          readinessProbe:
+            successThreshold: 1
+            failureThreshold: 3
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 3
+            httpGet:
+              path: /
+              port: {{ .Values.services.app.port}}
+              scheme: HTTP
+          ports:
+            - containerPort: {{ .Values.services.app.port}}
+          imagePullPolicy: Always
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,13 @@
+apiVersion: v1
+
+kind: PersistentVolumeClaim
+
+metadata:
+  name: {{ $.Release.Name }}-app-dev-pvc
+
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadOnlyMany
+  volumeName: {{ $.Release.Name }}-app-dev
+  resources: { requests: { storage: 1Gi } }

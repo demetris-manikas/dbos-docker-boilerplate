@@ -1,0 +1,17 @@
+apiVersion: v1
+
+kind: PersistentVolume
+
+metadata:
+  name: {{ $.Release.Name }}-app-dev
+  labels:
+    type: local
+
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: {{ .Values.dev.appDir }}

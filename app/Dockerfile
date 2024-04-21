@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-RUN npm install -g typescript tsx
+RUN npm install -g typescript tsx nodemon
 
 USER node
 RUN mkdir -p /home/node/app && chown -R node:node /home/node/app

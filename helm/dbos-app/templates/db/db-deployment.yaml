@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: {{ $.Release.Name }}-db
+
+spec:
+  selector:
+    matchLabels:
+      service: {{ $.Release.Name }}-db
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        service: {{ $.Release.Name }}-db
+    spec:
+      volumes:
+        - name: {{ $.Release.Name }}-db-data
+          persistentVolumeClaim:
+            claimName: {{ $.Release.Name }}-db-data-pvc
+      containers:
+        - name: {{ $.Release.Name }}-db
+          image: {{ .Values.registry }}/{{ .Values.images.db }}
+          volumeMounts:
+            - name: {{ $.Release.Name }}-db-data
+              mountPath: /var/lib/postgresql
+          envFrom:
+            - configMapRef:
+                name: env-configmap
+            - secretRef:
+                name: db-secrets
+            - secretRef:
+                name: app-db-secrets
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: 1
+            limits:
+              memory: "4G"
+              cpu: 2
+          ports:
+            - containerPort: {{ .Values.services.db.port}}
+
+          imagePullPolicy: Always
+      restartPolicy: Always
+
+status: {}
+
+
