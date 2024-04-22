@@ -31,3 +31,7 @@ Modify to your needs
 
 Write your dbos backed application.
 
+## TODO
+1. Document and polish helm installation
+2. Implement auto-compile on source changes
+
