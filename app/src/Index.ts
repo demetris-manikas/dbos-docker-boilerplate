@@ -4,6 +4,6 @@ import { Knex } from "knex";
 export class Index {
     @GetApi('/')
     static async version(ctxt: TransactionContext<Knex>) {
-        return Promise.resolve(`Welcome to dbos app ${ctxt.workflowUUID}!`);
+        return Promise.resolve(`Welcome to dbos app. Your ip is ${ctxt.request.ip}!`);
     }
 }
