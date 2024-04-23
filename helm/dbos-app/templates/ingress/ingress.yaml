@@ -6,15 +6,15 @@ metadata:
   name: {{ $.Release.Name }}-ingress
 
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className | quote }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
           {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: {{ .path | quote }}
+            pathType: {{ .pathType | quote }}
             backend:
               service:
                 name: {{ $.Release.Name }}-{{ .service }}

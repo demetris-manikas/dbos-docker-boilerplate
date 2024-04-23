@@ -7,4 +7,3 @@ metadata:
 
 data:
   APP_DB_HOSTNAME: {{ $.Release.Name }}-db
-  APP_ENV: production

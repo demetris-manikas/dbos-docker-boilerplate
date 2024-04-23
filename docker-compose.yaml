@@ -19,8 +19,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - ip6net
+
   db:
     container_name: dbos-db
     image: ${REGISTRY}dbos-db:latest
@@ -42,16 +41,7 @@ services:
       APP_DB_NAME: ${APP_DB_NAME}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
-    networks:
-      - ip6net
 
 volumes:
   db_data:
     driver: local
-
-networks:
-   ip6net:
-     enable_ipv6: true
-     ipam:
-       config:
-         - subnet: 2001:0DB8::/112

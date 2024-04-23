@@ -50,7 +50,7 @@ spec:
             timeoutSeconds: 3
             httpGet:
               path: /
-              port: {{ .Values.services.app.port}}
+              port: {{ .Values.services.app.port }}
               scheme: HTTP
           readinessProbe:
             successThreshold: 1
@@ -60,10 +60,10 @@ spec:
             timeoutSeconds: 3
             httpGet:
               path: /
-              port: {{ .Values.services.app.port}}
+              port: {{ .Values.services.app.port }}
               scheme: HTTP
           ports:
-            - containerPort: {{ .Values.services.app.port}}
+            - containerPort: {{ .Values.services.app.port }}
           imagePullPolicy: Always
       restartPolicy: Always
 status: {}
