@@ -9,8 +9,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./app/dbos-config.yaml:/home/node/app/dbos-config.yaml
-      - ./app/dist:/home/node/app/dist
+      - ./app:/home/node/app
     environment:
       APP_DB_HOSTNAME: dbos-db
       APP_DB_NAME: ${APP_DB_NAME}
