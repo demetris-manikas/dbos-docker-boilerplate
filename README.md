@@ -1,6 +1,6 @@
 # What is it about
 This a template to get you started on developing
-a [DBOS backed apps](https://docs.dbos.dev/) application on your local machine
+a [DBOS backed](https://docs.dbos.dev/) application on your local machine
 with docker-compose
 
 A basic Helm configuration (tested with microk8s) is also provided but needs polishing...
