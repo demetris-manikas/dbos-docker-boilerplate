@@ -1,14 +1,18 @@
+{{ $ctx := dict "service" .Values.app.service "release" $.Release "chart" $.Chart }}
+{{ $qServiceName := printf "%s-%s" $.Release.Name "app" }}
+
 apiVersion: apps/v1
 
 kind: Deployment
 
 metadata:
-  name: {{ $.Release.Name }}-app
+  name: {{ $qServiceName }}
+{{- include "dbos-app.labels" $ctx | indent 2 }}
 
 spec:
   selector:
     matchLabels:
-      service: {{ $.Release.Name }}-app
+      service: {{ $qServiceName }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,17 +22,17 @@ spec:
   template:
     metadata:
       labels:
-        service: {{ $.Release.Name }}-app
+        service: {{ $qServiceName }}
     spec:
       volumes:
-        - name: {{ $.Release.Name }}-app-dev
+        - name: {{ $qServiceName }}-dev
           persistentVolumeClaim:
-            claimName: {{ $.Release.Name }}-app-dev-pvc
+            claimName: {{ $qServiceName }}-dev-pvc
       containers:
-        - name: {{ $.Release.Name }}-app
+        - name: {{ $qServiceName }}-app
           image: {{ .Values.registry }}/{{ .Values.images.app }}
           volumeMounts:
-            - name: {{ $.Release.Name }}-app-dev
+            - name: {{ $qServiceName }}-dev
               mountPath: /home/node/app
           envFrom:
             - configMapRef:
@@ -50,7 +54,7 @@ spec:
             timeoutSeconds: 3
             httpGet:
               path: /
-              port: {{ .Values.services.app.port }}
+              port: {{ .Values.app.service.port }}
               scheme: HTTP
           readinessProbe:
             successThreshold: 1
@@ -60,10 +64,10 @@ spec:
             timeoutSeconds: 3
             httpGet:
               path: /
-              port: {{ .Values.services.app.port }}
+              port: {{ .Values.app.service.port }}
               scheme: HTTP
           ports:
-            - containerPort: {{ .Values.services.app.port }}
+            - containerPort: {{ .Values.app.service.port }}
           imagePullPolicy: Always
       restartPolicy: Always
 status: {}

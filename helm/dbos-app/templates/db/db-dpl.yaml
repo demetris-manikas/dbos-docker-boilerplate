@@ -4,7 +4,6 @@ kind: Deployment
 
 metadata:
   name: {{ $.Release.Name }}-db
-
 spec:
   selector:
     matchLabels:
@@ -45,7 +44,7 @@ spec:
               memory: "4G"
               cpu: 2
           ports:
-            - containerPort: {{ .Values.services.db.port}}
+            - containerPort: {{ .Values.db.service.port}}
 
           imagePullPolicy: Always
       restartPolicy: Always

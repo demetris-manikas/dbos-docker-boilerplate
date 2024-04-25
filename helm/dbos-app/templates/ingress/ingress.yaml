@@ -1,10 +1,11 @@
+{{ $ctx := dict "release" $.Release "chart" $.Chart }}
 apiVersion: networking.k8s.io/v1
 
 kind: Ingress
 
 metadata:
   name: {{ $.Release.Name }}-ingress
-
+{{- include "dbos-app.labels" $ctx | indent 2 }}
 spec:
   ingressClassName: {{ .Values.ingress.className | quote }}
   rules:

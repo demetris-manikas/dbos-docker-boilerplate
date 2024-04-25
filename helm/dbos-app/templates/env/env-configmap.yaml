@@ -1,9 +1,6 @@
-# Use config map for not-secret configuration data
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: env-configmap
-
 data:
   APP_DB_HOSTNAME: {{ $.Release.Name }}-db

@@ -1,0 +1,34 @@
+{{- define "dbos-app.fullname"}}
+{{- printf "%s-%s" .release.Name "application" | trunc 63 -}}
+{{ end -}}
+
+{{- define "dbos-app.labels.list" }}
+heritage: {{ .release.Service | quote }}
+release: {{ .release.Name | quote }}
+chart: {{ .chart.Name | quote }}
+version: {{ .chart.Version | quote }}
+app: {{ include "dbos-app.fullname" . }}
+{{ end -}}
+
+{{- define "dbos-app.labels" }}
+labels:
+{{- include "dbos-app.labels.list" . | indent 2 }}
+{{ end -}}
+
+{{- define "dbos-app.service"}}
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: {{ .release.Name }}-{{ .service.name }}
+  labels:
+    service: {{ .release.Name }}-{{ .service.name }}
+{{- include "dbos-app.labels.list" . | indent 4 }}
+spec:
+  ports:
+    - port: {{ .service.port }}
+      targetPort: {{ .service.targetPort }}
+  selector:
+    service: {{ .release.Name }}-{{ .service.name }}
+{{ end -}}

@@ -15,13 +15,17 @@ ingress:
           port: 3000
   tls: []
 
-services:
-  app:
-      port: 3000
-      targetPort: 3000
-  db:
-      port: 5432
-      targetPort: 5432
+app:
+  service:
+    name: "app"
+    port: 3000
+    targetPort: 3000
+
+db:
+  service:
+    name: "db"
+    port: 5432
+    targetPort: 5432
 
 dev:
   appDir: "/home/demetris/projects/dbos-docker-tpl/app"
@@ -32,6 +36,6 @@ secrets:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
   app:
-    APP_DB_USER: app
     APP_DB_NAME: app
+    APP_DB_USER: app
     APP_DB_PASSWORD: app

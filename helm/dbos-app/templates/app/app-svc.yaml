@@ -1,0 +1,2 @@
+{{ $ctx := dict "service" .Values.app.service "release" $.Release "chart" $.Chart }}
+{{ include "dbos-app.service" $ctx }}
