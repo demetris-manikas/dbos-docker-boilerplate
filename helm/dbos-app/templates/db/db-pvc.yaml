@@ -1,0 +1,8 @@
+{{ $ctx := dict
+  "name" "db"
+  "volumeClaim" .Values.db.volumeClaim
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ include "dbos-app.pvc" $ctx }}

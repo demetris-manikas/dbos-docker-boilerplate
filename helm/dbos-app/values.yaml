@@ -13,19 +13,30 @@ ingress:
           pathType: Prefix
           service: app
           port: 3000
-  tls: []
 
 app:
   service:
     name: "app"
     port: 3000
     targetPort: 3000
+  volume:
+    storage: 1Gi
+    accessMode: ReadOnlyMany
+  volumeClaim:
+    storage: 1Gi
+    accessMode: ReadOnlyMany
 
 db:
   service:
     name: "db"
     port: 5432
     targetPort: 5432
+  volume:
+    storage: 10Gi
+    accessMode: ReadWriteOnce
+  volumeClaim:
+    storage: 1Gi
+    accessMode: ReadWriteOnce
 
 dev:
   appDir: "/home/demetris/projects/dbos-docker-tpl/app"

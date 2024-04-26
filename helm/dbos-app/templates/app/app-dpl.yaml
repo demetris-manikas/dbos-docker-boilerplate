@@ -1,5 +1,10 @@
-{{ $ctx := dict "service" .Values.app.service "release" $.Release "chart" $.Chart }}
-{{ $qServiceName := printf "%s-%s" $.Release.Name "app" }}
+{{ $ctx := dict
+  "service" .Values.app.service
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ $qServiceName := printf "%s-%s" .Release.Name "app" }}
 
 apiVersion: apps/v1
 
@@ -29,7 +34,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ $qServiceName }}-dev-pvc
       containers:
-        - name: {{ $qServiceName }}-app
+        - name: {{ $qServiceName }}
           image: {{ .Values.registry }}/{{ .Values.images.app }}
           volumeMounts:
             - name: {{ $qServiceName }}-dev
@@ -54,7 +59,7 @@ spec:
             timeoutSeconds: 3
             httpGet:
               path: /
-              port: {{ .Values.app.service.port }}
+              port: {{ $ctx.service.port }}
               scheme: HTTP
           readinessProbe:
             successThreshold: 1
@@ -64,10 +69,10 @@ spec:
             timeoutSeconds: 3
             httpGet:
               path: /
-              port: {{ .Values.app.service.port }}
+              port: {{ $ctx.service.port }}
               scheme: HTTP
           ports:
-            - containerPort: {{ .Values.app.service.port }}
+            - containerPort: {{ $ctx.service.port }}
           imagePullPolicy: Always
       restartPolicy: Always
 status: {}

@@ -1,5 +1,13 @@
+{{- define "dbos-app.pv.name"}}
+{{- printf "%s-%s-pv" .release.Name .name -}}
+{{ end -}}
+
+{{- define "dbos-app.pvc.name"}}
+{{- printf "%s-%s-pvc" .release.Name .name -}}
+{{ end -}}
+
 {{- define "dbos-app.fullname"}}
-{{- printf "%s-%s" .release.Name "application" | trunc 63 -}}
+{{- printf "%s-application" .release.Name  | trunc 63 -}}
 {{ end -}}
 
 {{- define "dbos-app.labels.list" }}
@@ -32,3 +40,41 @@ spec:
   selector:
     service: {{ .release.Name }}-{{ .service.name }}
 {{ end -}}
+
+{{- define "dbos-app.pv"}}
+apiVersion: v1
+
+kind: PersistentVolume
+
+metadata:
+  name: {{ include "dbos-app.pv.name" . }}
+  labels:
+    type: local
+{{- include "dbos-app.labels.list" . | indent 4 }}
+spec:
+  storageClassName: manual
+  capacity:
+    storage: {{ .volume.storage | quote }}
+  accessModes:
+    - {{ .volume.accessMode | quote }}
+  hostPath:
+    path: {{ .hostPath | quote }}
+{{ end -}}
+
+{{- define "dbos-app.pvc"}}
+apiVersion: v1
+
+kind: PersistentVolumeClaim
+
+metadata:
+  name: {{ include "dbos-app.pvc.name" . }}
+spec:
+  storageClassName: manual
+  accessModes:
+    - {{ .volumeClaim.accessMode | quote }}
+  volumeName: {{ include "dbos-app.pv.name" . }}
+  resources:
+    requests:
+        storage: {{ .volumeClaim.storage }}
+{{ end -}}
+

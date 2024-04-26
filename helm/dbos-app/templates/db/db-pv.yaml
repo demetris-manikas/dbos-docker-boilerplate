@@ -1,0 +1,12 @@
+
+{{ $hostPath := printf "%s/%s-%s" .Values.dev.homeDir .Release.Name "db" }}
+
+{{ $ctx := dict
+  "name" "db"
+  "volume" .Values.db.volume
+  "hostPath" $hostPath
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ include "dbos-app.pv" $ctx }}

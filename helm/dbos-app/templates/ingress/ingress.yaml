@@ -1,4 +1,4 @@
-{{ $ctx := dict "release" $.Release "chart" $.Chart }}
+{{ $ctx := dict "release" .Release "chart" .Chart }}
 apiVersion: networking.k8s.io/v1
 
 kind: Ingress
