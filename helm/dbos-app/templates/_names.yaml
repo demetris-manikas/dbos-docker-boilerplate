@@ -1,0 +1,11 @@
+{{- define "dbos-app.pv.name"}}
+{{- printf "%s-%s-pv" .release.Name .name -}}
+{{ end -}}
+
+{{- define "dbos-app.pvc.name"}}
+{{- printf "%s-%s-pvc" .release.Name .name -}}
+{{ end -}}
+
+{{- define "dbos-app.fullname"}}
+{{- printf "%s-application" .release.Name  | trunc 63 -}}
+{{ end -}}

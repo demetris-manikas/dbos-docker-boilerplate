@@ -1,0 +1,19 @@
+{{- define "dbos-app.pv"}}
+apiVersion: v1
+
+kind: PersistentVolume
+
+metadata:
+  name: {{ include "dbos-app.pv.name" . }}
+  labels:
+    type: local
+{{- include "dbos-app.labels.list" . | indent 4 }}
+spec:
+  storageClassName: manual
+  capacity:
+    storage: {{ .volume.storage | quote }}
+  accessModes:
+    - {{ .volume.accessMode | quote }}
+  hostPath:
+    path: {{ .hostPath | quote }}
+{{ end -}}

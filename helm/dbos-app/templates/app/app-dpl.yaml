@@ -1,10 +1,9 @@
+{{ $qServiceName := printf "%s-%s" .Release.Name "app" }}
 {{ $ctx := dict
   "service" .Values.app.service
   "release" .Release
   "chart" .Chart
 }}
-
-{{ $qServiceName := printf "%s-%s" .Release.Name "app" }}
 
 apiVersion: apps/v1
 
@@ -30,14 +29,14 @@ spec:
         service: {{ $qServiceName }}
     spec:
       volumes:
-        - name: {{ $qServiceName }}-dev
+        - name: {{ $qServiceName }}
           persistentVolumeClaim:
-            claimName: {{ $qServiceName }}-dev-pvc
+            claimName: {{ $qServiceName }}-pvc
       containers:
         - name: {{ $qServiceName }}
           image: {{ .Values.registry }}/{{ .Values.images.app }}
           volumeMounts:
-            - name: {{ $qServiceName }}-dev
+            - name: {{ $qServiceName }}
               mountPath: /home/node/app
           envFrom:
             - configMapRef:

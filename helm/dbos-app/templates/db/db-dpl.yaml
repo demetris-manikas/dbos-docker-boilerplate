@@ -20,14 +20,14 @@ spec:
         service: {{ $.Release.Name }}-db
     spec:
       volumes:
-        - name: {{ $.Release.Name }}-db-data
+        - name: {{ $.Release.Name }}-db
           persistentVolumeClaim:
-            claimName: {{ $.Release.Name }}-db-data-pvc
+            claimName: {{ $.Release.Name }}-db-pvc
       containers:
         - name: {{ $.Release.Name }}-db
           image: {{ .Values.registry }}/{{ .Values.images.db }}
           volumeMounts:
-            - name: {{ $.Release.Name }}-db-data
+            - name: {{ $.Release.Name }}-db
               mountPath: /var/lib/postgresql
           envFrom:
             - configMapRef:

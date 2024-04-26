@@ -1,0 +1,17 @@
+{{- define "dbos-app.service"}}
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: {{ .release.Name }}-{{ .service.name }}
+  labels:
+    service: {{ .release.Name }}-{{ .service.name }}
+{{- include "dbos-app.labels.list" . | indent 4 }}
+spec:
+  ports:
+    - port: {{ .service.port }}
+      targetPort: {{ .service.targetPort }}
+  selector:
+    service: {{ .release.Name }}-{{ .service.name }}
+{{ end -}}

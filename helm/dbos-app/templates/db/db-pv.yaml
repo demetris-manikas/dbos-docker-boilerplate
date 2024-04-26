@@ -1,6 +1,4 @@
-
 {{ $hostPath := printf "%s/%s-%s" .Values.dev.homeDir .Release.Name "db" }}
-
 {{ $ctx := dict
   "name" "db"
   "volume" .Values.db.volume

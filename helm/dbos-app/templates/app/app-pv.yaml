@@ -1,10 +1,7 @@
-
-{{ $hostPath := printf "%s/%s-%s" .Values.dev.appDir .Release.Name "app" }}
-
 {{ $ctx := dict
   "name" "app"
   "volume" .Values.app.volume
-  "hostPath" $hostPath
+  "hostPath" .Values.dev.appDir
   "release" .Release
   "chart" .Chart
 }}
