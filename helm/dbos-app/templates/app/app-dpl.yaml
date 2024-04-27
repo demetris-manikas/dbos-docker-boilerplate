@@ -8,8 +8,8 @@
 {{ $serviceName := include "dbos-app.svc.name" $ctx }}
 {{ $image := printf "%s/%s:%s" $ctx.deployment.image.registry $ctx.deployment.image.name $ctx.deployment.image.version}}
 {{ $probeMethod := toYaml $ctx.deployment.probe.method }}
-{{ $livenessSettings := toYaml $ctx.deployment.probe.liveness }}
-{{ $readinessSettings := toYaml $ctx.deployment.probe.readiness }}
+{{ $livenessSettings := $ctx.deployment.probe.liveness }}
+{{ $readinessSettings := $ctx.deployment.probe.readiness }}
 {{ $resourcesSettings := toYaml $ctx.deployment.resources }}
 
 {{ $volumeName := include "dbos-app.pv.name" $ctx }}
@@ -50,16 +50,24 @@ spec:
               mountPath: /home/node/app
           envFrom:
             - configMapRef:
-                name: env-configmap
+                name: {{ include "dbos-app.configmap.name" $ctx }}
             - secretRef:
                 name: {{ include "dbos-app.secrets.name" $ctx }}
           resources:
 {{$resourcesSettings | indent 12 }}
           readinessProbe:
-{{$readinessSettings | indent 12 }}
+            initialDelaySeconds: {{ $readinessSettings.initialDelaySeconds }}
+            successThreshold: {{ $readinessSettings.successThreshold }}
+            failureThreshold: {{ $readinessSettings.failureThreshold }}
+            periodSeconds: {{ $readinessSettings.periodSeconds }}
+            timeoutSeconds: {{ $readinessSettings.timeoutSeconds }}
 {{$probeMethod | indent 12 }}
           livenessProbe:
-{{$livenessSettings | indent 12 }}
+            initialDelaySeconds: {{ $livenessSettings.initialDelaySeconds }}
+            successThreshold: {{ $livenessSettings.successThreshold }}
+            failureThreshold: {{ $livenessSettings.failureThreshold }}
+            periodSeconds: {{ $livenessSettings.periodSeconds }}
+            timeoutSeconds: {{ $livenessSettings.timeoutSeconds }}
 {{$probeMethod | indent 12 }}
           ports:
             - containerPort: {{ $ctx.service.port }}

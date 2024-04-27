@@ -31,11 +31,9 @@ spec:
               mountPath: /var/lib/postgresql
           envFrom:
             - configMapRef:
-                name: env-configmap
+                name: dbos-db-configmap
             - secretRef:
-                name: db-secrets
-            - secretRef:
-                name: dbos-app-secrets
+                name: dbos-db-secrets
           resources:
             requests:
               memory: "1Gi"
