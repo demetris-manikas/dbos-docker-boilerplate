@@ -5,7 +5,7 @@ images:
   app: dbos-app:latest
 
 ingress:
-  className: "nginx"
+  className: nginx
   hosts:
     - host: dbos
       paths:
@@ -15,8 +15,9 @@ ingress:
           port: 3000
 
 app:
+  name: app
   service:
-    name: "app"
+    name: app
     port: 3000
     targetPort: 3000
   volume:
@@ -25,10 +26,15 @@ app:
   volumeClaim:
     storage: 1Gi
     accessMode: ReadOnlyMany
+  secrets:
+    APP_DB_NAME: app
+    APP_DB_USER: app
+    APP_DB_PASSWORD: app
 
 db:
+  name: db
   service:
-    name: "db"
+    name: db
     port: 5432
     targetPort: 5432
   volume:
@@ -37,6 +43,9 @@ db:
   volumeClaim:
     storage: 1Gi
     accessMode: ReadWriteOnce
+  secrets:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
 
 dev:
   appDir: "/home/demetris/projects/dbos-docker-tpl/app"
