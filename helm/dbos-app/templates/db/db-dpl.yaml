@@ -1,52 +1,11 @@
-apiVersion: apps/v1
+{{ $ctx := dict
+  "name" .Values.db.name
+  "registry" .Values.registry
+  "deployment" .Values.db.deployment
+  "service" .Values.db.service
+  "release" .Release
+  "chart" .Chart
+  "volumeMountPath" "/var/lib/postgresql"
+}}
 
-kind: Deployment
-
-metadata:
-  name: {{ $.Release.Name }}-db-svc
-spec:
-  selector:
-    matchLabels:
-      service: {{ $.Release.Name }}-db-svc
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 25%
-  revisionHistoryLimit: 5
-  template:
-    metadata:
-      labels:
-        service: {{ $.Release.Name }}-db-svc
-    spec:
-      volumes:
-        - name: {{ $.Release.Name }}-db
-          persistentVolumeClaim:
-            claimName: {{ $.Release.Name }}-db-pvc
-      containers:
-        - name: {{ $.Release.Name }}-db-svc
-          image: {{ .Values.registry }}/{{ .Values.images.db }}
-          volumeMounts:
-            - name: {{ $.Release.Name }}-db
-              mountPath: /var/lib/postgresql
-          envFrom:
-            - configMapRef:
-                name: dbos-db-configmap
-            - secretRef:
-                name: dbos-db-secrets
-          resources:
-            requests:
-              memory: "1Gi"
-              cpu: 1
-            limits:
-              memory: "4G"
-              cpu: 2
-          ports:
-            - containerPort: {{ .Values.db.service.port}}
-
-          imagePullPolicy: Always
-      restartPolicy: Always
-
-status: {}
-
-
+{{ include "dbos-app.dpl" $ctx }}

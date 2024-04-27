@@ -1,0 +1,71 @@
+{{- define "dbos-app.dpl"}}
+{{ $serviceName := include "dbos-app.svc.name" . }}
+{{ $image := printf "%s/%s:%s" .registry .deployment.image.name .deployment.image.version}}
+{{ $probeMethod := toYaml .deployment.probe.method }}
+{{ $livenessSettings := .deployment.probe.liveness }}
+{{ $readinessSettings := .deployment.probe.readiness }}
+{{ $resourcesSettings := toYaml .deployment.resources }}
+
+{{ $volumeName := include "dbos-app.pv.name" . }}
+{{ $volumeClaimName := include "dbos-app.pvc.name" . }}
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: {{ include "dbos-app.dpl.name" . }}
+{{- include "dbos-app.labels" . | indent 2 }}
+spec:
+  selector:
+    matchLabels:
+      service: {{ $serviceName }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .deployment.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .deployment.rollingUpdate.maxUnavailable }}
+  revisionHistoryLimit: {{ .deployment.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        service: {{ $serviceName }}
+    spec:
+      volumes:
+        - name: {{ $volumeName }}
+          persistentVolumeClaim:
+            claimName: {{ $volumeClaimName }}
+      containers:
+        - name: {{ $serviceName }}
+          image: {{ $image }}
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: {{ $volumeName }}
+              mountPath: {{ .volumeMountPath }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "dbos-app.configmap.name" . }}
+            - secretRef:
+                name: {{ include "dbos-app.secrets.name" . }}
+          resources:
+{{$resourcesSettings | indent 12 }}
+          readinessProbe:
+            initialDelaySeconds: {{ $readinessSettings.initialDelaySeconds }}
+            successThreshold: {{ $readinessSettings.successThreshold }}
+            failureThreshold: {{ $readinessSettings.failureThreshold }}
+            periodSeconds: {{ $readinessSettings.periodSeconds }}
+            timeoutSeconds: {{ $readinessSettings.timeoutSeconds }}
+{{$probeMethod | indent 12 }}
+          livenessProbe:
+            initialDelaySeconds: {{ $livenessSettings.initialDelaySeconds }}
+            successThreshold: {{ $livenessSettings.successThreshold }}
+            failureThreshold: {{ $livenessSettings.failureThreshold }}
+            periodSeconds: {{ $livenessSettings.periodSeconds }}
+            timeoutSeconds: {{ $livenessSettings.timeoutSeconds }}
+{{$probeMethod | indent 12 }}
+          ports:
+            - containerPort: {{ .service.port }}
+      restartPolicy: Always
+status: {}
+
+{{ end -}}

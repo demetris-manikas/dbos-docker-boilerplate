@@ -68,6 +68,38 @@ db:
   service:
     port: 5432
     targetPort: 5432
+  deployment:
+    image:
+      registry: localhost:32000
+      name: dbos-db
+      version: latest
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: 1
+      limits:
+        memory: "1Gi"
+        cpu: 1
+    probe:
+      method:
+        exec:
+          command: ["sh", "-c", "pg_isready"]
+      liveness:
+        initialDelaySeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 3
+        timeoutSeconds: 12
+      readiness:
+        initialDelaySeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 1
+        timeoutSeconds: 3
   volume:
     storage: 10Gi
     accessMode: ReadWriteOnce

@@ -1,75 +1,11 @@
 {{ $ctx := dict
   "name" .Values.app.name
+  "registry" .Values.registry
   "deployment" .Values.app.deployment
   "service" .Values.app.service
   "release" .Release
   "chart" .Chart
+  "volumeMountPath" "/home/node/app"
 }}
-{{ $serviceName := include "dbos-app.svc.name" $ctx }}
-{{ $image := printf "%s/%s:%s" $ctx.deployment.image.registry $ctx.deployment.image.name $ctx.deployment.image.version}}
-{{ $probeMethod := toYaml $ctx.deployment.probe.method }}
-{{ $livenessSettings := $ctx.deployment.probe.liveness }}
-{{ $readinessSettings := $ctx.deployment.probe.readiness }}
-{{ $resourcesSettings := toYaml $ctx.deployment.resources }}
 
-{{ $volumeName := include "dbos-app.pv.name" $ctx }}
-{{ $volumeClaimName := include "dbos-app.pvc.name" $ctx }}
-
-apiVersion: apps/v1
-
-kind: Deployment
-
-metadata:
-  name: {{ $serviceName }}
-{{- include "dbos-app.labels" $ctx | indent 2 }}
-spec:
-  selector:
-    matchLabels:
-      service: {{ $serviceName }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: {{ $ctx.deployment.rollingUpdate.maxSurge }}
-      maxUnavailable: {{ $ctx.deployment.rollingUpdate.maxUnavailable }}
-  revisionHistoryLimit: {{ $ctx.deployment.revisionHistoryLimit }}
-  template:
-    metadata:
-      labels:
-        service: {{ $serviceName }}
-    spec:
-      volumes:
-        - name: {{ $volumeName }}
-          persistentVolumeClaim:
-            claimName: {{ $volumeClaimName }}
-      containers:
-        - name: {{ $serviceName }}
-          image: {{ $image }}
-          imagePullPolicy: Always
-          volumeMounts:
-            - name: {{ $volumeName }}
-              mountPath: /home/node/app
-          envFrom:
-            - configMapRef:
-                name: {{ include "dbos-app.configmap.name" $ctx }}
-            - secretRef:
-                name: {{ include "dbos-app.secrets.name" $ctx }}
-          resources:
-{{$resourcesSettings | indent 12 }}
-          readinessProbe:
-            initialDelaySeconds: {{ $readinessSettings.initialDelaySeconds }}
-            successThreshold: {{ $readinessSettings.successThreshold }}
-            failureThreshold: {{ $readinessSettings.failureThreshold }}
-            periodSeconds: {{ $readinessSettings.periodSeconds }}
-            timeoutSeconds: {{ $readinessSettings.timeoutSeconds }}
-{{$probeMethod | indent 12 }}
-          livenessProbe:
-            initialDelaySeconds: {{ $livenessSettings.initialDelaySeconds }}
-            successThreshold: {{ $livenessSettings.successThreshold }}
-            failureThreshold: {{ $livenessSettings.failureThreshold }}
-            periodSeconds: {{ $livenessSettings.periodSeconds }}
-            timeoutSeconds: {{ $livenessSettings.timeoutSeconds }}
-{{$probeMethod | indent 12 }}
-          ports:
-            - containerPort: {{ $ctx.service.port }}
-      restartPolicy: Always
-status: {}
+{{ include "dbos-app.dpl" $ctx }}

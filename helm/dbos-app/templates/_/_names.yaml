@@ -2,6 +2,10 @@
 {{- printf "%s-application" .release.Name  | trunc 63 -}}
 {{ end -}}
 
+{{- define "dbos-app.dpl.name"}}
+{{- printf "%s-%s-dpl" .release.Name .name -}}
+{{ end -}}
+
 {{- define "dbos-app.svc.name"}}
 {{- printf "%s-%s-svc" .release.Name .name -}}
 {{ end -}}
