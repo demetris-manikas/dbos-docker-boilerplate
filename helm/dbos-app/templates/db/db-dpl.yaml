@@ -35,7 +35,7 @@ spec:
             - secretRef:
                 name: db-secrets
             - secretRef:
-                name: app-secrets
+                name: dbos-app-secrets
           resources:
             requests:
               memory: "1Gi"

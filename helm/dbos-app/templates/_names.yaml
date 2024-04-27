@@ -6,8 +6,8 @@
 {{- printf "%s-%s-pvc" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.secret.name"}}
-{{- printf "%s-%s-secret" .release.Name .name -}}
+{{- define "dbos-app.secrets.name"}}
+{{- printf "%s-%s-secrets" .release.Name .name -}}
 {{ end -}}
 
 {{- define "dbos-app.fullname"}}

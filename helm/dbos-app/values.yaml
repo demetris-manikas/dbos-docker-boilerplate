@@ -19,6 +19,41 @@ app:
   service:
     port: 3000
     targetPort: 3000
+  deployment:
+    image:
+      registry: localhost:32000
+      name: dbos-app
+      version: latest
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: 1
+      limits:
+        memory: "2Gi"
+        cpu: 1
+    probeMethod:
+    probe:
+      method:
+        httpGet:
+          path: /
+          port: 3000
+          scheme: HTTP
+      liveness:
+        initialDelaySeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 3
+        timeoutSeconds: 12
+      readiness:
+        initialDelaySeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 1
+        timeoutSeconds: 3
   volume:
     storage: 1Gi
     accessMode: ReadOnlyMany

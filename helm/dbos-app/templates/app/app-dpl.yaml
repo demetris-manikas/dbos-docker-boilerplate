@@ -1,78 +1,67 @@
-{{ $qServiceName := printf "%s-%s-svc" .Release.Name "app" }}
 {{ $ctx := dict
   "name" .Values.app.name
+  "deployment" .Values.app.deployment
   "service" .Values.app.service
   "release" .Release
   "chart" .Chart
 }}
+{{ $serviceName := include "dbos-app.svc.name" $ctx }}
+{{ $image := printf "%s/%s:%s" $ctx.deployment.image.registry $ctx.deployment.image.name $ctx.deployment.image.version}}
+{{ $probeMethod := toYaml $ctx.deployment.probe.method }}
+{{ $livenessSettings := toYaml $ctx.deployment.probe.liveness }}
+{{ $readinessSettings := toYaml $ctx.deployment.probe.readiness }}
+{{ $resourcesSettings := toYaml $ctx.deployment.resources }}
+
+{{ $volumeName := include "dbos-app.pv.name" $ctx }}
+{{ $volumeClaimName := include "dbos-app.pvc.name" $ctx }}
 
 apiVersion: apps/v1
 
 kind: Deployment
 
 metadata:
-  name: {{ $qServiceName }}
+  name: {{ $serviceName }}
 {{- include "dbos-app.labels" $ctx | indent 2 }}
-
 spec:
   selector:
     matchLabels:
-      service: {{ $qServiceName }}
+      service: {{ $serviceName }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-  revisionHistoryLimit: 5
+      maxSurge: {{ $ctx.deployment.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ $ctx.deployment.rollingUpdate.maxUnavailable }}
+  revisionHistoryLimit: {{ $ctx.deployment.revisionHistoryLimit }}
   template:
     metadata:
       labels:
-        service: {{ $qServiceName }}
+        service: {{ $serviceName }}
     spec:
       volumes:
-        - name: {{ $qServiceName }}
+        - name: {{ $volumeName }}
           persistentVolumeClaim:
-            claimName: {{ include "dbos-app.pvc.name" $ctx }}
+            claimName: {{ $volumeClaimName }}
       containers:
-        - name: {{ $qServiceName }}
-          image: {{ .Values.registry }}/{{ .Values.images.app }}
+        - name: {{ $serviceName }}
+          image: {{ $image }}
+          imagePullPolicy: Always
           volumeMounts:
-            - name: {{ $qServiceName }}
+            - name: {{ $volumeName }}
               mountPath: /home/node/app
           envFrom:
             - configMapRef:
                 name: env-configmap
             - secretRef:
-                name: app-secrets
+                name: {{ include "dbos-app.secrets.name" $ctx }}
           resources:
-            requests:
-              memory: "1Gi"
-              cpu: 1
-            limits:
-              memory: "4Gi"
-              cpu: 2
-          livenessProbe:
-            successThreshold: 1
-            failureThreshold: 3
-            periodSeconds: 10
-            initialDelaySeconds: 1
-            timeoutSeconds: 3
-            httpGet:
-              path: /
-              port: {{ $ctx.service.port }}
-              scheme: HTTP
+{{$resourcesSettings | indent 12 }}
           readinessProbe:
-            successThreshold: 1
-            failureThreshold: 3
-            initialDelaySeconds: 1
-            periodSeconds: 10
-            timeoutSeconds: 3
-            httpGet:
-              path: /
-              port: {{ $ctx.service.port }}
-              scheme: HTTP
+{{$readinessSettings | indent 12 }}
+{{$probeMethod | indent 12 }}
+          livenessProbe:
+{{$livenessSettings | indent 12 }}
+{{$probeMethod | indent 12 }}
           ports:
             - containerPort: {{ $ctx.service.port }}
-          imagePullPolicy: Always
       restartPolicy: Always
 status: {}
