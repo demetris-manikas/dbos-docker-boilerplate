@@ -18,7 +18,7 @@ spec:
             pathType: {{ .pathType | quote }}
             backend:
               service:
-                name: {{ $.Release.Name }}-{{ .service }}
+                name: {{ $.Release.Name }}-app-svc
                 port:
                   number: {{ .port }}
           {{- end }}

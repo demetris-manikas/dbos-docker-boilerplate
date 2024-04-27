@@ -1,17 +1,19 @@
 {{- define "dbos-app.svc"}}
+{{ $serviceName := include "dbos-app.svc.name" . }}
+
 apiVersion: v1
 
 kind: Service
 
 metadata:
-  name: {{ .release.Name }}-{{ .service.name }}
+  name: {{ $serviceName }}
   labels:
-    service: {{ .release.Name }}-{{ .service.name }}
+    service: {{ $serviceName }}
 {{- include "dbos-app.labels.list" . | indent 4 }}
 spec:
   ports:
     - port: {{ .service.port }}
       targetPort: {{ .service.targetPort }}
   selector:
-    service: {{ .release.Name }}-{{ .service.name }}
+    service: {{ $serviceName }}
 {{ end -}}

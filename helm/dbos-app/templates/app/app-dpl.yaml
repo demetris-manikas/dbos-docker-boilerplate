@@ -1,5 +1,6 @@
-{{ $qServiceName := printf "%s-%s" .Release.Name "app" }}
+{{ $qServiceName := printf "%s-%s-svc" .Release.Name "app" }}
 {{ $ctx := dict
+  "name" .Values.app.name
   "service" .Values.app.service
   "release" .Release
   "chart" .Chart
@@ -31,7 +32,7 @@ spec:
       volumes:
         - name: {{ $qServiceName }}
           persistentVolumeClaim:
-            claimName: {{ $qServiceName }}-pvc
+            claimName: {{ include "dbos-app.pvc.name" $ctx }}
       containers:
         - name: {{ $qServiceName }}
           image: {{ .Values.registry }}/{{ .Values.images.app }}
@@ -42,7 +43,7 @@ spec:
             - configMapRef:
                 name: env-configmap
             - secretRef:
-                name: app-db-secrets
+                name: app-secrets
           resources:
             requests:
               memory: "1Gi"

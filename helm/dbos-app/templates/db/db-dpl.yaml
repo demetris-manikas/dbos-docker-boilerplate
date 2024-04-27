@@ -3,11 +3,11 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: {{ $.Release.Name }}-db
+  name: {{ $.Release.Name }}-db-svc
 spec:
   selector:
     matchLabels:
-      service: {{ $.Release.Name }}-db
+      service: {{ $.Release.Name }}-db-svc
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -17,14 +17,14 @@ spec:
   template:
     metadata:
       labels:
-        service: {{ $.Release.Name }}-db
+        service: {{ $.Release.Name }}-db-svc
     spec:
       volumes:
         - name: {{ $.Release.Name }}-db
           persistentVolumeClaim:
             claimName: {{ $.Release.Name }}-db-pvc
       containers:
-        - name: {{ $.Release.Name }}-db
+        - name: {{ $.Release.Name }}-db-svc
           image: {{ .Values.registry }}/{{ .Values.images.db }}
           volumeMounts:
             - name: {{ $.Release.Name }}-db
@@ -35,7 +35,7 @@ spec:
             - secretRef:
                 name: db-secrets
             - secretRef:
-                name: app-db-secrets
+                name: app-secrets
           resources:
             requests:
               memory: "1Gi"

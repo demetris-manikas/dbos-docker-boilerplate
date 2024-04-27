@@ -17,7 +17,6 @@ ingress:
 app:
   name: app
   service:
-    name: app
     port: 3000
     targetPort: 3000
   volume:
@@ -34,7 +33,6 @@ app:
 db:
   name: db
   service:
-    name: db
     port: 5432
     targetPort: 5432
   volume:
