@@ -1,3 +1,11 @@
+{{- define "dbos-app.fullname"}}
+{{- printf "%s-application" .release.Name  | trunc 63 -}}
+{{ end -}}
+
+{{- define "dbos-app.svc.name"}}
+{{- printf "%s-%s-svc" .release.Name .name -}}
+{{ end -}}
+
 {{- define "dbos-app.pv.name"}}
 {{- printf "%s-%s-pv" .release.Name .name -}}
 {{ end -}}
@@ -10,10 +18,6 @@
 {{- printf "%s-%s-secrets" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.fullname"}}
-{{- printf "%s-application" .release.Name  | trunc 63 -}}
-{{ end -}}
-
-{{- define "dbos-app.svc.name"}}
-{{- printf "%s-%s-svc" .release.Name .name -}}
+{{- define "dbos-app.configmap.name"}}
+{{- printf "%s-%s-configmap" .release.Name .name -}}
 {{ end -}}

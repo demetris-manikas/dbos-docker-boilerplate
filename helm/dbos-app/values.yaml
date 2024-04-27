@@ -2,7 +2,6 @@ registry: localhost:32000
 
 images:
   db: dbos-db:latest
-  app: dbos-app:latest
 
 ingress:
   className: nginx
@@ -33,9 +32,8 @@ app:
         memory: "1Gi"
         cpu: 1
       limits:
-        memory: "2Gi"
+        memory: "1Gi"
         cpu: 1
-    probeMethod:
     probe:
       method:
         httpGet:
@@ -55,10 +53,10 @@ app:
         periodSeconds: 1
         timeoutSeconds: 3
   volume:
-    storage: 1Gi
+    storage: 100M
     accessMode: ReadOnlyMany
   volumeClaim:
-    storage: 1Gi
+    storage: 100M
     accessMode: ReadOnlyMany
   secrets:
     APP_DB_NAME: app
@@ -83,12 +81,3 @@ db:
 dev:
   appDir: "/home/demetris/projects/dbos-docker-tpl/app"
   homeDir: "/tmp/"
-
-secrets:
-  db:
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: postgres
-  app:
-    APP_DB_NAME: app
-    APP_DB_USER: app
-    APP_DB_PASSWORD: app

@@ -5,6 +5,7 @@ kind: PersistentVolumeClaim
 
 metadata:
   name: {{ include "dbos-app.pvc.name" . }}
+{{- include "dbos-app.labels" . | indent 2 }}
 spec:
   storageClassName: manual
   accessModes:

@@ -3,10 +3,10 @@ heritage: {{ .release.Service | quote }}
 release: {{ .release.Name | quote }}
 chart: {{ .chart.Name | quote }}
 version: {{ .chart.Version | quote }}
-app: {{ include "dbos-app.fullname" . }}
+app: {{ include "dbos-app.fullname" . | quote}}
 {{ end -}}
 
 {{- define "dbos-app.labels" }}
 labels:
-{{- include "dbos-app.labels.list" . | indent 2 }}
+{{- include "dbos-app.labels.list" . | indent 2 -}}
 {{ end -}}
