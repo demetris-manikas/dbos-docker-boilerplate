@@ -6,7 +6,7 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: {{ $serviceName | quote }}
+  name: {{ $serviceName }}
   labels:
     service: {{ $serviceName }}
 {{- include "dbos-app.labels.list" . | indent 4 }}

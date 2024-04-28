@@ -1,8 +1,5 @@
 registry: localhost:32000
 
-images:
-  db: dbos-db:latest
-
 ingress:
   className: nginx
   hosts:
@@ -15,12 +12,8 @@ ingress:
 
 app:
   name: app
-  service:
-    port: 3000
-    targetPort: 3000
   deployment:
     image:
-      registry: localhost:32000
       name: dbos-app
       version: latest
     revisionHistoryLimit: 5
@@ -32,8 +25,8 @@ app:
         memory: "1Gi"
         cpu: 1
       limits:
-        memory: "1Gi"
-        cpu: 1
+        memory: "2Gi"
+        cpu: 2
     probe:
       method:
         httpGet:
@@ -52,11 +45,14 @@ app:
         failureThreshold: 3
         periodSeconds: 1
         timeoutSeconds: 3
+  service:
+    port: 3000
+    targetPort: 3000
   volume:
-    storage: 100M
+    storage: 1Gi
     accessMode: ReadOnlyMany
   volumeClaim:
-    storage: 100M
+    storage: 1Gi
     accessMode: ReadOnlyMany
   secrets:
     APP_DB_NAME: app
@@ -70,7 +66,6 @@ db:
     targetPort: 5432
   deployment:
     image:
-      registry: localhost:32000
       name: dbos-db
       version: latest
     revisionHistoryLimit: 5
@@ -79,10 +74,10 @@ db:
       maxUnavailable: 1
     resources:
       requests:
-        memory: "1Gi"
+        memory: 1Gi
         cpu: 1
       limits:
-        memory: "1Gi"
+        memory: 1Gi
         cpu: 1
     probe:
       method:
@@ -101,7 +96,7 @@ db:
         periodSeconds: 1
         timeoutSeconds: 3
   volume:
-    storage: 10Gi
+    storage: 1Gi
     accessMode: ReadWriteOnce
   volumeClaim:
     storage: 1Gi
@@ -112,4 +107,4 @@ db:
 
 dev:
   appDir: "/home/demetris/projects/dbos-docker-tpl/app"
-  homeDir: "/tmp/"
+  homeDir: "/tmp"

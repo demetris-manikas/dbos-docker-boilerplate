@@ -4,7 +4,7 @@
 {{ $probeMethod := toYaml .deployment.probe.method }}
 {{ $livenessSettings := .deployment.probe.liveness }}
 {{ $readinessSettings := .deployment.probe.readiness }}
-{{ $resourcesSettings := toYaml .deployment.resources }}
+{{ $requestsSettings := .deployment.resources }}
 
 {{ $volumeName := include "dbos-app.pv.name" . }}
 {{ $volumeClaimName := include "dbos-app.pvc.name" . }}
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: {{ include "dbos-app.dpl.name" . }}
+  name: {{ $serviceName }}
 {{- include "dbos-app.labels" . | indent 2 }}
 spec:
   selector:
@@ -48,7 +48,12 @@ spec:
             - secretRef:
                 name: {{ include "dbos-app.secrets.name" . }}
           resources:
-{{$resourcesSettings | indent 12 }}
+            requests:
+              memory: {{ $requestsSettings.requests.memory }}
+              cpu: {{ $requestsSettings.requests.cpu }}
+            limits:
+              memory: {{ $requestsSettings.limits.memory }}
+              cpu: {{ $requestsSettings.limits.cpu }}
           readinessProbe:
             initialDelaySeconds: {{ $readinessSettings.initialDelaySeconds }}
             successThreshold: {{ $readinessSettings.successThreshold }}

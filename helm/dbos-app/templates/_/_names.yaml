@@ -22,6 +22,10 @@
 {{- printf "%s-%s-secrets" .release.Name .name -}}
 {{ end -}}
 
+{{- define "dbos-app.ingress.name"}}
+{{- printf "%s-%s-ingress" .release.Name .name -}}
+{{ end -}}
+
 {{- define "dbos-app.configmap.name"}}
 {{- printf "%s-%s-configmap" .release.Name .name -}}
 {{ end -}}

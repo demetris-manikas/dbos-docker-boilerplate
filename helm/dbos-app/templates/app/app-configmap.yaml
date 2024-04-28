@@ -8,4 +8,4 @@ kind: ConfigMap
 metadata:
   name: {{ include "dbos-app.configmap.name" $ctx }}
 data:
-  APP_DB_HOSTNAME: {{ $.Release.Name }}-db-svc
+  APP_DB_HOSTNAME: dbos-db-svc
