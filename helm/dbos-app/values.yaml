@@ -1,15 +1,5 @@
 registry: localhost:32000
 
-ingress:
-  className: nginx
-  hosts:
-    - host: dbos
-      paths:
-        - path: /
-          pathType: Prefix
-          service: app
-          port: 3000
-
 app:
   name: app
   deployment:
@@ -57,11 +47,8 @@ app:
               pathType: Prefix
               service: app
               port: 3000
-
   volume:
-    storage: 1Gi
-    accessMode: ReadOnlyMany
-  volumeClaim:
+    hostPath: "/home/demetris/projects/dbos-docker-tpl/app"
     storage: 1Gi
     accessMode: ReadOnlyMany
   secrets:
@@ -106,15 +93,9 @@ db:
         periodSeconds: 1
         timeoutSeconds: 3
   volume:
-    storage: 1Gi
-    accessMode: ReadWriteOnce
-  volumeClaim:
+    hostPath: "/tmp/dbos-app"
     storage: 1Gi
     accessMode: ReadWriteOnce
   secrets:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
-
-dev:
-  appDir: "/home/demetris/projects/dbos-docker-tpl/app"
-  homeDir: "/tmp"

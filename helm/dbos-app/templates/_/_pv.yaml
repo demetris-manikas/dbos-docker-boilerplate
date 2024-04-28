@@ -15,5 +15,5 @@ spec:
   accessModes:
     - {{ .volume.accessMode | quote }}
   hostPath:
-    path: {{ .hostPath | quote }}
+    path: {{ .volume.hostPath | quote }}
 {{ end -}}

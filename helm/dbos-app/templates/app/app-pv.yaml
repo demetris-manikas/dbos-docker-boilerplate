@@ -1,7 +1,6 @@
 {{ $ctx := dict
   "name" .Values.app.name
   "volume" .Values.app.volume
-  "hostPath" .Values.dev.appDir
   "release" .Release
   "chart" .Chart
 }}
