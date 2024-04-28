@@ -3,9 +3,16 @@
   "release" .Release
   "chart" .Chart
 }}
+
+{{ $dbctx := dict
+  "name" .Values.db.name
+  "release" .Release
+  "chart" .Chart
+}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "dbos-app.configmap.name" $ctx }}
 data:
-  APP_DB_HOSTNAME: dbos-db-svc
+  APP_DB_HOSTNAME: {{ include "dbos-app.svc.name" $dbctx }}

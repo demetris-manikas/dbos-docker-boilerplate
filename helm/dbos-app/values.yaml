@@ -48,6 +48,16 @@ app:
   service:
     port: 3000
     targetPort: 3000
+    ingress:
+      className: nginx
+      hosts:
+        - host: dbos
+          paths:
+            - path: /
+              pathType: Prefix
+              service: app
+              port: 3000
+
   volume:
     storage: 1Gi
     accessMode: ReadOnlyMany

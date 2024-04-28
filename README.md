@@ -3,7 +3,7 @@ This a template to get you started on developing
 a [DBOS](https://docs.dbos.dev/) backed application on your local machine
 with docker-compose or microk8s
 
-A basic Helm configuration (tested with microk8s) is also provided but needs polishing...
+A Helm configuration (tested with microk8s) is also provided.
 
 ## Getting Started
 ### with docker compose
@@ -46,19 +46,6 @@ addons:
     rbac                 # (core) Role-Based Access Control for authorisation
     registry             # (core) Private image registry exposed on localhost:32000
     storage              # (core) Alias to hostpath-storage add-on, deprecated
-  disabled:
-    cert-manager         # (core) Cloud native certificate management
-    cis-hardening        # (core) Apply CIS K8s hardening
-    community            # (core) The community addons repository
-    gpu                  # (core) Alias to nvidia add-on
-    host-access          # (core) Allow Pods connecting to Host services smoothly
-    kube-ovn             # (core) An advanced network fabric for Kubernetes
-    mayastor             # (core) OpenEBS MayaStor
-    metallb              # (core) Loadbalancer for your Kubernetes cluster
-    nvidia               # (core) NVIDIA hardware (GPU and network) support
-    observability        # (core) A lightweight observability stack for logs, traces and metrics
-    prometheus           # (core) Prometheus operator for monitoring and logging
-    rook-ceph            # (core) Distributed Ceph storage using Rook
 ```
 
 Edit your .env file and set REGISTRY to localhost:32000/ (sorry the trailing slash is not optional)
@@ -80,6 +67,3 @@ and you should get this message: `Connection succesfull! version: ${POSTGRES_VER
 
 ## Next Steps
 Most of the boilerplate is here so modify to your needs and write your [DBOS](https://docs.dbos.dev/) backed application.
-
-## TODO
-1. Follow best practices for the helm installation
