@@ -40,15 +40,9 @@ app:
     targetPort: 3000
     ingress:
       className: nginx
-      hosts:
-        - host: dbos
-          paths:
-            - path: /
-              pathType: Prefix
-              service: app
-              port: 3000
+      host: dbos
   volume:
-    hostPath: "/home/demetris/projects/dbos-docker-tpl/app"
+    hostPath: ""
     storage: 1Gi
     accessMode: ReadOnlyMany
   secrets:
@@ -93,7 +87,7 @@ db:
         periodSeconds: 1
         timeoutSeconds: 3
   volume:
-    hostPath: "/tmp/dbos-app"
+    hostPath: ""
     storage: 1Gi
     accessMode: ReadWriteOnce
   secrets:

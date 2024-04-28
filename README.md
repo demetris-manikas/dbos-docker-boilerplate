@@ -55,8 +55,14 @@ Edit your .env file and set REGISTRY to localhost:32000/ (sorry the trailing sla
     docker push localhost:32000/dbos-app
     docker push localhost:32000/dbos-db
     cd ../helm
-    helm install dbos ./dbos-app --namespace dbos-app --create-namespace
+    cp values.yaml.tpl values.yaml
 ```
+Edit helm/values.yaml.
+
+Set the app hostPath to point to the app dir (e.g. /home/user/projects/dbos-app/app)
+Set the db hostPath to point to the where you want postgres to keep its data (e.g. /tmp/dbos-app)
+
+To install run from within the helm directory  ```helm install -f values.yaml dbos dbos-app/ -n dbos-app --create-namespace```
 To uninstall run ```helm uninstall dbos --namespace dbos-app```
 
 Add ```127.0.0.1 dbos``` to your /etc/hosts

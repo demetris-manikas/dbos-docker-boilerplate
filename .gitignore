@@ -144,3 +144,6 @@ dist
 # Editor temp/recovery files
 *.swp
 *.swo
+
+
+helm/values.yaml
