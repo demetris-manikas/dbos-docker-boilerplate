@@ -42,10 +42,7 @@ addons:
     hostpath-storage     # (core) Storage class; allocates storage from host directory
     ingress              # (core) Ingress controller for external access
     metrics-server       # (core) K8s Metrics Server for API access to service metrics
-    minio                # (core) MinIO object storage
-    rbac                 # (core) Role-Based Access Control for authorisation
-    registry             # (core) Private image registry exposed on localhost:32000
-    storage              # (core) Alias to hostpath-storage add-on, deprecated
+    registry             # (core) Private image registry exposed on localhost:32
 ```
 
 Edit your .env file and set REGISTRY to localhost:32000/ (sorry the trailing slash is not optional)

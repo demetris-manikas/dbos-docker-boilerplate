@@ -5,12 +5,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 
 metadata:
-  name: {{ include "dbos-app.ingress.name" . }}
+  name: {{ include "dbos-app.svc.name" . }}-ingress
 {{- include "dbos-app.labels" . | indent 2 }}
 spec:
   ingressClassName: {{ $ingressSettings.className | quote }}
   rules:
-    - host: {{ $ingressSettings.host }}
+    - host: {{ $ingressSettings.host | quote }}
       http:
         paths:
           - path: "/"
