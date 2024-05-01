@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:22-alpine
 
 RUN npm install -g typescript tsx nodemon
 
@@ -10,6 +10,7 @@ COPY --chown=node:node package.json ./
 COPY --chown=node:node package-lock.json ./
 COPY --chown=node:node tsconfig.json ./
 COPY --chown=node:node nodemon.json ./
+COPY --chown=node:node dbos-config.yaml ./
 
 RUN npm ci --omit=dev
 
@@ -19,7 +20,6 @@ ENV NODE_ENV production
 
 RUN npm run build
 
-COPY --chown=node:node dbos-config.yaml ./
 
 EXPOSE 3000
 
