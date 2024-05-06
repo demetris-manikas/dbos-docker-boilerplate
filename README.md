@@ -17,9 +17,12 @@ cd ..
 cp .env.tpl .env
 docker compose up
 ```
-To see that it's working, visit this URL in your browser: [`http://localhost:3000/db/version`](http://localhost:3000/db/version).
+To see that it's working, visit: [`http://localhost:3000/db/version`](http://localhost:3000/db/version).
 
-and you should get this message: `Connection succesfull! version: ${POSTGRES_VERSION}.`
+and you should get this message: `Connection succesfull! version: {POSTGRES_VERSION}.`
+
+To check the Kafka integration visit [`http://localhost:3000/kafka/producer`](http://localhost:3000/kafka/producer)
+and you should see a message in the console.
 
 ### with microk8s
 with your microk8s running run
