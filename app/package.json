@@ -15,7 +15,11 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@dbos-inc/communicator-random": "^1.7.6",
     "@dbos-inc/dbos-sdk": "^1.7.6",
-    "knex": "3.1.0"
+    "install": "^0.13.0",
+    "kafkajs": "^2.2.4",
+    "knex": "3.1.0",
+    "npm": "^10.7.0"
   }
 }

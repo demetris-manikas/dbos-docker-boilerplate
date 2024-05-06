@@ -5,7 +5,7 @@ export interface dbos_pgversion {
     version: string;
 }
 
-export class DbVersion {
+export class Version {
     @GetApi('/db/version')
     @Transaction()
     static async version(ctxt: TransactionContext<Knex>) {
