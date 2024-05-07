@@ -6,3 +6,9 @@ POSTGRES_PASSWORD=postgres
 APP_DB_USER=app
 APP_DB_NAME=app
 APP_DB_PASSWORD=app
+
+KC_DB=keycloak
+KC_DB_USERNAME=keycloak
+KC_DB_PASSWORD=ketcloak
+KC_DB_URL_DATABASE=keycloak
+

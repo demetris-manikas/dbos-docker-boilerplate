@@ -19,6 +19,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      broker:
+        condition: service_healthy
 
   db:
     container_name: dbos-db
@@ -26,7 +28,7 @@ services:
     build:
       context: db
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5435:5432'
     shm_size: 128mb
     restart: unless-stopped
     healthcheck:
@@ -46,7 +48,6 @@ services:
 
   broker:
     image: apache/kafka:latest
-    hostname: broker
     container_name: broker
     user: root
     ports:
@@ -69,9 +70,68 @@ services:
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
     volumes:
       - kafka_data:/tmp/kraft-combined-logs
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-cluster.sh cluster-id --bootstrap-server localhost:9092 || exit 1"]
+      interval: 2s
+      timeout: 12s
+      retries: 4
+      start_period: 2s
+
+  keycloak-db:
+    hostname: keycloak-db
+    container_name: keycloak-db
+    image: ${REGISTRY}keycloak-db:latest
+    build:
+      context: keycloak-db
+    ports:
+      - '127.0.0.1:5436:5432'
+    shm_size: 128mb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 10s
+      retries: 3
+      start_period: 1s
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      KEYCLOAK_DB_NAME: ${KC_DB}
+      KEYCLOAK_DB_USER: ${KC_DB_USERNAME}
+      KEYCLOAK_DB_PASSWORD: ${KC_DB_PASSWORD}
+
+  keycloak:
+    image: keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev --verbose
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_SCHEMA: public
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_DATABASE: ${KC_DB_URL_DATABASE}
+      KC_DB_URL_PORT: 5432
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_ADMIN: keycloak
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_PORT: "8080"
+      KC_PROXY: "edge"
+    ports:
+      - '8080:8080'
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
 
 volumes:
   kafka_data:
     driver: local
   db_data:
+    driver: local
+  keycloak_db_data:
     driver: local
