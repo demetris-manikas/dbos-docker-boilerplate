@@ -114,13 +114,9 @@ services:
       KC_DB_USERNAME: ${KC_DB_USERNAME}
       KC_DB_PASSWORD: ${KC_DB_PASSWORD}
       KC_DB_URL_HOST: keycloak-db
-      KC_DB_URL_DATABASE: ${KC_DB_URL_DATABASE}
       KC_DB_URL_PORT: 5432
-      KC_HOSTNAME: keycloak
-      KC_HOSTNAME_ADMIN: keycloak
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME_STRICT_HTTPS: "false"
-      KC_HTTP_PORT: "8080"
       KC_PROXY: "edge"
     ports:
       - '8080:8080'

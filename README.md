@@ -73,3 +73,6 @@ and you should get this message: `Connection succesfull! version: ${POSTGRES_VER
 
 ## Next Steps
 Most of the boilerplate is here so modify to your needs and write your [DBOS](https://docs.dbos.dev/) backed application.
+
+## TODO
+Elaborate the keycloak setup and create example usage case
