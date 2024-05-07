@@ -1,1 +1,1 @@
-export * from './receiver';
+export * from './consumer';

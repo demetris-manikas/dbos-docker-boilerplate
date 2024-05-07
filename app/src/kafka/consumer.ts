@@ -4,11 +4,11 @@ import { brokers, clientId, topic } from "../defs/kafka";
 
 const kafkaConfig: KafkaConfig = {
     brokers: brokers,
-    clientId: clientId
+    clientId: clientId,
 };
 
 @Kafka(kafkaConfig)
-export class KafkaReceiver {
+export class KafkaConsumer {
   @KafkaConsume(topic)
   @Workflow()
   static async kafkaConsumeWorkflow(ctxt: WorkflowContext, topic: string, partition: number, message: KafkaMessage) {

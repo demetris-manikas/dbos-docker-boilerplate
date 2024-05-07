@@ -4,6 +4,7 @@ services:
   app:
     image: ${REGISTRY}dbos-app:latest
     container_name: dbos-app
+    restart: unless-stopped
     build:
       context: app
     ports:
@@ -27,7 +28,7 @@ services:
     ports:
       - '5432:5432'
     shm_size: 128mb
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
@@ -60,7 +61,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       CLUSTER_ID: 'd86da882-0c82-11ef-8bb9-a757193d3343'
-      AUTO_CREATE_TOPICS: true
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
