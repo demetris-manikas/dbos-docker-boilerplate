@@ -105,7 +105,7 @@ services:
   keycloak:
     image: keycloak/keycloak:latest
     container_name: keycloak
-    command: start-dev --verbose
+    command: start-dev
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
