@@ -18,6 +18,7 @@
     "@dbos-inc/communicator-random": "^1.7.6",
     "@dbos-inc/dbos-sdk": "^1.7.6",
     "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
     "kafkajs": "^2.2.4",
     "knex": "3.1.0",
     "npm": "^10.7.0"

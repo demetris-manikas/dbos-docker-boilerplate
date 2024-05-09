@@ -1,10 +1,14 @@
-import { GetApi, Transaction, TransactionContext } from "@dbos-inc/dbos-sdk";
+import { Authentication, GetApi, Transaction, TransactionContext } from "@dbos-inc/dbos-sdk";
 import { Knex } from "knex";
+import { basicHttpAuthentication } from "../../middleware/auth/basic";
+import { DefaultRequiredRole } from "../../middleware/auth/defs";
 
 export interface dbos_pgversion {
     version: string;
 }
 
+@Authentication(basicHttpAuthentication)
+@DefaultRequiredRole(['user'])
 export class Version {
     @GetApi('/db/version')
     @Transaction()
