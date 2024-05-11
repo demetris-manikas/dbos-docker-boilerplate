@@ -1,3 +1,5 @@
+TZ=Europe/Athens
+
 REGISTRY=
 
 POSTGRES_USER=postgres

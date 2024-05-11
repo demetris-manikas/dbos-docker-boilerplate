@@ -2,16 +2,17 @@ version: '3.8'
 
 services:
   app:
-    image: ${REGISTRY}dbos-app:latest
     container_name: dbos-app
+    image: ${REGISTRY}dbos-app:latest
     restart: unless-stopped
     build:
-      context: app
+      context: docker/app
     ports:
-      - '3000:3000'
+      - '127.0.0.1:3000:3000'
     volumes:
       - ./app:/home/node/app
     environment:
+      TZ: ${TZ}
       APP_DB_HOSTNAME: dbos-db
       APP_DB_NAME: ${APP_DB_NAME}
       APP_DB_USER: ${APP_DB_USER}
@@ -26,7 +27,7 @@ services:
     container_name: dbos-db
     image: ${REGISTRY}dbos-db:latest
     build:
-      context: db
+      context: docker/db
     ports:
       - '127.0.0.1:5435:5432'
     shm_size: 128mb
@@ -40,41 +41,21 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
+      TZ: ${TZ}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       APP_DB_NAME: ${APP_DB_NAME}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
 
-  # zookeeper:
-  #   image: confluentinc/cp-zookeeper:latest
-  #   environment:
-  #     ZOOKEEPER_CLIENT_PORT: 2181
-  #     ZOOKEEPER_TICK_TIME: 2000
-  #   ports:
-  #     - 2181:2181
-
-  # broker:
-  #   image: confluentinc/cp-kafka:latest
-  #   ports:
-  #     - 9092:9092
-  #   environment:
-  #     KAFKA_BROKER_ID: 1
-  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  #     KAFKA_LISTENERS: PLAINTEXT://:9092
-  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092
-  #     KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-
   broker:
-    image: apache/kafka:latest
     container_name: dbos-app-broker
+    image: ${REGISTRY}apache/kafka:latest
     user: root
     ports:
-      - '9092:9092'
+      - '127.0.0.1:9092:9092'
     environment:
+      TZ: ${TZ}
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT_HOST://broker:9092,PLAINTEXT://broker:19092'
@@ -102,55 +83,113 @@ services:
       retries: 4
       start_period: 2s
 
-  # keycloak-db:
-  #   hostname: keycloak-db
-  #   container_name: keycloak-db
-  #   image: ${REGISTRY}keycloak-db:latest
-  #   build:
-  #     context: keycloak-db
-  #   ports:
-  #     - '127.0.0.1:5436:5432'
-  #   shm_size: 128mb
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready"]
-  #     interval: 1s
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 1s
-  #   volumes:
-  #     - keycloak_db_data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_USER: ${POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #     KEYCLOAK_DB_NAME: ${KC_DB}
-  #     KEYCLOAK_DB_USER: ${KC_DB_USERNAME}
-  #     KEYCLOAK_DB_PASSWORD: ${KC_DB_PASSWORD}
+  keycloak-db:
+    container_name: dbos-app-keycloak-db
+    image: ${REGISTRY}dbos-app-keycloak-db:latest
+    build:
+      context: docker/keycloak-db
+    ports:
+      - '127.0.0.1:5436:5432'
+    shm_size: 128mb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 10s
+      retries: 3
+      start_period: 1s
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    environment:
+      TZ: ${TZ}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      KEYCLOAK_DB_NAME: ${KC_DB}
+      KEYCLOAK_DB_USER: ${KC_DB_USERNAME}
+      KEYCLOAK_DB_PASSWORD: ${KC_DB_PASSWORD}
 
-  # keycloak:
-  #   image: keycloak/keycloak:latest
-  #   container_name: keycloak
-  #   command: start-dev --import-realm
-  #   depends_on:
-  #     keycloak-db:
-  #       condition: service_healthy
-  #   environment:
-  #     KEYCLOAK_ADMIN: admin
-  #     KEYCLOAK_ADMIN_PASSWORD: admin
-  #     KC_DB: postgres
-  #     KC_DB_SCHEMA: public
-  #     KC_DB_USERNAME: ${KC_DB_USERNAME}
-  #     KC_DB_PASSWORD: ${KC_DB_PASSWORD}
-  #     KC_DB_URL_HOST: keycloak-db
-  #     KC_DB_URL_PORT: 5432
-  #     KC_HTTP_ENABLED: "true"
-  #     KC_HOSTNAME_STRICT_HTTPS: "false"
-  #     KC_PROXY: "edge"
-  #     KC_LOG_LEVEL: "ERROR"
-  #   ports:
-  #     - '8080:8080'
-  #   volumes:
-  #     - ./keycloak/import:/opt/keycloak/data/import
+  keycloak:
+    container_name: dbos-app-keycloak
+    image: ${REGISTRY}keycloak/keycloak:latest
+    command: start-dev --import-realm
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    environment:
+      TZ: ${TZ}
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_SCHEMA: public
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_PORT: 5432
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_PROXY: "edge"
+      KC_LOG_LEVEL: "ERROR"
+    ports:
+      - '127.0.0.1:8080:8080'
+    volumes:
+      - ./docker/keycloak/import:/opt/keycloak/data/import
+
+  proxy:
+    container_name: dbos-app-proxy
+    image: ${REGISTRY}dbos-proxy:latest
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - '127.0.0.1:80:80'
+    command:
+      - sh
+      - -c
+      - nginx-debug -g 'daemon off;'
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      TZ: ${TZ}
+
+  oauth2-proxy:
+    container_name: dbos-app-oauth2-proxy
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
+    ports:
+      - '127.0.0.1:4180:4180'
+    environment:
+      TZ: ${TZ}
+      OAUTH2_PROXY_PROVIDER: "oidc"
+      OAUTH2_PROXY_PROVIDER_DISPLAY_NAME: "keycloak oidc"
+      OAUTH2_PROXY_CLIENT_ID: dbos-app
+      OAUTH2_PROXY_CLIENT_SECRET: secret
+      OAUTH2_PROXY_REDIRECT_URL: "http://dbosapp.test/oauth2/callback"
+      OAUTH2_PROXY_OIDC_ISSUER_URL: "http://auth.dbosapp.test/realms/dbos-app"
+      OAUTH2_PROXY_PROFILE_URL: "http://auth.dbosapp.test/realms/dbos-app/protocol/openid-connect/userinfo"
+      OAUTH2_PROXY_REDEEM_URL: "http://auth.dbosapp.test/realms/dbos-app/protocol/openid-connect/token"
+      OAUTH2_PROXY_REAL_CLIENT_IP_HEADER: "X-Forwarded-For"
+      OAUTH2_PROXY_REVERSE_PROXY: "true"
+      OAUTH2_PROXY_SHOW_DEBUG_ON_ERROR: "true"
+      OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+      OAUTH2_PROXY_HTTP_ADDRESS: "0.0.0.0:4180"
+      OAUTH2_PROXY_UPSTREAMS: "http://dbos-app:3000/"
+      OAUTH2_PROXY_WHITELIST_DOMAINS: "dbosapp.test:*"
+      OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+      OAUTH2_PROXY_WEBSOCKETS: "true"
+      OAUTH2_PROXY_COOKIE_SECRET: sixteenbyteslong
+      OAUTH2_PROXY_COOKIE_SECURE: "false"
+      OAUTH2_PROXY_COOKIE_REFRESH: "1m30s"
+      OAUTH2_PROXY_COOKIE_SAMESITE: "strict"
+      OAUTH2_PROXY_SKIP_JWT_BEARER_TOKENS: "false"
+      OAUTH2_PROXY_PASS_ACCESS_TOKEN: "true"
+      OAUTH2_PROXY_PASS_AUTHORIZATION_HEADER: "true"
+      OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL: "false"
+      OAUTH2_PROXY_CODE_CHALLENGE_METHOD: "S256"
+      OAUTH2_PROXY_SET_AUTHORIZATION_HEADER: "true"
+      OAUTH2_PROXY_REQUEST_LOGGING: "false"
+      OAUTH2_PROXY_AUTH_LOGGING: "false"
+      OAUTH2_PROXY_SCOPE: "openid profile email"
+      KEYCLOAK_REALM: "dbos-app"
+      KEYCLOAK_URL: "http://auth.dbosapp.test"
 
 volumes:
   kafka_data:
