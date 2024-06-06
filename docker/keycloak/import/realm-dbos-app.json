@@ -830,12 +830,12 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "secret",
+      "secret": "72341b6d-7065-4518-a0e4-50ee15025608",
       "redirectUris": [
-        "http://dbosapp.test/*"
+        "http://app.dbosapp.test/*"
       ],
       "webOrigins": [
-        "http://dbosapp.test/*"
+        "http://app.dbosapp.test/*"
       ],
       "notBefore": 0,
       "bearerOnly": false,
