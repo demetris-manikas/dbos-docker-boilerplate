@@ -167,9 +167,7 @@ services:
       - 4180:4180/tcp
     environment:
       TZ: ${TZ}
-      OAUTH2_PROXY_REVERSE_PROXY: "true"
       OAUTH2_PROXY_CODE_CHALLENGE_METHOD: S256
-      OAUTH2_PROXY_REDEEM_URL: http://auth.dbosapp.test/realms/dbos-app/protocol/openid-connect/token
 
 
     depends_on:
