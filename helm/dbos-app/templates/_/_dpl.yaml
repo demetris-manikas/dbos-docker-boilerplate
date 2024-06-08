@@ -6,11 +6,9 @@
 {{ $readinessSettings := .deployment.probe.readiness }}
 {{ $requestsSettings := .deployment.resources }}
 
-
 {{ $volumeName := include "dbos-app.pv.name" . }}
 {{ $volumeClaimName := include "dbos-app.pvc.name" . }}
 
-{{ $hasVolume := .volumeMountPath }}
 apiVersion: apps/v1
 
 kind: Deployment
