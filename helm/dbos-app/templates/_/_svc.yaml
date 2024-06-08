@@ -12,8 +12,10 @@ metadata:
 {{- include "dbos-app.labels.list" . | indent 4 }}
 spec:
   ports:
-    - port: {{ .service.port }}
-      targetPort: {{ .service.targetPort }}
+    {{- range .ports }}
+    - port: {{ .port }}
+      targetPort: {{ .targetPort }}
+    {{- end }}
   selector:
     service: {{ $serviceName | quote }}
 {{ end -}}

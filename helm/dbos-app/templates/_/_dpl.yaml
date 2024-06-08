@@ -6,9 +6,11 @@
 {{ $readinessSettings := .deployment.probe.readiness }}
 {{ $requestsSettings := .deployment.resources }}
 
+
 {{ $volumeName := include "dbos-app.pv.name" . }}
 {{ $volumeClaimName := include "dbos-app.pvc.name" . }}
 
+{{ $hasVolume := .volumeMountPath }}
 apiVersion: apps/v1
 
 kind: Deployment
@@ -31,17 +33,21 @@ spec:
       labels:
         service: {{ $serviceName }}
     spec:
+      {{ if .volumeMountPath }}
       volumes:
         - name: {{ $volumeName }}
           persistentVolumeClaim:
             claimName: {{ $volumeClaimName }}
+      {{ end }}
       containers:
         - name: {{ $serviceName }}
           image: {{ $image }}
           imagePullPolicy: Always
+          {{ if .volumeMountPath }}
           volumeMounts:
             - name: {{ $volumeName }}
               mountPath: {{ .volumeMountPath }}
+          {{ end }}
           envFrom:
             - configMapRef:
                 name: {{ include "dbos-app.configmap.name" . }}

@@ -40,7 +40,7 @@ app:
     targetPort: 3000
     ingress:
       className: nginx
-      host: dbos
+      host: app.dbosapp.test
   volume:
     hostPath: ""
     storage: 1Gi
@@ -93,3 +93,51 @@ db:
   secrets:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
+
+
+keycloak_db:
+  name: keycloak-db
+  service:
+    port: 5432
+    targetPort: 5432
+  deployment:
+    image:
+      name: dbos-app-keycloak-db
+      version: latest
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 1
+      limits:
+        memory: 1Gi
+        cpu: 1
+    probe:
+      method:
+        exec:
+          command: ["sh", "-c", "pg_isready"]
+      liveness:
+        initialDelaySeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 3
+        timeoutSeconds: 12
+      readiness:
+        initialDelaySeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 1
+        timeoutSeconds: 3
+  volume:
+    hostPath: ""
+    storage: 1Gi
+    accessMode: ReadWriteOnce
+  secrets:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    KEYCLOAK_DB_NAME: keycloak
+    KEYCLOAK_DB_USER: keycloak
+    KEYCLOAK_DB_PASSWORD: keycloak

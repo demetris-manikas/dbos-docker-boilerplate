@@ -1,6 +1,16 @@
+{{
+  $servicePort := dict
+    "name" "db-svc-port"
+    "port" .Values.db.service.port
+    "targetPort" .Values.db.service.targetPort
+}}
+
+{{ $ports := list $servicePort }}
+
 {{ $ctx := dict
   "name" .Values.db.name
   "service" .Values.db.service
+  "ports" $ports
   "release" .Release
   "chart" .Chart
 }}

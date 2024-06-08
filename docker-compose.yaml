@@ -50,7 +50,9 @@ services:
 
   broker:
     container_name: dbos-app-broker
-    image: ${REGISTRY}apache/kafka:latest
+    image: ${REGISTRY}dbos-app-broker:latest
+    build:
+      context: docker/kafka
     user: root
     ports:
       - '9092:9092'
@@ -136,28 +138,6 @@ services:
     volumes:
       - ./docker/keycloak/import:/opt/keycloak/data/import
 
-  proxy:
-    container_name: dbos-app-proxy
-    image: ${REGISTRY}dbos-app-proxy:latest
-    build:
-      context: docker/nginx
-      dockerfile: Dockerfile
-    ports:
-      - '80:80'
-    command:
-      - sh
-      - -c
-      - nginx-debug -g 'daemon off;'
-    volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-    environment:
-      TZ: ${TZ}
-    networks:
-      default:
-        aliases:
-          - auth.dbosapp.test
-          - app.dbosapp.test
-
   oauth2-proxy:
     container_name: dbos-app-oauth2-proxy
     image: ${REGISTRY}dbos-app-oauth2-proxy:latest
@@ -208,6 +188,28 @@ services:
       - proxy
       - app
       - keycloak
+
+  proxy:
+    container_name: dbos-app-proxy
+    image: dbos-app-proxy:latest
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    command:
+      - sh
+      - -c
+      - nginx-debug -g 'daemon off;'
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      TZ: ${TZ}
+    networks:
+      default:
+        aliases:
+          - auth.dbosapp.test
+          - app.dbosapp.test
 
 volumes:
   kafka_data:

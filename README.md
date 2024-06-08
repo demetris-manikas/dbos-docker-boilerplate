@@ -52,8 +52,12 @@ Edit your .env file and set REGISTRY to localhost:32000/ (sorry the trailing sla
 ```bash
     cd app
     docker compose build
-    docker push localhost:32000/dbos-app
     docker push localhost:32000/dbos-db
+    docker push localhost:32000/dbos-app
+    docker push localhost:32000/dbos-app-keycloak-db
+    docker push localhost:32000/dbos-app-keycloak
+    docker push localhost:32000/dbos-app-broker
+    docker push localhost:32000/dbos-app-oauth2-proxy
     cd ../helm
     cp values.yaml.tpl values.yaml
 ```
