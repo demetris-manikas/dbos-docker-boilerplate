@@ -19,3 +19,6 @@ database:
 
 runtimeConfig:
   port: 3000 # Optional, defaults to 3000
+
+env:
+  brokers: ${BROKERS}

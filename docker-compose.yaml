@@ -17,6 +17,7 @@ services:
       APP_DB_NAME: ${APP_DB_NAME}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      BROKERS: broker:9092
     depends_on:
       db:
         condition: service_healthy

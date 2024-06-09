@@ -3,7 +3,7 @@ import { Knex } from "knex";
 
 export class Index {
     @GetApi('/')
-    static async version(ctxt: TransactionContext<Knex>) {
+    static async ip(ctxt: TransactionContext<Knex>) {
         return Promise.resolve(`Welcome to dbos app. Your ip is ${ctxt.request.ip}!`);
     }
 }
