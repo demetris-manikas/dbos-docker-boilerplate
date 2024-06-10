@@ -1,32 +1,32 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: dbos-app
-    image: ${REGISTRY}dbos-app:latest
+  backend:
+    container_name: app-backend
+    image: ${REGISTRY}app-backend:latest
     restart: unless-stopped
     build:
-      context: app
+      context: backend
     ports:
       - '3000:3000'
     volumes:
-      - ./app:/home/node/app
+      - ./backend:/home/node/app
     environment:
       TZ: ${TZ}
-      APP_DB_HOSTNAME: dbos-db
+      APP_DB_HOSTNAME: app-backend-db
       APP_DB_NAME: ${APP_DB_NAME}
       APP_DB_USER: ${APP_DB_USER}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
       BROKERS: broker:9092
     depends_on:
-      db:
+      backend-db:
         condition: service_healthy
       broker:
         condition: service_healthy
 
-  db:
-    container_name: dbos-db
-    image: ${REGISTRY}dbos-db:latest
+  backend-db:
+    container_name: app-backend-db
+    image: ${REGISTRY}app-backend-db:latest
     build:
       context: docker/db
     ports:
@@ -50,8 +50,8 @@ services:
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
 
   broker:
-    container_name: dbos-app-broker
-    image: ${REGISTRY}dbos-app-broker:latest
+    container_name: app-broker
+    image: ${REGISTRY}app-broker:latest
     build:
       context: docker/kafka
     user: root
@@ -159,7 +159,7 @@ services:
 
       OAUTH2_PROXY_REAL_CLIENT_IP_HEADER: "X-Forwarded-For"
       OAUTH2_PROXY_HTTP_ADDRESS: "0.0.0.0:4180"
-      OAUTH2_PROXY_UPSTREAMS: "http://dbos-app:3000"
+      OAUTH2_PROXY_UPSTREAMS: "http://app-backend:3000"
 
       OAUTH2_PROXY_CLIENT_SECRET: "72341b6d-7065-4518-a0e4-50ee15025608"
       OAUTH2_PROXY_REDIRECT_URL: http://app.dbosapp.test/oauth2/callback
@@ -187,7 +187,7 @@ services:
 
     depends_on:
       - proxy
-      - app
+      - backend
       - keycloak
 
   proxy:
