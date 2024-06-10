@@ -1,8 +1,8 @@
 {{ $ctx := dict
-  "name" .Values.db.name
+  "name" .Values.backend_db.name
   "registry" .Values.registry
-  "deployment" .Values.db.deployment
-  "service" .Values.db.service
+  "deployment" .Values.backend_db.deployment
+  "service" .Values.backend_db.service
   "release" .Release
   "chart" .Chart
   "volumeMountPath" "/var/lib/postgresql"

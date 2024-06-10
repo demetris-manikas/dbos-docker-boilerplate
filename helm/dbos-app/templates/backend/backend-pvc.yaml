@@ -1,6 +1,6 @@
 {{ $ctx := dict
-  "name" .Values.db.name
-  "volumeClaim" .Values.db.volume
+  "name" .Values.backend.name
+  "volumeClaim" .Values.backend.volume
   "release" .Release
   "chart" .Chart
 }}

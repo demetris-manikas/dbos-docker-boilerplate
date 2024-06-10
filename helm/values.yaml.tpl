@@ -1,9 +1,9 @@
 registry: localhost:32000
 
-app:
+backend:
   volume:
     hostPath: "path-to-app-dir"
 
-db:
+backend_db:
   volume:
     hostPath: "path-for postgres data"

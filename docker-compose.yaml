@@ -87,8 +87,8 @@ services:
       start_period: 2s
 
   keycloak-db:
-    container_name: dbos-app-keycloak-db
-    image: ${REGISTRY}dbos-app-keycloak-db:latest
+    container_name: app-keycloak-db
+    image: ${REGISTRY}app-keycloak-db:latest
     build:
       context: docker/keycloak-db
     ports:
@@ -112,8 +112,8 @@ services:
       KEYCLOAK_DB_PASSWORD: ${KC_DB_PASSWORD}
 
   keycloak:
-    container_name: dbos-app-keycloak
-    image: ${REGISTRY}dbos-app-keycloak:latest
+    container_name: app-keycloak
+    image: ${REGISTRY}app-keycloak:latest
     command: start-dev --import-realm --health-enabled=true
     build:
       context: docker/keycloak
@@ -140,8 +140,8 @@ services:
       - ./docker/keycloak/import:/opt/keycloak/data/import
 
   oauth2-proxy:
-    container_name: dbos-app-oauth2-proxy
-    image: ${REGISTRY}dbos-app-oauth2-proxy:latest
+    container_name: app-oauth2-proxy
+    image: ${REGISTRY}app-oauth2-proxy:latest
     build:
       context: docker/oauth2-proxy
       dockerfile: Dockerfile
@@ -191,8 +191,8 @@ services:
       - keycloak
 
   proxy:
-    container_name: dbos-app-proxy
-    image: dbos-app-proxy:latest
+    container_name: app-proxy
+    image: app-proxy:latest
     build:
       context: docker/nginx
       dockerfile: Dockerfile

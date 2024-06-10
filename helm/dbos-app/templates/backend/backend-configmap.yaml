@@ -1,11 +1,11 @@
 {{ $ctx := dict
-  "name" .Values.app.name
+  "name" .Values.backend.name
   "release" .Release
   "chart" .Chart
 }}
 
 {{ $dbctx := dict
-  "name" .Values.db.name
+  "name" .Values.backend_db.name
   "release" .Release
   "chart" .Chart
 }}
@@ -16,4 +16,4 @@ metadata:
   name: {{ include "dbos-app.configmap.name" $ctx }}
 data:
   APP_DB_HOSTNAME: {{ include "dbos-app.svc.name" $dbctx }}
-  BROKERS: {{ .Values.app.config.brokers }}
+  BROKERS: {{ .Values.backend.config.brokers }}

@@ -1,15 +1,15 @@
 {{
   $servicePort := dict
     "name" "app-port"
-    "port" .Values.app.service.port
-    "targetPort" .Values.app.service.targetPort
+    "port" .Values.backend.service.port
+    "targetPort" .Values.backend.service.targetPort
 }}
 
 {{ $ports := list $servicePort }}
 
 {{ $ctx := dict
-  "name" .Values.app.name
-  "service" .Values.app.service
+  "name" .Values.backend.name
+  "service" .Values.backend.service
   "ports" $ports
   "release" .Release
   "chart" .Chart

@@ -1,10 +1,10 @@
 registry: localhost:32000
 
-app:
-  name: app
+backend:
+  name: app-backend
   deployment:
     image:
-      name: dbos-app
+      name: app-backend
       version: latest
     revisionHistoryLimit: 5
     rollingUpdate:
@@ -52,14 +52,14 @@ app:
     APP_DB_USER: app
     APP_DB_PASSWORD: app
 
-db:
-  name: db
+backend_db:
+  name: app-backend-db
   service:
     port: 5432
     targetPort: 5432
   deployment:
     image:
-      name: dbos-db
+      name: app-backend-db
       version: latest
     revisionHistoryLimit: 5
     rollingUpdate:
@@ -104,7 +104,7 @@ keycloak_db:
     targetPort: 5432
   deployment:
     image:
-      name: dbos-app-keycloak-db
+      name: app-keycloak-db
       version: latest
     revisionHistoryLimit: 5
     rollingUpdate:
