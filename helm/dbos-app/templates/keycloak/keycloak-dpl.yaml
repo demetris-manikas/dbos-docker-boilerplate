@@ -1,0 +1,11 @@
+{{ $ctx := dict
+  "name" .Values.keycloak.name
+  "registry" .Values.registry
+  "deployment" .Values.keycloak.deployment
+  "service" .Values.keycloak.service
+  "release" .Release
+  "chart" .Chart
+  "volumeMountPath" "/home/node/keycloak"
+}}
+
+{{ include "dbos-app.dpl" $ctx }}

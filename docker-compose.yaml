@@ -28,7 +28,7 @@ services:
     container_name: app-backend-db
     image: ${REGISTRY}app-backend-db:latest
     build:
-      context: docker/db
+      context: docker/backend-db
     ports:
       - '5435:5432'
     shm_size: 128mb
@@ -114,7 +114,6 @@ services:
   keycloak:
     container_name: app-keycloak
     image: ${REGISTRY}app-keycloak:latest
-    command: start-dev --import-realm --health-enabled=true
     build:
       context: docker/keycloak
     depends_on:
@@ -135,7 +134,7 @@ services:
       KC_PROXY: "edge"
       KC_LOG_LEVEL: "ERROR"
     ports:
-      - '9080:8080'
+      - '8080:8080'
     volumes:
       - ./docker/keycloak/import:/opt/keycloak/data/import
 

@@ -1,0 +1,18 @@
+{{
+  $servicePort := dict
+    "name" "app-port"
+    "port" .Values.keycloak.service.port
+    "targetPort" .Values.keycloak.service.targetPort
+}}
+
+{{ $ports := list $servicePort }}
+
+{{ $ctx := dict
+  "name" .Values.keycloak.name
+  "service" .Values.keycloak.service
+  "ports" $ports
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ include "dbos-app.svc" $ctx }}

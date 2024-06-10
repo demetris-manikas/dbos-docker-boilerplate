@@ -1,0 +1,8 @@
+{{ $ctx := dict
+  "name" .Values.keycloak.name
+  "volumeClaim" .Values.keycloak.volume
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ include "dbos-app.pvc" $ctx }}
