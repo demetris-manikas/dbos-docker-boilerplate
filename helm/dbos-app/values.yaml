@@ -45,6 +45,8 @@ app:
     hostPath: ""
     storage: 1Gi
     accessMode: ReadOnlyMany
+  config:
+    brokers: '10.1.52.155:9092'
   secrets:
     APP_DB_NAME: app
     APP_DB_USER: app

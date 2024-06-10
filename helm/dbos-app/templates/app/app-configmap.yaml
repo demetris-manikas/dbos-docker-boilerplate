@@ -16,3 +16,4 @@ metadata:
   name: {{ include "dbos-app.configmap.name" $ctx }}
 data:
   APP_DB_HOSTNAME: {{ include "dbos-app.svc.name" $dbctx }}
+  BROKERS: {{ .Values.app.config.brokers }}
