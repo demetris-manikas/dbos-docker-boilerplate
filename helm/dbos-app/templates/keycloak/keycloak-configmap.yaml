@@ -4,20 +4,27 @@
   "chart" .Chart
 }}
 
+{{ $dbctx := dict
+  "name" .Values.keycloak_db.name
+  "release" .Release
+  "chart" .Chart
+}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "dbos-app.configmap.name" $ctx }}
+  name: {{ include "template.configmap.name" $ctx }}
 data:
-  KEYCLOAK_ADMIN: "admin"
-  KEYCLOAK_ADMIN_PASSWORD: "admin"
   KC_DB: "postgres"
   KC_DB_SCHEMA: "public"
-  KC_DB_USERNAME: "keycloak"
-  KC_DB_PASSWORD: "keycloak"
-  KC_DB_URL_HOST: "keycloak-db"
+  KC_DB_URL_HOST: {{ include "template.svc.name" $dbctx }}
   KC_DB_URL_PORT: "5432"
   KC_HTTP_ENABLED: "true"
   KC_HOSTNAME_STRICT_HTTPS: "false"
   KC_PROXY: "edge"
   KC_LOG_LEVEL: "ERROR"
+  KC_CACHE: "ispn"
+  KC_CACHE_STACK: "kubernetes"
+  JAVA_OPTS_APPEND: "-Djgroups.dns.query=keycloak-headless-service"
+  JAVA_OPTS: "-Xms256m -Xmx2g -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
+  JGROUPS_DISCOVERY_PROTOCOL: dns.DNS_PING

@@ -1,13 +1,13 @@
-{{- define "dbos-app.dpl"}}
-{{ $serviceName := include "dbos-app.svc.name" . }}
+{{- define "template.dpl"}}
+{{ $serviceName := include "template.svc.name" . }}
 {{ $image := printf "%s/%s:%s" .registry .deployment.image.name .deployment.image.version}}
 {{ $probeMethod := toYaml .deployment.probe.method }}
 {{ $livenessSettings := .deployment.probe.liveness }}
 {{ $readinessSettings := .deployment.probe.readiness }}
 {{ $requestsSettings := .deployment.resources }}
 
-{{ $volumeName := include "dbos-app.pv.name" . }}
-{{ $volumeClaimName := include "dbos-app.pvc.name" . }}
+{{ $volumeName := include "template.pv.name" . }}
+{{ $volumeClaimName := include "template.pvc.name" . }}
 
 apiVersion: apps/v1
 
@@ -15,7 +15,7 @@ kind: Deployment
 
 metadata:
   name: {{ $serviceName }}
-{{- include "dbos-app.labels" . | indent 2 }}
+{{- include "template.labels" . | indent 2 }}
 spec:
   selector:
     matchLabels:
@@ -48,9 +48,9 @@ spec:
           {{ end }}
           envFrom:
             - configMapRef:
-                name: {{ include "dbos-app.configmap.name" . }}
+                name: {{ include "template.configmap.name" . }}
             - secretRef:
-                name: {{ include "dbos-app.secrets.name" . }}
+                name: {{ include "template.secrets.name" . }}
           resources:
             requests:
               memory: {{ $requestsSettings.requests.memory }}

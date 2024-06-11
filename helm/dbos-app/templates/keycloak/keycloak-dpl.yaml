@@ -5,7 +5,6 @@
   "service" .Values.keycloak.service
   "release" .Release
   "chart" .Chart
-  "volumeMountPath" "/home/node/keycloak"
 }}
 
-{{ include "dbos-app.dpl" $ctx }}
+{{ include "template.dpl" $ctx }}

@@ -1,12 +1,12 @@
-{{- define "dbos-app.ingress"}}
+{{- define "template.ingress"}}
 {{ $ingressSettings := .service.ingress }}
 apiVersion: networking.k8s.io/v1
 
 kind: Ingress
 
 metadata:
-  name: {{ include "dbos-app.svc.name" . }}-ingress
-{{- include "dbos-app.labels" . | indent 2 }}
+  name: {{ include "template.svc.name" . }}-ingress
+{{- include "template.labels" . | indent 2 }}
 spec:
   ingressClassName: {{ $ingressSettings.className | quote }}
   rules:
@@ -17,7 +17,7 @@ spec:
             pathType: "Prefix"
             backend:
               service:
-                name: {{ include "dbos-app.svc.name" . }}
+                name: {{ include "template.svc.name" . }}
                 port:
                   number: {{ .service.port }}
 {{ end -}}

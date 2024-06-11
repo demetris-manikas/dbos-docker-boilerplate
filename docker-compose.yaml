@@ -136,7 +136,7 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - ./docker/keycloak/import:/opt/keycloak/data/import
+      - ./docker/keycloak/data/:/opt/keycloak/data/
 
   oauth2-proxy:
     container_name: app-oauth2-proxy

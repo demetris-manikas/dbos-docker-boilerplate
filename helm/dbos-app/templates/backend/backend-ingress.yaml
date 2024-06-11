@@ -5,4 +5,4 @@
   "chart" .Chart
 }}
 
-{{ include "dbos-app.ingress" $ctx }}
+{{ include "template.ingress" $ctx }}

@@ -1,5 +1,5 @@
-{{- define "dbos-app.svc"}}
-{{ $serviceName := include "dbos-app.svc.name" . }}
+{{- define "template.svc"}}
+{{ $serviceName := include "template.svc.name" . }}
 
 apiVersion: v1
 
@@ -9,7 +9,7 @@ metadata:
   name: {{ $serviceName }}
   labels:
     service: {{ $serviceName }}
-{{- include "dbos-app.labels.list" . | indent 4 }}
+{{- include "template.labels.list" . | indent 4 }}
 spec:
   ports:
     {{- range .ports }}

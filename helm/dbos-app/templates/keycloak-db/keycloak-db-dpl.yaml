@@ -8,4 +8,4 @@
   "volumeMountPath" "/var/lib/postgresql"
 }}
 
-{{ include "dbos-app.dpl" $ctx }}
+{{ include "template.dpl" $ctx }}

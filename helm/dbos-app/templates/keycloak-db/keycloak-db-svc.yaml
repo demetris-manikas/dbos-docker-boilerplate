@@ -14,4 +14,4 @@
   "chart" .Chart
 }}
 
-{{ include "dbos-app.svc" $ctx }}
+{{ include "template.svc" $ctx }}

@@ -1,13 +1,13 @@
-{{- define "dbos-app.pv"}}
+{{- define "template.pv"}}
 apiVersion: v1
 
 kind: PersistentVolume
 
 metadata:
-  name: {{ include "dbos-app.pv.name" . }}
+  name: {{ include "template.pv.name" . }}
   labels:
     type: local
-{{- include "dbos-app.labels.list" . | indent 4 }}
+{{- include "template.labels.list" . | indent 4 }}
 spec:
   storageClassName: manual
   capacity:

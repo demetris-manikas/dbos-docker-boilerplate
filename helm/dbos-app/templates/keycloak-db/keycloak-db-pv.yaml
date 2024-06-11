@@ -5,4 +5,4 @@
   "chart" .Chart
 }}
 
-{{ include "dbos-app.pv" $ctx }}
+{{ include "template.pv" $ctx }}
