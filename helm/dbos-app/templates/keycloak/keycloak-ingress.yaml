@@ -1,8 +1,0 @@
-{{ $ctx := dict
-  "name" .Values.keycloak.name
-  "service" .Values.keycloak.service
-  "release" .Release
-  "chart" .Chart
-}}
-
-{{ include "template.ingress" $ctx }}

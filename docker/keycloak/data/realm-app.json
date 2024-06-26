@@ -1,6 +1,6 @@
 {
   "id": "151d2d3a-c02b-40eb-a459-daa967ad983f",
-  "realm": "dbos-app",
+  "realm": "app",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -84,7 +84,7 @@
       },
       {
         "id": "66492783-7d2f-4b23-81a6-71ae5e3742f2",
-        "name": "default-roles-dbos-app",
+        "name": "default-roles-app",
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
@@ -442,7 +442,7 @@
         "user",
         "manager",
         "admin",
-        "default-roles-dbos-app",
+        "default-roles-app",
         "uma_authorization"
       ],
       "clientRoles": {}
@@ -456,7 +456,7 @@
       "realmRoles": [
         "offline_access",
         "manager",
-        "default-roles-dbos-app",
+        "default-roles-app",
         "uma_authorization"
       ],
       "clientRoles": {}
@@ -469,14 +469,14 @@
       "attributes": {},
       "realmRoles": [
         "user",
-        "default-roles-dbos-app"
+        "default-roles-app"
       ],
       "clientRoles": {}
     }
   ],
   "defaultRole": {
     "id": "66492783-7d2f-4b23-81a6-71ae5e3742f2",
-    "name": "default-roles-dbos-app",
+    "name": "default-roles-app",
     "description": "${role_default-roles}",
     "composite": true,
     "clientRole": false,
@@ -549,13 +549,13 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/dbos-app/account/",
+      "baseUrl": "/realms/app/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/dbos-app/account/*"
+        "/realms/app/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -593,13 +593,13 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/dbos-app/account/",
+      "baseUrl": "/realms/app/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/dbos-app/account/*"
+        "/realms/app/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -762,13 +762,13 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/dbos-app/console/",
+      "baseUrl": "/admin/app/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/admin/dbos-app/console/*"
+        "/admin/app/console/*"
       ],
       "webOrigins": [
         "+"
@@ -824,7 +824,7 @@
     },
     {
       "id": "0c0c2022-d830-4b72-a780-b894247d7adf",
-      "clientId": "dbos-app",
+      "clientId": "app",
       "description": "DBOS app client",
       "surrogateAuthRequired": false,
       "enabled": true,

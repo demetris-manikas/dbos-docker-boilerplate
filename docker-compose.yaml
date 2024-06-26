@@ -135,8 +135,6 @@ services:
       KC_LOG_LEVEL: "ERROR"
     ports:
       - '8080:8080'
-    volumes:
-      - ./docker/keycloak/data/:/opt/keycloak/data/
 
   oauth2-proxy:
     container_name: app-oauth2-proxy

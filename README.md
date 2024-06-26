@@ -55,9 +55,6 @@ Install kafka following the directions from [here](https://rafael-natali.medium.
     docker compose build
     docker push localhost:32000/app-backend-db
     docker push localhost:32000/app-backend
-    docker push localhost:32000/app-keycloak-db
-    docker push localhost:32000/app-keycloak
-    docker push localhost:32000/app-oauth2-proxy
     cd helm
     cp values.yaml.tpl values.yaml
 ```
@@ -69,9 +66,9 @@ Set the db hostPath to point to the where you want postgres to keep its data (e.
 To install run from within the helm directory  ```helm install -f values.yaml dbos dbos-app/ -n dbos-app --create-namespace```
 To uninstall run ```helm uninstall dbos --namespace dbos-app```
 
-Add ```127.0.0.1 dbos``` to your /etc/hosts
+Add ```127.0.0.1 app.dbosapp.test``` to your /etc/hosts
 
-Visit [https://dbos/db/version](https://dbos/db/version)
+Visit [https://app.dbosapp.test/db/version](https://dbos/db/version)
 
 and you should get this message: `Connection succesfull! version: ${POSTGRES_VERSION}.`
 
@@ -79,4 +76,4 @@ and you should get this message: `Connection succesfull! version: ${POSTGRES_VER
 Most of the boilerplate is here so modify to your needs and write your [DBOS](https://docs.dbos.dev/) backed application.
 
 ## TODO
-Elaborate the keycloak setup and create example usage case
+Create keycloack oauth2-proxy helm files

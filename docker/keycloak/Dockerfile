@@ -25,8 +25,11 @@ COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/quarkus-lo
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/quarkus-logging-gelf-deployment.jar /opt/keycloak/lib/lib/main/quarkus-logging-gelf-deployment.jar
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/logstash-gelf.jar /opt/keycloak/providers/logstash-gelf.jar
 
-COPY --chown=keycloak:keycloak ./conf/cache-ispn.xml /opt/keycloak/conf/cache-ispn.xml
+# COPY --chown=keycloak:keycloak ./conf/cache-ispn.xml /opt/keycloak/conf/cache-ispn.xml
+RUN mkdir -p /opt/keycloak/domain/configuration
+COPY --chown=keycloak:keycloak ./domain/configuration/domain.xml /opt/keycloak/domain/configuration/domain.xml
 COPY --chown=keycloak:keycloak ./conf/quarkus.properties /opt/keycloak/conf/quarkus.properties
+COPY --chown=keycloak:keycloak ./data/realm-app.json /opt/keycloak/data/realm-app.json
 
 USER keycloak
 WORKDIR /opt/keycloak
