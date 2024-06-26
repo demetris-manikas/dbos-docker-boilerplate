@@ -152,7 +152,7 @@ services:
 
       OAUTH2_PROXY_PROVIDER: "oidc"
       OAUTH2_PROXY_PROVIDER_DISPLAY_NAME: "keycloak oidc"
-      OAUTH2_PROXY_CLIENT_ID: dbos-app
+      OAUTH2_PROXY_CLIENT_ID: app
 
       OAUTH2_PROXY_REAL_CLIENT_IP_HEADER: "X-Forwarded-For"
       OAUTH2_PROXY_HTTP_ADDRESS: "0.0.0.0:4180"
@@ -160,8 +160,8 @@ services:
 
       OAUTH2_PROXY_CLIENT_SECRET: "72341b6d-7065-4518-a0e4-50ee15025608"
       OAUTH2_PROXY_REDIRECT_URL: http://app.dbosapp.test/oauth2/callback
-      OAUTH2_PROXY_OIDC_ISSUER_URL: http://auth.dbosapp.test/realms/dbos-app
-      OAUTH2_PROXY_REDEEM_URL: http://auth.dbosapp.test/realms/dbos-app/protocol/openid-connect/token
+      OAUTH2_PROXY_OIDC_ISSUER_URL: http://auth.dbosapp.test/realms/app
+      OAUTH2_PROXY_REDEEM_URL: http://auth.dbosapp.test/realms/app/protocol/openid-connect/token
       OAUTH2_PROXY_REVERSE_PROXY: "true"
 
       OAUTH2_PROXY_WHITELIST_DOMAINS: ".dbosapp.test. app.dbosapp.test, auth.dbosapp.test"

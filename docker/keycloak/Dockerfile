@@ -8,7 +8,7 @@ RUN curl -o /home/user/quarkus-logging-gelf.jar https://repo1.maven.org/maven2/i
 RUN curl -o /home/user/quarkus-logging-gelf-deployment.jar https://repo1.maven.org/maven2/io/quarkus/quarkus-logging-gelf-deployment/${QUARKUS_GELF_VERSION}/quarkus-logging-gelf-deployment-${QUARKUS_GELF_VERSION}.jar
 RUN curl -o /home/user/logstash-gelf.jar https://repo1.maven.org/maven2/biz/paluch/logging/logstash-gelf/${LOGSTASH_GELF_VERSION}/logstash-gelf-${LOGSTASH_GELF_VERSION}.jar
 
-FROM quay.io/keycloak/keycloak:24.0.4 as builder
+FROM quay.io/keycloak/keycloak:24.0.4 AS builder
 COPY --from=gelf-builder --chown=keycloak:keycloak /home/user/quarkus-logging-gelf.jar /opt/keycloak/providers/quarkus-logging-gelf.jar
 COPY --from=gelf-builder --chown=keycloak:keycloak /home/user/quarkus-logging-gelf-deployment.jar /opt/keycloak/providers/quarkus-logging-gelf-deployment.jar
 COPY --from=gelf-builder --chown=keycloak:keycloak /home/user/logstash-gelf.jar /opt/keycloak/providers/logstash-gelf.jar
@@ -25,11 +25,10 @@ COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/quarkus-lo
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/quarkus-logging-gelf-deployment.jar /opt/keycloak/lib/lib/main/quarkus-logging-gelf-deployment.jar
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/logstash-gelf.jar /opt/keycloak/providers/logstash-gelf.jar
 
-# COPY --chown=keycloak:keycloak ./conf/cache-ispn.xml /opt/keycloak/conf/cache-ispn.xml
 RUN mkdir -p /opt/keycloak/domain/configuration
 COPY --chown=keycloak:keycloak ./domain/configuration/domain.xml /opt/keycloak/domain/configuration/domain.xml
 COPY --chown=keycloak:keycloak ./conf/quarkus.properties /opt/keycloak/conf/quarkus.properties
-COPY --chown=keycloak:keycloak ./data/realm-app.json /opt/keycloak/data/realm-app.json
+COPY --chown=keycloak:keycloak ./data/import /opt/keycloak/data/import
 
 USER keycloak
 WORKDIR /opt/keycloak
