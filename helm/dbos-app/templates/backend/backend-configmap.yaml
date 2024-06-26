@@ -1,0 +1,19 @@
+{{ $ctx := dict
+  "name" .Values.backend.name
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ $dbctx := dict
+  "name" .Values.backend_db.name
+  "release" .Release
+  "chart" .Chart
+}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "template.configmap.name" $ctx }}
+data:
+  APP_DB_HOSTNAME: {{ include "template.svc.name" $dbctx }}
+  BROKERS: {{ .Values.backend.config.brokers }}

@@ -1,8 +1,0 @@
-{{ $ctx := dict
-  "name" .Values.app.name
-  "service" .Values.app.service
-  "release" .Release
-  "chart" .Chart
-}}
-
-{{ include "dbos-app.ingress" $ctx }}

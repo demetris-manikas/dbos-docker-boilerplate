@@ -1,9 +1,21 @@
 registry: localhost:32000
 
-app:
+backend:
   volume:
-    hostPath: "path-to-app-dir"
+    hostPath: "/path-to-backend-dir"
 
-db:
+backend_db:
   volume:
-    hostPath: "path-for postgres data"
+    hostPath: "/tmp/dbos-app/db"
+
+keycloak:
+  volume:
+    hostPath: "/tmp/dbos-app/keycloak"
+
+keycloak_db:
+  volume:
+    hostPath: "/tmp/dbos-app/keycloak-db"
+
+kafka:
+  volume:
+    hostPath: "/tmp/dbos-app/kafka"

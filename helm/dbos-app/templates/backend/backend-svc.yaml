@@ -1,0 +1,18 @@
+{{
+  $servicePort := dict
+    "name" "app-port"
+    "port" .Values.backend.service.port
+    "targetPort" .Values.backend.service.targetPort
+}}
+
+{{ $ports := list $servicePort }}
+
+{{ $ctx := dict
+  "name" .Values.backend.name
+  "service" .Values.backend.service
+  "ports" $ports
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ include "template.svc" $ctx }}

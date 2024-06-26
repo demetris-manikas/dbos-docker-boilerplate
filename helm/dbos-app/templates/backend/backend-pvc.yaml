@@ -1,0 +1,8 @@
+{{ $ctx := dict
+  "name" .Values.backend.name
+  "volumeClaim" .Values.backend.volume
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ include "template.pvc" $ctx }}

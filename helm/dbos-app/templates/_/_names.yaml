@@ -1,31 +1,31 @@
-{{- define "dbos-app.fullname"}}
+{{- define "template.fullname"}}
 {{- printf "%s-application" .release.Name  | trunc 63 -}}
 {{ end -}}
 
-{{- define "dbos-app.dpl.name"}}
+{{- define "template.dpl.name"}}
 {{- printf "%s-%s-dpl" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.svc.name"}}
+{{- define "template.svc.name"}}
 {{- printf "%s-%s-svc" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.pv.name"}}
+{{- define "template.pv.name"}}
 {{- printf "%s-%s-pv" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.pvc.name"}}
+{{- define "template.pvc.name"}}
 {{- printf "%s-%s-pvc" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.secrets.name"}}
+{{- define "template.secrets.name"}}
 {{- printf "%s-%s-secrets" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.ingress.name"}}
+{{- define "template.ingress.name"}}
 {{- printf "%s-%s-ingress" .release.Name .name -}}
 {{ end -}}
 
-{{- define "dbos-app.configmap.name"}}
+{{- define "template.configmap.name"}}
 {{- printf "%s-%s-configmap" .release.Name .name -}}
 {{ end -}}

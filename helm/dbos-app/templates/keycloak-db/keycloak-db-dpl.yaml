@@ -1,0 +1,11 @@
+{{ $ctx := dict
+  "name" .Values.keycloak_db.name
+  "registry" .Values.registry
+  "deployment" .Values.keycloak_db.deployment
+  "service" .Values.keycloak_db.service
+  "release" .Release
+  "chart" .Chart
+  "volumeMountPath" "/var/lib/postgresql"
+}}
+
+{{ include "template.dpl" $ctx }}

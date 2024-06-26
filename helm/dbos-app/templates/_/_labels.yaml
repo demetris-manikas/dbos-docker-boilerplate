@@ -1,12 +1,12 @@
-{{- define "dbos-app.labels.list" }}
+{{- define "template.labels.list" }}
 heritage: {{ .release.Service | quote }}
 release: {{ .release.Name | quote }}
 chart: {{ .chart.Name | quote }}
 version: {{ .chart.Version | quote }}
-app: {{ include "dbos-app.fullname" . | quote}}
+app: {{ include "template.fullname" . | quote}}
 {{ end -}}
 
-{{- define "dbos-app.labels" }}
+{{- define "template.labels" }}
 labels:
-{{- include "dbos-app.labels.list" . | indent 2 -}}
+{{- include "template.labels.list" . | indent 2 -}}
 {{ end -}}

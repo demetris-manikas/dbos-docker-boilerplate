@@ -1,10 +1,10 @@
 registry: localhost:32000
 
-app:
-  name: app
+backend:
+  name: app-backend
   deployment:
     image:
-      name: dbos-app
+      name: app-backend
       version: latest
     revisionHistoryLimit: 5
     rollingUpdate:
@@ -40,24 +40,26 @@ app:
     targetPort: 3000
     ingress:
       className: nginx
-      host: dbos
+      host: app.dbosapp.test
   volume:
     hostPath: ""
     storage: 1Gi
     accessMode: ReadOnlyMany
+  config:
+    brokers: 'kafka-headless.kafka.svc.cluster.local:9092'
   secrets:
     APP_DB_NAME: app
     APP_DB_USER: app
     APP_DB_PASSWORD: app
 
-db:
-  name: db
+backend_db:
+  name: app-backend-db
   service:
     port: 5432
     targetPort: 5432
   deployment:
     image:
-      name: dbos-db
+      name: app-backend-db
       version: latest
     revisionHistoryLimit: 5
     rollingUpdate:
@@ -93,3 +95,103 @@ db:
   secrets:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
+
+keycloak:
+  name: app-keycloak
+  deployment:
+    image:
+      name: app-keycloak
+      version: latest
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: 1
+      limits:
+        memory: "2Gi"
+        cpu: 2
+    probe:
+      method:
+        httpGet:
+          path: /
+          port: 8080
+          scheme: HTTP
+      liveness:
+        initialDelaySeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 3
+        timeoutSeconds: 12
+      readiness:
+        initialDelaySeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 1
+        timeoutSeconds: 3
+  service:
+    port: 8080
+    targetPort: 8080
+    ingress:
+      className: nginx
+      host: auth.dbosapp.test
+  volume:
+    hostPath: ""
+    storage: 1Gi
+    accessMode: ReadOnlyMany
+  config:
+  secrets:
+    KEYCLOAK_ADMIN: "admin"
+    KEYCLOAK_ADMIN_PASSWORD: "admin"
+    KC_DB_USERNAME: "keycloak"
+    KC_DB_PASSWORD: "keycloak"
+
+
+keycloak_db:
+  name: app-keycloak-db
+  service:
+    port: 5432
+    targetPort: 5432
+  deployment:
+    image:
+      name: app-keycloak-db
+      version: latest
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 1
+      limits:
+        memory: 1Gi
+        cpu: 1
+    probe:
+      method:
+        exec:
+          command: ["sh", "-c", "pg_isready"]
+      liveness:
+        initialDelaySeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 3
+        timeoutSeconds: 12
+      readiness:
+        initialDelaySeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 1
+        timeoutSeconds: 3
+  volume:
+    hostPath: ""
+    storage: 1Gi
+    accessMode: ReadWriteOnce
+  secrets:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    KEYCLOAK_DB_NAME: keycloak
+    KEYCLOAK_DB_USER: keycloak
+    KEYCLOAK_DB_PASSWORD: keycloak

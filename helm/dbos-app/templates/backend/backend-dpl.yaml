@@ -1,0 +1,11 @@
+{{ $ctx := dict
+  "name" .Values.backend.name
+  "registry" .Values.registry
+  "deployment" .Values.backend.deployment
+  "service" .Values.backend.service
+  "release" .Release
+  "chart" .Chart
+  "volumeMountPath" "/home/node/backend"
+}}
+
+{{ include "template.dpl" $ctx }}

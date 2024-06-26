@@ -10,7 +10,7 @@ A Helm configuration (tested with microk8s) is also provided.
 #### run the following commands to get up and running
 
 ```bash
-cd app
+cd backend
 npm run install
 npm run build
 cd ..
@@ -49,25 +49,26 @@ addons:
 ```
 
 Edit your .env file and set REGISTRY to localhost:32000/ (sorry the trailing slash is not optional)
+
+Install kafka following the directions from [here](https://rafael-natali.medium.com/running-kafka-in-kubernetes-with-kraft-mode-549d22ab31b0) and then run the following commands
 ```bash
-    cd app
     docker compose build
-    docker push localhost:32000/dbos-app
-    docker push localhost:32000/dbos-db
-    cd ../helm
+    docker push localhost:32000/app-backend-db
+    docker push localhost:32000/app-backend
+    cd helm
     cp values.yaml.tpl values.yaml
 ```
 Edit helm/values.yaml.
 
-Set the app hostPath to point to the app dir (e.g. /home/user/projects/dbos-app/app)
-Set the db hostPath to point to the where you want postgres to keep its data (e.g. /tmp/dbos-app)
+Set the app hostPath to point to the app dir (e.g. /home/user/projects/dbos-app/backend)
+Set the db hostPath to point to the where you want postgres to keep its data (e.g. /tmp/backend-db)
 
 To install run from within the helm directory  ```helm install -f values.yaml dbos dbos-app/ -n dbos-app --create-namespace```
 To uninstall run ```helm uninstall dbos --namespace dbos-app```
 
-Add ```127.0.0.1 dbos``` to your /etc/hosts
+Add ```127.0.0.1 app.dbosapp.test``` to your /etc/hosts
 
-Visit [https://dbos/db/version](https://dbos/db/version)
+Visit [https://app.dbosapp.test/db/version](https://dbos/db/version)
 
 and you should get this message: `Connection succesfull! version: ${POSTGRES_VERSION}.`
 
@@ -75,4 +76,4 @@ and you should get this message: `Connection succesfull! version: ${POSTGRES_VER
 Most of the boilerplate is here so modify to your needs and write your [DBOS](https://docs.dbos.dev/) backed application.
 
 ## TODO
-Elaborate the keycloak setup and create example usage case
+Create keycloack oauth2-proxy helm files

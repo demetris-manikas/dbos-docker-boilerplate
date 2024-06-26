@@ -1,0 +1,10 @@
+{{ $ctx := dict
+  "name" .Values.keycloak_db.name
+  "release" .Release
+  "chart" .Chart
+}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "template.configmap.name" $ctx }}
+data:

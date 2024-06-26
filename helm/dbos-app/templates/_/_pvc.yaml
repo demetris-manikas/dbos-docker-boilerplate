@@ -1,16 +1,16 @@
-{{- define "dbos-app.pvc"}}
+{{- define "template.pvc"}}
 apiVersion: v1
 
 kind: PersistentVolumeClaim
 
 metadata:
-  name: {{ include "dbos-app.pvc.name" . }}
-{{- include "dbos-app.labels" . | indent 2 }}
+  name: {{ include "template.pvc.name" . }}
+{{- include "template.labels" . | indent 2 }}
 spec:
   storageClassName: manual
   accessModes:
     - {{ .volumeClaim.accessMode | quote }}
-  volumeName: {{ include "dbos-app.pv.name" . }}
+  volumeName: {{ include "template.pv.name" . }}
   resources:
     requests:
         storage: {{ .volumeClaim.storage }}
