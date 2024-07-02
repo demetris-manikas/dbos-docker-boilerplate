@@ -9,14 +9,14 @@
     "lint-fix": "eslint --fix src"
   },
   "devDependencies": {
-    "@dbos-inc/eslint-plugin": "^0.0.6",
-    "eslint": "^8.56.0",
-    "nodemon": "^3.1.0",
-    "typescript": "^5.2.2"
+    "@dbos-inc/eslint-plugin": "^1.0.4",
+    "eslint": "^9.6.0",
+    "nodemon": "^3.1.4",
+    "typescript": "^5.5.3"
   },
   "dependencies": {
-    "@dbos-inc/communicator-random": "^1.12.10",
-    "@dbos-inc/dbos-sdk": "^1.12.10",
+    "@dbos-inc/communicator-random": "^1.15.9",
+    "@dbos-inc/dbos-sdk": "^1.15.9",
     "kafkajs": "^2.2.4",
     "knex": "3.1.0"
   }
