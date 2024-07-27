@@ -1,7 +1,7 @@
 FROM maven:3.9-eclipse-temurin-17 AS gelf-builder
 ARG QUARKUS_GELF_VERSION=3.6.4
 ARG LOGSTASH_GELF_VERSION=1.15.1
-RUN useradd -m -u 1000 user
+RUN useradd -m user
 USER user
 WORKDIR /home/user
 RUN curl -o /home/user/quarkus-logging-gelf.jar https://repo1.maven.org/maven2/io/quarkus/quarkus-logging-gelf/${QUARKUS_GELF_VERSION}/quarkus-logging-gelf-${QUARKUS_GELF_VERSION}.jar
