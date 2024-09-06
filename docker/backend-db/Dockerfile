@@ -1,4 +1,4 @@
-FROM postgres:16-alpine
+FROM sibedge/postgres-plv8
 
 USER postgres
 
