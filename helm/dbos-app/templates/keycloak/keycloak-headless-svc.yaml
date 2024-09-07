@@ -1,6 +1,11 @@
 {{ $config := .Values.keycloak }}
 
-{{ $name :=  printf "%s-headless" $config.name }}
+{{ $keycloakHeadlessCtx := dict
+  "name" (printf "%s-headless" $config.name)
+  "release" .Release
+  "chart" .Chart
+}}
+{{ $keycloakHeadlessServiceName := include "template.svc.name" $keycloakHeadlessCtx }}
 
 {{ $ctx := dict
   "name" $config.name
@@ -10,16 +15,10 @@
 
 {{ $keycloakServiceName := include "template.svc.name" $ctx }}
 
-{{ $serviceName := include "template.svc.name" (dict
-  "name" $name
-  "release" .Release
-  "chart" .Chart
-) }}
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $serviceName }}
+  name: {{ $keycloakHeadlessServiceName }}
 spec:
   clusterIP: None
   selector:

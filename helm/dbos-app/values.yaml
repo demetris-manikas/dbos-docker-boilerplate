@@ -120,13 +120,13 @@ keycloak:
           port: 8080
           scheme: HTTP
       liveness:
-        initialDelaySeconds: 10
+        initialDelaySeconds: 40
         successThreshold: 1
         failureThreshold: 3
         periodSeconds: 3
         timeoutSeconds: 12
       readiness:
-        initialDelaySeconds: 10
+        initialDelaySeconds: 40
         successThreshold: 1
         failureThreshold: 3
         periodSeconds: 1

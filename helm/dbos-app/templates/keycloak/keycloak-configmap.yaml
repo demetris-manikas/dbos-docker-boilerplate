@@ -12,15 +12,13 @@
   "chart" .Chart
 }}
 
-{{ $name :=  printf "%s-headless" $config.name }}
-
-{{ $ctx := dict
-  "name" $config.name
+{{ $keycloakHeadlessCtx := dict
+  "name" (printf "%s-headless" $config.name)
   "release" .Release
   "chart" .Chart
 }}
 
-{{ $keycloakServiceName := include "template.svc.name" $ctx }}
+{{ $keycloakHeadlessServiceName := include "template.svc.name" $keycloakHeadlessCtx }}
 
 apiVersion: v1
 kind: ConfigMap
@@ -36,5 +34,5 @@ data:
   KC_HOSTNAME_STRICT_HTTPS: "false"
   KC_HTTP_ENABLED: "true"
   KC_PROXY: "edge"
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s" $keycloakServiceName }}
+  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s" $keycloakHeadlessServiceName }}
 
