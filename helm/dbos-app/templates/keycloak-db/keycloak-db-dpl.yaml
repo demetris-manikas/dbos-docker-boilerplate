@@ -1,11 +1,31 @@
+{{ $config := .Values.keycloak_db }}
+
+{{ $namesCtx := dict
+  "name" $config.name
+  "release" .Release
+}}
+
+{{ $persistentVolumeName := include "template.pv.name" $namesCtx }}
+{{ $pvcName := include "template.pvc.name" $namesCtx }}
+
+{{ $persistentVolume := (dict
+  "name" $persistentVolumeName
+  "persistentVolumeClaim" (dict "claimName" $pvcName)
+  )
+}}
+
+{{ $persistentVolumeMount := (dict
+  "name" $persistentVolumeName
+  "mountPath" "/var/lib/postgresql"
+)}}
+
 {{ $ctx := dict
-  "name" .Values.keycloak_db.name
+  "name" $config.name
   "registry" .Values.registry
-  "deployment" .Values.keycloak_db.deployment
-  "service" .Values.keycloak_db.service
+  "deployment" $config.deployment
+  "service" $config.service
   "release" .Release
   "chart" .Chart
-  "volumeMountPath" "/var/lib/postgresql"
 }}
 
 {{ include "template.dpl" $ctx }}

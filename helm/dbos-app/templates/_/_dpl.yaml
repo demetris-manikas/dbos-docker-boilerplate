@@ -32,21 +32,24 @@ spec:
       labels:
         service: {{ $serviceName }}
     spec:
-      {{ if .volumeMountPath }}
+      {{- if .volumes }}
       volumes:
-        - name: {{ $volumeName }}
-          persistentVolumeClaim:
-            claimName: {{ $volumeClaimName }}
+      {{- range .volumes }}
+        -
+{{ toYaml . | indent 10 -}}
       {{ end }}
+      {{- end }}
       containers:
         - name: {{ $serviceName }}
           image: {{ $image }}
           imagePullPolicy: Always
-          {{ if .volumeMountPath }}
+          {{- if .volumeMounts }}
           volumeMounts:
-            - name: {{ $volumeName }}
-              mountPath: {{ .volumeMountPath }}
-          {{ end }}
+          {{- range .volumeMounts }}
+            -
+{{ toYaml . | indent 14 -}}
+            {{ end }}
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "template.configmap.name" . }}
