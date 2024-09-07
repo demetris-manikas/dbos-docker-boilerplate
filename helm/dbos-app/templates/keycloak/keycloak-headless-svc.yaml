@@ -1,0 +1,26 @@
+{{ $config := .Values.keycloak }}
+
+{{ $name :=  printf "%s-headless" $config.name }}
+
+{{ $ctx := dict
+  "name" $config.name
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ $keycloakServiceName := include "template.svc.name" $ctx }}
+
+{{ $serviceName := include "template.svc.name" (dict
+  "name" $name
+  "release" .Release
+  "chart" .Chart
+) }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $serviceName }}
+spec:
+  clusterIP: None
+  selector:
+    service: {{ $keycloakServiceName }}

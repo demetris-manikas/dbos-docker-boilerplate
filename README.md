@@ -55,6 +55,8 @@ Install kafka following the directions from [here](https://rafael-natali.medium.
     docker compose build
     docker push localhost:32000/app-backend-db
     docker push localhost:32000/app-backend
+    docker push localhost:32000/app-keycloak-db
+    docker push localhost:32000/app-keycloak
     cd helm
     cp values.yaml.tpl values.yaml
 ```
@@ -76,4 +78,4 @@ and you should get this message: `Connection succesfull! version: ${POSTGRES_VER
 Most of the boilerplate is here so modify to your needs and write your [DBOS](https://docs.dbos.dev/) backed application.
 
 ## TODO
-Create keycloack oauth2-proxy helm files
+Create oauth2-proxy helm files

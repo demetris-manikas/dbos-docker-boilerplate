@@ -1,0 +1,40 @@
+{{ $config := .Values.keycloak }}
+
+{{ $ctx := dict
+  "name" $config.name
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ $dbctx := dict
+  "name" .Values.keycloak_db.name
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ $name :=  printf "%s-headless" $config.name }}
+
+{{ $ctx := dict
+  "name" $config.name
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ $keycloakServiceName := include "template.svc.name" $ctx }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "template.configmap.name" $ctx }}
+data:
+  KC_DB: postgres
+  KC_DB_SCHEMA: public
+  KC_DB_URL_DATABASE: {{ $config.env.KC_DB_URL_DATABASE }}
+  KC_DB_URL_HOST: {{ include "template.svc.name" $dbctx }}
+  KC_DB_URL_PORT: "5432"
+  KC_HOSTNAME: {{ $config.service.ingress.host }}
+  KC_HOSTNAME_STRICT_HTTPS: "false"
+  KC_HTTP_ENABLED: "true"
+  KC_PROXY: "edge"
+  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s" $keycloakServiceName }}
+

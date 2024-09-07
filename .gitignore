@@ -147,3 +147,4 @@ dist
 
 
 helm/values.yaml
+helm/dist

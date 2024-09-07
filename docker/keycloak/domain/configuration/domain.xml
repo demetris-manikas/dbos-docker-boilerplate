@@ -1,7 +1,0 @@
-<spi name="userCache">
-    <provider name="default" enabled="false"/>
-</spi>
-
-<spi name="realmCache">
-    <provider name="default" enabled="false"/>
-</spi>

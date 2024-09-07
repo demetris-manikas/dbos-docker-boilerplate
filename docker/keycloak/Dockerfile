@@ -14,8 +14,8 @@ COPY --from=gelf-builder --chown=keycloak:keycloak /home/user/quarkus-logging-ge
 COPY --from=gelf-builder --chown=keycloak:keycloak /home/user/logstash-gelf.jar /opt/keycloak/providers/logstash-gelf.jar
 USER keycloak
 WORKDIR /opt/keycloak
-RUN /opt/keycloak/bin/kc.sh build --features=authorization,impersonation --health-enabled=true
 
+RUN /opt/keycloak/bin/kc.sh build --features=authorization,impersonation --db=postgres --cache=ispn --cache-stack=kubernetes --health-enabled=true --metrics-enabled=true
 
 FROM quay.io/keycloak/keycloak:24.0.4
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
@@ -25,8 +25,6 @@ COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/quarkus-lo
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/quarkus-logging-gelf-deployment.jar /opt/keycloak/lib/lib/main/quarkus-logging-gelf-deployment.jar
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/logstash-gelf.jar /opt/keycloak/providers/logstash-gelf.jar
 
-RUN mkdir -p /opt/keycloak/domain/configuration
-COPY --chown=keycloak:keycloak ./domain/configuration/domain.xml /opt/keycloak/domain/configuration/domain.xml
 COPY --chown=keycloak:keycloak ./conf/quarkus.properties /opt/keycloak/conf/quarkus.properties
 COPY --chown=keycloak:keycloak ./data/import /opt/keycloak/data/import
 

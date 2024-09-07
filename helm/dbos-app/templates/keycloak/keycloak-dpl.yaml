@@ -1,0 +1,12 @@
+{{ $config := .Values.keycloak }}
+
+{{ $ctx := dict
+  "name" $config.name
+  "registry" .Values.registry
+  "deployment" $config.deployment
+  "service" $config.service
+  "release" .Release
+  "chart" .Chart
+}}
+
+{{ include "template.dpl" $ctx }}
