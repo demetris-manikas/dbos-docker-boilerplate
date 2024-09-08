@@ -1,14 +1,11 @@
 {{- define "template.dpl"}}
 {{ $deplomentName := include "template.dpl.name" . }}
 {{ $serviceName := include "template.svc.name" . }}
-{{ $image := printf "%s/%s:%s" .registry .deployment.image.name .deployment.image.version}}
+{{ $image := printf "%s/%s:%s" .registry .deployment.image.name .deployment.image.version }}
 {{ $probeMethod := toYaml .deployment.probe.method }}
 {{ $livenessSettings := .deployment.probe.liveness }}
 {{ $readinessSettings := .deployment.probe.readiness }}
 {{ $requestsSettings := .deployment.resources }}
-
-{{ $volumeName := include "template.pv.name" . }}
-{{ $volumeClaimName := include "template.pvc.name" . }}
 
 apiVersion: apps/v1
 

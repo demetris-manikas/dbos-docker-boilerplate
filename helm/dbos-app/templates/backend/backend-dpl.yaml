@@ -16,7 +16,7 @@
 
 {{ $persistentVolumeMount := (dict
   "name" $persistentVolumeName
-  "mountPath" "/home/node/backend"
+  "mountPath" "/home/node/app"
 )}}
 
 {{ $ctx := dict
