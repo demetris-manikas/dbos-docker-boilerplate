@@ -15,8 +15,8 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "@dbos-inc/communicator-random": "^1.15.9",
-    "@dbos-inc/dbos-sdk": "^1.15.9",
+    "@dbos-inc/communicator-random": "^1.23.8",
+    "@dbos-inc/dbos-sdk": "^1.23.8",
     "kafkajs": "^2.2.4",
     "knex": "3.1.0"
   }
