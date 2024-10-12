@@ -6,7 +6,6 @@ kind: Ingress
 
 metadata:
   name: {{ include "template.svc.name" . }}-ingress
-{{- include "template.labels" . | indent 2 }}
 spec:
   ingressClassName: {{ $ingressSettings.className | quote }}
   rules:

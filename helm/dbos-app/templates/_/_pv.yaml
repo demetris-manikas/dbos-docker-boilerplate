@@ -7,7 +7,6 @@ metadata:
   name: {{ include "template.pv.name" . }}
   labels:
     type: local
-{{- include "template.labels.list" . | indent 4 }}
 spec:
   storageClassName: manual
   capacity:

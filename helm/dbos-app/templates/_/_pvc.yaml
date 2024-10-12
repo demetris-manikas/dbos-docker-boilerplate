@@ -5,7 +5,6 @@ kind: PersistentVolumeClaim
 
 metadata:
   name: {{ include "template.pvc.name" . }}
-{{- include "template.labels" . | indent 2 }}
 spec:
   storageClassName: manual
   accessModes:

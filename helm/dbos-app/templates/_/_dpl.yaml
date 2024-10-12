@@ -13,7 +13,6 @@ kind: Deployment
 
 metadata:
   name: {{ $deplomentName }}
-{{- include "template.labels" . | indent 2 }}
 spec:
   selector:
     matchLabels:

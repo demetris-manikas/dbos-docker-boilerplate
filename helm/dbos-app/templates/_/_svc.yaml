@@ -9,7 +9,6 @@ metadata:
   name: {{ $serviceName }}
   labels:
     service: {{ $serviceName }}
-{{- include "template.labels.list" . | indent 4 }}
 spec:
   ports:
     {{- range .ports }}
