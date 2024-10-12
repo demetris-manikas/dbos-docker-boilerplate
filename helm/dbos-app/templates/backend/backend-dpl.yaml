@@ -24,8 +24,8 @@
   "registry" .Values.registry
   "deployment" $config.deployment
   "service" $config.service
-  "volumes" (list $persistentVolume )
-  "volumeMounts" (list $persistentVolumeMount )
+  "volumes" (list $persistentVolume)
+  "volumeMounts" (list $persistentVolumeMount)
   "release" .Release
 }}
 

@@ -1,7 +1,3 @@
-{{- define "template.fullname"}}
-{{- printf "%s-application" .release.Name  | trunc 63 -}}
-{{ end -}}
-
 {{- define "template.dpl.name"}}
 {{- printf "%s-%s-dpl" .release.Name .name -}}
 {{ end -}}
