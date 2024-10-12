@@ -2,7 +2,7 @@
   "name" .Values.backend.name
   "service" .Values.backend.service
   "release" .Release
-  "chart" .Chart
+
 }}
 
 {{ include "template.ingress" $ctx }}

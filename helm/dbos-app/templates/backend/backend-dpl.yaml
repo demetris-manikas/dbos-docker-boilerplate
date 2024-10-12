@@ -27,7 +27,6 @@
   "volumes" (list $persistentVolume )
   "volumeMounts" (list $persistentVolumeMount )
   "release" .Release
-  "chart" .Chart
 }}
 
 {{ include "template.dpl" $ctx }}

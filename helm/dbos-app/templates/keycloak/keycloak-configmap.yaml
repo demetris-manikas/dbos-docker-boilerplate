@@ -3,19 +3,16 @@
 {{ $ctx := dict
   "name" $config.name
   "release" .Release
-  "chart" .Chart
 }}
 
 {{ $dbctx := dict
   "name" .Values.keycloak_db.name
   "release" .Release
-  "chart" .Chart
 }}
 
 {{ $keycloakHeadlessCtx := dict
   "name" (printf "%s-headless" $config.name)
   "release" .Release
-  "chart" .Chart
 }}
 
 {{ $keycloakHeadlessServiceName := include "template.svc.name" $keycloakHeadlessCtx }}

@@ -4,7 +4,6 @@
   "name" $config.name
   "service" $config.service
   "release" .Release
-  "chart" .Chart
 }}
 
 {{ include "template.ingress" $ctx }}

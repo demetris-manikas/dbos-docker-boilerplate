@@ -13,7 +13,6 @@
   "service" $config.service
   "ports" $ports
   "release" .Release
-  "chart" .Chart
 }}
 
 {{ include "template.svc" $ctx }}

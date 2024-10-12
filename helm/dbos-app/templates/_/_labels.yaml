@@ -1,8 +1,6 @@
 {{- define "template.labels.list" }}
 heritage: {{ .release.Service | quote }}
 release: {{ .release.Name | quote }}
-chart: {{ .chart.Name | quote }}
-version: {{ .chart.Version | quote }}
 app: {{ include "template.fullname" . | quote}}
 {{ end -}}
 

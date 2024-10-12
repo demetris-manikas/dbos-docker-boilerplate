@@ -1,13 +1,12 @@
 {{ $ctx := dict
   "name" .Values.backend.name
   "release" .Release
-  "chart" .Chart
 }}
 
 {{ $dbctx := dict
   "name" .Values.backend_db.name
   "release" .Release
-  "chart" .Chart
+
 }}
 
 apiVersion: v1
