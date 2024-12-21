@@ -1,0 +1,39 @@
+registry: localhost:32000
+
+backend:
+  name: dbos-backend
+  deployment:
+    image:
+      name: dbos-backend
+      version: latest
+
+
+backend_db:
+  name: dbos-backend-db
+  deployment:
+    image:
+      name: dbos-backend-db
+      version: latest
+  volume:
+    hostPath: "/tmp/dbos-app/db"
+
+keycloak:
+  name: dbos-keycloak
+  deployment:
+    image:
+      name: dbos-keycloak
+      version: latest
+  volume:
+    hostPath: "/tmp/dbos-app/keycloak"
+
+keycloak_db:
+  name: dbos-keycloak-db
+  deployment:
+    image:
+      name: dbos-keycloak-db
+      version: latest
+  volume:
+    hostPath: "/tmp/dbos-app/keycloak-db"
+
+container_registry:
+  enabled: true

@@ -1,0 +1,21 @@
+FROM node:22-alpine
+
+RUN npm install -g typescript tsx nodemon
+
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
+WORKDIR /home/node/app
+
+COPY package.json ./
+COPY package-lock.json ./
+COPY tsconfig.json ./
+COPY nodemon.json ./
+COPY dbos-config.yaml ./
+COPY entrypoint.dev.sh ./
+RUN chmod +x entrypoint.dev.sh
+
+RUN npm ci
+
+ENV NODE_ENV=development
+
+EXPOSE 3000
+
