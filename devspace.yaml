@@ -11,6 +11,7 @@ vars:
   CLUSTER_NAME: ${DEVSPACE_NAME}-cluster
   NAMESPACE: ${DEVSPACE_NAME}
   TEMPLATES_DIST: ./helm/dist
+  SECRETS_DIR: ${TEMPLATES_DIST}/secrets-dev
 
 commands:
   bootstrap: |-
@@ -27,6 +28,7 @@ commands:
     kubectl create namespace ${NAMESPACE}
     devspace use namespace ${NAMESPACE}
     kubectl create namespace argocd
+    kubectl create namespace kafka
     kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
     helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
     helm install sealed-secrets -n kube-system sealed-secrets/sealed-secrets
@@ -69,35 +71,54 @@ pipelines:
 
 images:
   backend:
-    image: ${REGISTRY}/backend:latest
+    image: ${REGISTRY}/dbos-backend:latest
     dockerfile: ./backend/Dockerfile
     context: ./backend/
+  backend-db:
+    image: ${REGISTRY}/dbos-backend-db:latest
+    dockerfile: ./docker/backend-db/Dockerfile
+    context: ./docker/backend-db
   keycloak:
-    image: ${REGISTRY}/keycloak:latest
+    image: ${REGISTRY}/dbos-keycloak:latest
     dockerfile: ./docker/keycloak/Dockerfile
     context: ./docker/keycloak
+  keycloak-db:
+    image: ${REGISTRY}/dbos-keycloak-db:latest
+    dockerfile: ./docker/keycloak-db/Dockerfile
+    context: ./docker/keycloak-db
 
 deployments:
+  secrets:
+    kubectl:
+      manifests:
+        - ${SECRETS_DIR}
   nginx-controller:
     kubectl:
       manifests:
         - ${TEMPLATES_DIST}/dbos-app/templates/nginx-controller
-  # secrets:
-  #   kubectl:
-  #     manifests:
-  #       - ./dist/secrets-dev/
-  # apps:
-  #   kubectl:
-  #     manifests:
-  #       - ./dist/empower/templates/apps/nginx-controller/
-  # backend:
-  #   kubectl:
-  #     manifests:
-  #       - ./dist/empower/templates/backend/
-  # keycloak:
-  #   kubectl:
-  #     manifests:
-  #       - ./dist/empower/templates/keycloak/
+  kafka:
+    kubectl:
+      manifests:
+        - ${TEMPLATES_DIST}/dbos-app/templates/kafka
+
+  backend-db:
+    kubectl:
+      manifests:
+        - ${TEMPLATES_DIST}/dbos-app/templates/backend-db
+  backend:
+    kubectl:
+      manifests:
+        - ${TEMPLATES_DIST}/dbos-app/templates/backend
+
+  keycloak:
+    kubectl:
+      manifests:
+        - ${TEMPLATES_DIST}/dbos-app/templates/keycloak
+  keycloak-db:
+    kubectl:
+      manifests:
+        - ${TEMPLATES_DIST}/dbos-app/templates/keycloak-db
+
 dev:
   # frontend:
   #   imageSelector: localhost:32000/frontend:latest

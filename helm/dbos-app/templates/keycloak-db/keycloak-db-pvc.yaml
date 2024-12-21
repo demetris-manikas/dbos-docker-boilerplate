@@ -1,7 +1,6 @@
 {{ $ctx := dict
   "name" .Values.keycloak_db.name
   "volumeClaim" .Values.keycloak_db.volume
-  "release" .Release
 }}
 
 {{ include "template.pvc" $ctx }}

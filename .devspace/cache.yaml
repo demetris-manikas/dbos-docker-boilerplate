@@ -1,16 +1,28 @@
 varsEncrypted: true
 images:
     backend:
-        imageConfigHash: 8802b47477b689d35bfbd8a830ee13afa5adabc5e63a7d4ec939d4d73d8c1fb6
-        dockerfileHash: a1507aa5ec304cb8ff6c390eca2e16a705c058be31459f682087d1053a2d5c0f
-        contextHash: 6269f0dd63a6efd3ef68192e4ef5b0ed2891aeb11d797fffaac0e32de143be3f
-        imageName: localhost:32000/backend
+        imageConfigHash: 345644a5af75c08f6f8be98cda60cea57a12f6f5c3b81dc22ff56da87f96e135
+        dockerfileHash: 7e7a543a632619a346c5c606cc1fc5d23ade79281639fe6506b91986def00710
+        contextHash: 790d5bb9b6b0bd53c54ca59aeba4094e61d998fbf035d2b3eb11f46dc2b6f247
+        imageName: localhost:32000/dbos-backend
+        tag: latest
+    backend-db:
+        imageConfigHash: 19ce3029a593042afbfe67995abccb667a1a4f8b2f2a5265f72e3e4509c21688
+        dockerfileHash: 3fb7920b35f3889f6ca604ea8be6287ca53f6dbd07535dfb6c07aa8c6253ec1c
+        contextHash: 7bc894a335ce3d99c88c0c3266dd5ba0d9c29d3b4c353154c8daf41ad3a57419
+        imageName: localhost:32000/dbos-backend-db
         tag: latest
     keycloak:
-        imageConfigHash: 109ee716938881f1eed6eeb39b1f8fdbbed2c0c17d42899fe9862f5622cd72a3
+        imageConfigHash: c6c1bf74ca0a55b548068e54556ca686a293ffe146d80d605300ac78891d4706
         dockerfileHash: 4125dd1db74a3b353df30284fd0ef903ae8dac22357c6500d20cb4f1c10d312a
         contextHash: 43c5bb9b89095f653a3d2691dcbcedca88404506d2a8c03dcae62a555c8addc2
-        imageName: localhost:32000/keycloak
+        imageName: localhost:32000/dbos-keycloak
+        tag: latest
+    keycloak-db:
+        imageConfigHash: 9e2ba1433c7109fee551608f6b1dcd31dbfcae6defc5d0b05d94177eb8531814
+        dockerfileHash: 03ea350ff3cb102614003358eee481082863de760fd7e354fba5339468d7c5fb
+        contextHash: d34211f528f54278aedc3b8316e987f0ad8be7cbf9b18f4bff043948e55e1640
+        imageName: localhost:32000/dbos-keycloak-db
         tag: latest
 lastContext:
     namespace: dbos

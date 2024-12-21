@@ -1,6 +1,5 @@
 {{ $ctx := dict
   "name" .Values.backend_db.name
-  "release" .Release
 }}
 apiVersion: v1
 kind: ConfigMap

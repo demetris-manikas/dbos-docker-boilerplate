@@ -1,27 +1,27 @@
 {{- define "template.dpl.name"}}
-{{- printf "%s-%s-dpl" .release.Name .name -}}
+{{- printf "%s-dpl" .name -}}
 {{ end -}}
 
 {{- define "template.svc.name"}}
-{{- printf "%s-%s-svc" .release.Name .name -}}
+{{- printf "%s-svc" .name -}}
 {{ end -}}
 
 {{- define "template.pv.name"}}
-{{- printf "%s-%s-pv" .release.Name .name -}}
+{{- printf "%s-pv" .name -}}
 {{ end -}}
 
 {{- define "template.pvc.name"}}
-{{- printf "%s-%s-pvc" .release.Name .name -}}
+{{- printf "%s-pvc" .name -}}
 {{ end -}}
 
 {{- define "template.secrets.name"}}
-{{- printf "%s-%s-secrets" .release.Name .name -}}
+{{- printf "%s-secrets" .name -}}
 {{ end -}}
 
 {{- define "template.ingress.name"}}
-{{- printf "%s-%s-ingress" .release.Name .name -}}
+{{- printf "%s-ingress" .name -}}
 {{ end -}}
 
 {{- define "template.configmap.name"}}
-{{- printf "%s-%s-configmap" .release.Name .name -}}
+{{- printf "%s-configmap" .name -}}
 {{ end -}}

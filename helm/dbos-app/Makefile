@@ -9,7 +9,10 @@ template: values
 
 secrets:
 	@mkdir -p ${output-dir}
+	@$(call secret,backend,_secrets)
 	@$(call secret,backend-db,_secrets)
+	@$(call secret,keycloak,_secrets)
+	@$(call secret,keycloak-db,_secrets)
 
 define secret
 	cp templates/$(1)/$(2).yaml templates/$(1)/secrets.yaml

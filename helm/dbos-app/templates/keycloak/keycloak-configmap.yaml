@@ -1,18 +1,16 @@
 {{ $config := .Values.keycloak }}
+{{ $resourcesSettings := $config.deployment.resources }}
 
 {{ $ctx := dict
   "name" $config.name
-  "release" .Release
 }}
 
 {{ $dbctx := dict
   "name" .Values.keycloak_db.name
-  "release" .Release
 }}
 
 {{ $keycloakHeadlessCtx := dict
   "name" (printf "%s-headless" $config.name)
-  "release" .Release
 }}
 
 {{ $keycloakHeadlessServiceName := include "template.svc.name" $keycloakHeadlessCtx }}
@@ -30,6 +28,8 @@ data:
   KC_HOSTNAME: {{ $config.service.ingress.host }}
   KC_HOSTNAME_STRICT_HTTPS: "false"
   KC_HTTP_ENABLED: "true"
-  KC_PROXY: "edge"
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s" $keycloakHeadlessServiceName }}
+  KC_PROXY_HEADERS: forwarded
+  KC_CACHE: ispn
+  KC_CACHE_STACK: kubernetes
+  JAVA_OPTS_APPEND: {{ printf "-Xms%s -Xmx%s -Djgroups.dns.query=%s" $resourcesSettings.requests.java  $resourcesSettings.limits.java $keycloakHeadlessServiceName}}
 

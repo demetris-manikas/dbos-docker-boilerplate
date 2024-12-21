@@ -1,7 +1,6 @@
 {{ $ctx := dict
   "name" .Values.backend_db.name
   "volumeClaim" .Values.backend_db.volume
-  "release" .Release
 }}
 
 {{ include "template.pvc" $ctx }}

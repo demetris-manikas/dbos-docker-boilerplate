@@ -146,5 +146,5 @@ dist
 *.swo
 
 
-helm/values.yaml
+
 helm/dist

@@ -3,7 +3,6 @@
 {{ $ctx := dict
   "name" $config.name
   "service" $config.service
-  "release" .Release
 }}
 
 {{ include "template.ingress" $ctx }}

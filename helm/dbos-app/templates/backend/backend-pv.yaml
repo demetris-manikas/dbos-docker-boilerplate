@@ -1,7 +1,0 @@
-{{ $ctx := dict
-  "name" .Values.backend.name
-  "volume" .Values.backend.volume
-  "release" .Release
-}}
-
-{{ include "template.pv" $ctx }}
