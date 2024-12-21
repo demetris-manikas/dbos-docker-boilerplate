@@ -1,0 +1,128 @@
+version: v2beta1
+name: dbos
+
+localRegistry:
+  enabled: false
+
+vars:
+  REGISTRY_HOST: localhost
+  REGISTRY_PORT: 32000
+  REGISTRY: ${REGISTRY_HOST}:${REGISTRY_PORT}
+  CLUSTER_NAME: ${DEVSPACE_NAME}-cluster
+  NAMESPACE: ${DEVSPACE_NAME}
+  TEMPLATES_DIST: ./helm/dist
+
+commands:
+  bootstrap: |-
+    k3d cluster create \
+          -v /etc/machine-id:/etc/machine-id \
+          --k3s-arg "--disable=traefik@server:0" \
+          --api-port 6550 \
+          -p "80:80@loadbalancer" \
+          -p "8444:8444@loadbalancer" \
+          -p "${REGISTRY_PORT}:${REGISTRY_PORT}@loadbalancer" \
+          ${CLUSTER_NAME}
+    devspace use context k3d-${CLUSTER_NAME}
+
+    kubectl create namespace ${NAMESPACE}
+    devspace use namespace ${NAMESPACE}
+    kubectl create namespace argocd
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+    helm install sealed-secrets -n kube-system sealed-secrets/sealed-secrets
+    kubectl rollout status deployment sealed-secrets -n kube-system
+    devspace run helm
+    kubectl apply -f ${TEMPLATES_DIST}/dbos-app/templates/nginx-controller
+    kubectl apply -f ${TEMPLATES_DIST}/dbos-app/templates/container-registry
+    kubectl apply -f ${TEMPLATES_DIST}/dbos-app/templates/coredns
+    kubectl rollout restart deployment coredns -n kube-system
+    kubectl rollout status deployment coredns -n kube-system
+    kubectl rollout status deployment container-registry-deployment
+
+  cluster-delete: |-
+    devspace use namespace ${NAMESPACE}
+    k3d cluster delete ${CLUSTER_NAME}
+
+  cluster-stop: |-
+    devspace use namespace ${NAMESPACE}
+    k3d cluster stop ${CLUSTER_NAME}
+
+  cluster-start: |-
+    devspace use namespace ${NAMESPACE}
+    k3d cluster start ${CLUSTER_NAME}
+
+  helm: |-
+    make -C helm "$@"
+
+pipelines:
+  deploy:
+    run: |-
+      build_images --all
+      devspace run helm
+      create_deployments --all
+
+  dev:
+    run: |-
+      make template
+      create_deployments --all
+      start_dev --all
+
+images:
+  backend:
+    image: ${REGISTRY}/backend:latest
+    dockerfile: ./backend/Dockerfile
+    context: ./backend/
+  keycloak:
+    image: ${REGISTRY}/keycloak:latest
+    dockerfile: ./docker/keycloak/Dockerfile
+    context: ./docker/keycloak
+
+deployments:
+  nginx-controller:
+    kubectl:
+      manifests:
+        - ${TEMPLATES_DIST}/dbos-app/templates/nginx-controller
+  # secrets:
+  #   kubectl:
+  #     manifests:
+  #       - ./dist/secrets-dev/
+  # apps:
+  #   kubectl:
+  #     manifests:
+  #       - ./dist/empower/templates/apps/nginx-controller/
+  # backend:
+  #   kubectl:
+  #     manifests:
+  #       - ./dist/empower/templates/backend/
+  # keycloak:
+  #   kubectl:
+  #     manifests:
+  #       - ./dist/empower/templates/keycloak/
+dev:
+  # frontend:
+  #   imageSelector: localhost:32000/frontend:latest
+  #   devImage: localhost:32000/frontend-dev:latest
+  #   command: ["/home/node/app/empower/start_dev.sh"]
+  #   sync:
+  #     - path: "../frontend:/home/node/app/empower"
+  #       startContainer: true
+  #       uploadExcludePaths:
+  #         - node_modules/
+  #         - .env
+  #         - public/__ENV.js
+  #       downloadExcludePaths:
+  #         - node_modules/
+  #         - public/__ENV.js
+  #         - .env
+
+  backend:
+    imageSelector: localhost:32000/backend:latest
+    devImage: localhost:32000/backend-dev:latest
+    command: ["/home/node/app/start_dev.sh"]
+    sync:
+      - path: "../backend:/home/node/app"
+        startContainer: true
+        uploadExcludePaths:
+          - node_modules/
+        downloadExcludePaths:
+          - node_modules/

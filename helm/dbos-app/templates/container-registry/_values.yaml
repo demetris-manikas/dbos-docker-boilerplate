@@ -1,0 +1,3 @@
+container_registry:
+  enabled: false
+  name: container-registry

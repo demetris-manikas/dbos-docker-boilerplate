@@ -1,0 +1,52 @@
+{{ if eq .Values.container_registry.enabled true }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: container-registry-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: container-registry-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        service: container-registry-service
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              service: container-registry-service
+      volumes:
+        - persistentVolumeClaim:
+            claimName: cr-pvc
+          name: cr-volume
+
+      containers:
+        - name: container-registry-service
+          image: registry:2
+          ports:
+            - name: cr
+              containerPort: 5000
+              protocol: TCP
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "50m"
+            limits:
+              memory: "4Gi"
+              cpu: "4"
+          volumeMounts:
+            - mountPath: /var/lib/registry
+              name: cr-volume
+{{ end }}

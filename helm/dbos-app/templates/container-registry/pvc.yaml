@@ -1,0 +1,14 @@
+{{ if eq .Values.container_registry.enabled true }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cr-pvc
+spec:
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+{{ end }}

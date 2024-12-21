@@ -1,0 +1,18 @@
+{{ if eq .Values.container_registry.enabled true }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: container-registry-service
+  labels:
+    service: container-registry-service
+spec:
+  type: NodePort
+  ports:
+    - name: cr
+      port: 32000
+      nodePort: 32000
+      targetPort: 5000
+      protocol: TCP
+  selector:
+    service: container-registry-service
+{{ end }}

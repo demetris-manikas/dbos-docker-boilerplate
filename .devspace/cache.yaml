@@ -1,0 +1,17 @@
+varsEncrypted: true
+images:
+    backend:
+        imageConfigHash: 8802b47477b689d35bfbd8a830ee13afa5adabc5e63a7d4ec939d4d73d8c1fb6
+        dockerfileHash: a1507aa5ec304cb8ff6c390eca2e16a705c058be31459f682087d1053a2d5c0f
+        contextHash: 6269f0dd63a6efd3ef68192e4ef5b0ed2891aeb11d797fffaac0e32de143be3f
+        imageName: localhost:32000/backend
+        tag: latest
+    keycloak:
+        imageConfigHash: 109ee716938881f1eed6eeb39b1f8fdbbed2c0c17d42899fe9862f5622cd72a3
+        dockerfileHash: 4125dd1db74a3b353df30284fd0ef903ae8dac22357c6500d20cb4f1c10d312a
+        contextHash: 43c5bb9b89095f653a3d2691dcbcedca88404506d2a8c03dcae62a555c8addc2
+        imageName: localhost:32000/keycloak
+        tag: latest
+lastContext:
+    namespace: dbos
+    context: k3d-dbos-cluster

@@ -1,0 +1,23 @@
+{{ $config := .Values.nginx_controller }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $config.name }}
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: ingress-nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: {{ $config.source.targetRevision }}
+    helm:
+      valuesObject:
+{{ toYaml $config.values | indent 8 }}
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: {{ $config.namespace | default "default" }}
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

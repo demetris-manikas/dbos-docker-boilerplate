@@ -1,0 +1,10 @@
+
+{{ $config := .Values.nginx_controller }}
+{{ $namespace := $config.namespace | default "default"}}
+{{ $serviceName := $config.values.fullnameOverride }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
