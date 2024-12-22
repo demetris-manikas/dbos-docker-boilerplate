@@ -1,0 +1,56 @@
+{{ $config := .Values.backend_oauth2_proxy }}
+{{ $authConfig := .Values.keycloak }}
+{{ $backendConfig := .Values.backend }}
+{{ $env := $config.env }}
+
+{{ $scheme := .Values.ingress.scheme }}
+{{ $domain := .Values.domain }}
+{{ $realm := "empower"}}
+
+{{ $authRealmUrl := printf "%s://auth.%s/realms/%s" $scheme $domain $realm }}
+
+{{ $backendServiceName := include "template.service.name" $backendConfig.name }}
+{{ $backendServicePort := $backendConfig.service.ports.backend.port | toString }}
+
+{{ $oauth2ProxyPort:= $config.service.ports.oauth2proxy.port | toString }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "template.configmap.name" $config.name }}
+data:
+  TZ: {{ .Values.TZ }}
+  OAUTH2_PROXY_PROVIDER: "oidc"
+  OAUTH2_PROXY_PROVIDER_DISPLAY_NAME: "keycloak oidc"
+  OAUTH2_PROXY_REAL_CLIENT_IP_HEADER: "X-Forwarded-For"
+  OAUTH2_PROXY_REVERSE_PROXY: "true"
+  OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+  OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+  OAUTH2_PROXY_WEBSOCKETS: "true"
+  OAUTH2_PROXY_SET_AUTHORIZATION_HEADER: "true"
+  OAUTH2_PROXY_REQUEST_LOGGING: "true"
+  OAUTH2_PROXY_AUTH_LOGGING: "true"
+  OAUTH2_PROXY_UPSTREAMS: {{ printf "%s://%s:%s" $scheme $backendServiceName $backendServicePort }}
+  OAUTH2_PROXY_HTTP_ADDRESS: {{ printf "0.0.0.0:%s" $oauth2ProxyPort }}
+  OAUTH2_PROXY_REDIRECT_URL: {{ printf "%s://oauth2.%s/oauth2/callback" $scheme $domain }}
+  OAUTH2_PROXY_OIDC_ISSUER_URL: {{ $authRealmUrl }}
+  OAUTH2_PROXY_PROFILE_URL:   {{ printf "%s/protocol/openid-connect/userinfo" $authRealmUrl }}
+  OAUTH2_PROXY_REDEEM_URL: {{ printf "%s/protocol/openid-connect/token" $authRealmUrl }}
+
+  OAUTH2_PROXY_COOKIE_DOMAINS: {{ printf "%s,.%s" $domain $domain }}
+  OAUTH2_PROXY_WHITELIST_DOMAINS: {{ printf "%s:*,.%s:*" $domain $domain }}
+
+  OAUTH2_PROXY_SHOW_DEBUG_ON_ERROR: {{ $config.env.OAUTH2_PROXY_SHOW_DEBUG_ON_ERROR | quote}}
+  OAUTH2_PROXY_COOKIE_SECURE: {{ $config.env.OAUTH2_PROXY_COOKIE_SECURE | quote }}
+  OAUTH2_PROXY_COOKIE_REFRESH: {{ $config.env.OAUTH2_PROXY_COOKIE_REFRESH | quote }}
+  OAUTH2_PROXY_COOKIE_SAMESITE: {{ $config.env.OAUTH2_PROXY_COOKIE_SAMESITE | quote }}
+  OAUTH2_PROXY_SKIP_JWT_BEARER_TOKENS: {{ $config.env.OAUTH2_PROXY_SKIP_JWT_BEARER_TOKENS | quote }}
+  OAUTH2_PROXY_PASS_ACCESS_TOKEN: "true"
+  OAUTH2_PROXY_SESSION_STORE_TYPE: {{ $config.env.OAUTH2_PROXY_SESSION_STORE_TYPE | quote }}
+
+  OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL: {{ $config.env.OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL | quote }}
+  OAUTH2_PROXY_CODE_CHALLENGE_METHOD: {{ $config.env.OAUTH2_PROXY_CODE_CHALLENGE_METHOD | quote }}
+  OAUTH2_PROXY_SCOPE: {{ $config.env.OAUTH2_PROXY_SCOPE | quote }}
+
+
+

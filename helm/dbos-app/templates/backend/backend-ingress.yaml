@@ -1,6 +1,20 @@
+{{ $config := .Values.backend }}
+{{ $serviceName := include "template.svc.name" (dict "name" $config.name) }}
+
+{{ $rootPath := dict
+  "path" $config.hosts.base.paths.root
+  "backend" (dict
+    "service" $serviceName
+    "port" (dict
+      "number" $config.service.ports.backend.port
+    )
+  )
+}}
+
 {{ $ctx := dict
-  "name" .Values.backend.name
-  "service" .Values.backend.service
+  "host" (printf "api.%s" .Values.domain)
+  "name" "api"
+  "paths" (list $rootPath)
 }}
 
 {{ include "template.ingress" $ctx }}

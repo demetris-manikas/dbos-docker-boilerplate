@@ -22,7 +22,9 @@
   "name" $config.name
   "registry" .Values.registry
   "deployment" $config.deployment
-  "service" $config.service
+  "port" $config.service.ports.keycloak_db.port
+  "volumes" (list $persistentVolume)
+  "volumeMounts" (list $persistentVolumeMount)
 }}
 
 {{ include "template.dpl" $ctx }}

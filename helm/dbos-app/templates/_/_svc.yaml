@@ -1,20 +1,31 @@
-{{- define "template.svc"}}
-{{ $serviceName := include "template.svc.name" . }}
+{{- define "template.svc" }}
 
+{{ $name := .name }}
+{{ $serviceName := .serviceName }}
+{{ $ports := .ports }}
+
+{{- if not $serviceName }}
+  {{ $serviceName = include "template.svc.name" (dict "name" $name) }}
+{{- end }}
+
+{{ $selectorService := $serviceName }}
+{{ if .selectorService }}
+  {{ $selectorService = .selectorService }}
+{{ end }}
 apiVersion: v1
-
 kind: Service
-
 metadata:
   name: {{ $serviceName }}
   labels:
-    service: {{ $serviceName }}
+    service: {{ $selectorService }}
 spec:
   ports:
-    {{- range .ports }}
-    - port: {{ .port }}
-      targetPort: {{ .targetPort }}
+    {{- range  $k, $v := $ports }}
+    - name: {{ $k | kebabcase }}
+      port: {{ $v.port }}
+      targetPort: {{ $v.targetPort }}
+      protocol: {{ $v.protocol | default "TCP"}}
     {{- end }}
   selector:
-    service: {{ $serviceName | quote }}
+    service: {{ $selectorService }}
 {{ end -}}

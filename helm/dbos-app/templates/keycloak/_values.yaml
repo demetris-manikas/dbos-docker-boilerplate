@@ -1,5 +1,12 @@
 keycloak:
   name: app-keycloak
+  hosts:
+    base:
+      paths:
+        root:
+          path: /
+          pathType: Prefix
+
   deployment:
     image:
       name: app-keycloak
@@ -10,11 +17,11 @@ keycloak:
       maxUnavailable: 1
     resources:
       requests:
-        java: 512m
+        java: 400m
         memory: 512Mi
         cpu: 1
       limits:
-        java: 1024m
+        java: 800m
         memory: 1Gi
         cpu: 1
     probe:
@@ -34,15 +41,14 @@ keycloak:
         timeoutSeconds: 5
         successThreshold: 1
   service:
-    port: 8080
-    targetPort: 8080
-    ingress:
-      className: nginx
-      host: auth.dbosapp.test
+    ports:
+      keycloak:
+        port: 8080
+        targetPort: 8080
   secrets:
-    KEYCLOAK_ADMIN: "admin"
-    KEYCLOAK_ADMIN_PASSWORD: "admin"
-    KC_DB_USERNAME: "keycloak"
-    KC_DB_PASSWORD: "keycloak"
+    KEYCLOAK_ADMIN: admin
+    KEYCLOAK_ADMIN_PASSWORD: admin
+    KC_DB_USERNAME: keycloak
+    KC_DB_PASSWORD: keycloak
   env:
-    KC_DB_URL_DATABASE: "keycloak"
+    KC_DB_URL_DATABASE: keycloak

@@ -1,0 +1,30 @@
+{{ $config := .Values.backend_oauth2_proxy }}
+{{ $serviceName := include "template.svc.name" $config.name }}
+
+{{ $rootPath := dict
+  "path" $config.hosts.base.paths.root
+  "backend" (dict
+    "service" $serviceName
+    "port" (dict
+      "number" $config.service.ports.oauth2proxy.port
+    )
+  )
+}}
+
+{{ $ctx := dict
+  "config" .Values.ingress
+  "hostConfig" (dict
+    "isMaintained" $config.hosts.base.isMaintained
+    "host" (printf "oauth2.%s" .Values.domain)
+  )
+  "name" "oauth2"
+  "paths" (list $rootPath)
+}}
+
+{{ if eq .Values.ingress.class "nginx" }}
+  {{ $_ := set $ctx "serverSnippet" "conf/nginx/snippets/proxy_hide_authorization_header.conf" }}
+  {{ $_ := set $ctx "configurationSnippet" "conf/nginx/snippets/cors.conf" }}
+  {{ $_ := set $ctx "Files" .Files }}
+{{ end }}
+
+{{ include "template.ingress" $ctx }}

@@ -1,8 +1,10 @@
 keycloak_db:
   name: app-keycloak-db
   service:
-    port: 5432
-    targetPort: 5432
+    ports:
+      keycloak_db:
+        port: 5432
+        targetPort: 5432
   deployment:
     image:
       name: app-keycloak-db

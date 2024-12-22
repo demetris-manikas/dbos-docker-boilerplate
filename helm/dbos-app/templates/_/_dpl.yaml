@@ -73,7 +73,7 @@ spec:
             timeoutSeconds: {{ $livenessSettings.timeoutSeconds }}
 {{$probeMethod | indent 12 }}
           ports:
-            - containerPort: {{ .service.port }}
+            - containerPort: {{ .port }}
       restartPolicy: Always
 status: {}
 

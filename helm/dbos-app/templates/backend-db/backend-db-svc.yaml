@@ -1,16 +1,8 @@
-{{
-  $servicePort := dict
-    "name" "db-svc-port"
-    "port" .Values.backend_db.service.port
-    "targetPort" .Values.backend_db.service.targetPort
-}}
-
-{{ $ports := list $servicePort }}
+{{ $config := .Values.backend_db }}
 
 {{ $ctx := dict
-  "name" .Values.backend_db.name
-  "service" .Values.backend_db.service
-  "ports" $ports
+    "name" $config.name
+    "ports" $config.service.ports
 }}
 
 {{ include "template.svc" $ctx }}

@@ -8,3 +8,5 @@ metadata:
   name: coredns-custom
   namespace: kube-system
 data:
+  hosts.override: |
+    rewrite name auth.{{ .Values.domain }} {{ $serviceName }}-controller.{{ $namespace }}.svc.cluster.local

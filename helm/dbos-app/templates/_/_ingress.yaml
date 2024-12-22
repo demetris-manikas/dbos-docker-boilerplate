@@ -1,23 +1,46 @@
-{{- define "template.ingress"}}
-{{ $ingressSettings := .service.ingress }}
+{{- define "template.ingress" }}
+{{ $host := .host }}
+{{ $paths := .paths }}
+{{ $annotations := .annotations }}
+{{ $configurationSnippet := .configurationSnippet }}
+{{ $serverSnippet := .serverSnippet }}
+{{ $ingressName := include "template.ingress.name" (dict "name" .name) }}
+
 apiVersion: networking.k8s.io/v1
-
 kind: Ingress
-
 metadata:
-  name: {{ include "template.svc.name" . }}-ingress
-spec:
-  ingressClassName: {{ $ingressSettings.className | quote }}
-  rules:
-    - host: {{ $ingressSettings.host | quote }}
-      http:
-        paths:
-          - path: "/"
-            pathType: "Prefix"
-            backend:
-              service:
-                name: {{ include "template.svc.name" . }}
-                port:
-                  number: {{ .service.port }}
-{{ end -}}
+  name: {{ $ingressName }}
+  annotations:
+  {{- if $configurationSnippet }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |-
+{{ $configurationSnippet | indent 8 }}
+  {{- end }}
 
+  {{- if $serverSnippet }}
+    nginx.ingress.kubernetes.io/server-snippet: |-
+{{ $serverSnippet | indent 8 }}
+  {{- end }}
+
+  {{- if $annotations }}
+{{ toYaml $annotations | indent 4}}
+  {{- end }}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ $host }}
+    http:
+      paths:
+        {{- range .paths }}
+        - path: {{ .path.path }}
+          pathType: {{ .path.pathType }}
+          backend:
+            service:
+              name: {{ .backend.service }}
+              port:
+                {{- if .backend.port.number }}
+                number: {{ .backend.port.number }}
+                {{- else }}
+                name: {{ .backend.port.name }}
+                {{- end }}
+        {{- end -}}
+{{ end -}}

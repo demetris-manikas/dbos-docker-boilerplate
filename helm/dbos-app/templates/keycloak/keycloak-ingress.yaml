@@ -1,8 +1,20 @@
 {{ $config := .Values.keycloak }}
+{{ $serviceName := include "template.svc.name" (dict "name" $config.name) }}
+
+{{ $rootPath := dict
+  "path" $config.hosts.base.paths.root
+  "backend" (dict
+    "service" $serviceName
+    "port" (dict
+      "number" $config.service.ports.keycloak.port
+    )
+  )
+}}
 
 {{ $ctx := dict
-  "name" $config.name
-  "service" $config.service
+  "host" (printf "auth.%s" .Values.domain)
+  "name" "keycloak"
+  "paths" (list $rootPath)
 }}
 
 {{ include "template.ingress" $ctx }}

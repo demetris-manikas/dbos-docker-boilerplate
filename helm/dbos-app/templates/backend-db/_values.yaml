@@ -1,8 +1,10 @@
 backend_db:
   name: app-backend-db
   service:
-    port: 5432
-    targetPort: 5432
+    ports:
+      backend_db:
+        port: 5432
+        targetPort: 5432
   deployment:
     image:
       name: app-backend-db

@@ -4,7 +4,7 @@
   "name" $config.name
   "registry" .Values.registry
   "deployment" $config.deployment
-  "service" $config.service
+  "port" $config.service.ports.keycloak.port
 }}
 
 {{ include "template.dpl" $ctx }}

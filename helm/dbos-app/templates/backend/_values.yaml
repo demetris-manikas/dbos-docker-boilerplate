@@ -1,5 +1,11 @@
 backend:
   name: app-backend
+  hosts:
+    base:
+      paths:
+        root:
+          path: /
+          pathType: Prefix
   deployment:
     image:
       name: app-backend
@@ -34,11 +40,11 @@ backend:
         periodSeconds: 1
         timeoutSeconds: 3
   service:
-    port: 3000
-    targetPort: 3000
-    ingress:
-      className: nginx
-      host: app.dbosapp.test
+    ports:
+      backend:
+        name: backend
+        port: 3000
+        targetPort: 3000
   volume:
     hostPath: ""
     storage: 1Gi

@@ -1,5 +1,4 @@
-
-{{ $config := .Values.backend }}
+{{ $config := .Values.backend_oauth2_proxy }}
 
 {{ $ctx := dict
     "name" $config.name

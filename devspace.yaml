@@ -14,17 +14,8 @@ vars:
   SECRETS_DIR: ${TEMPLATES_DIST}/secrets-dev
 
 commands:
-  bootstrap: |-
-    k3d cluster create \
-          -v /etc/machine-id:/etc/machine-id \
-          --k3s-arg "--disable=traefik@server:0" \
-          --api-port 6550 \
-          -p "80:80@loadbalancer" \
-          -p "8444:8444@loadbalancer" \
-          -p "${REGISTRY_PORT}:${REGISTRY_PORT}@loadbalancer" \
-          ${CLUSTER_NAME}
+  install: |-
     devspace use context k3d-${CLUSTER_NAME}
-
     kubectl create namespace ${NAMESPACE}
     devspace use namespace ${NAMESPACE}
     kubectl create namespace argocd
@@ -41,7 +32,17 @@ commands:
     kubectl rollout status deployment coredns -n kube-system
     kubectl rollout status deployment container-registry-deployment
 
-  cluster-delete: |-
+  cluster-init: |-
+    k3d cluster create \
+          -v /etc/machine-id:/etc/machine-id \
+          --k3s-arg "--disable=traefik@server:0" \
+          --api-port 6550 \
+          -p "80:80@loadbalancer" \
+          -p "8444:8444@loadbalancer" \
+          -p "${REGISTRY_PORT}:${REGISTRY_PORT}@loadbalancer" \
+          ${CLUSTER_NAME}
+
+  cluster-destroy: |-
     devspace use namespace ${NAMESPACE}
     k3d cluster delete ${CLUSTER_NAME}
 

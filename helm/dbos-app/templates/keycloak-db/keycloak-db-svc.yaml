@@ -1,15 +1,7 @@
-{{
-  $servicePort := dict
-    "name" "keycloak-db-port"
-    "port" .Values.keycloak_db.service.port
-    "targetPort" .Values.keycloak_db.service.targetPort
-}}
-{{ $ports := list $servicePort }}
-
+{{ $config := .Values.keycloak_db }}
 {{ $ctx := dict
-  "name" .Values.keycloak_db.name
-  "service" .Values.keycloak_db.service
-  "ports" $ports
+    "name" $config.name
+    "ports" $config.service.ports
 }}
 
 {{ include "template.svc" $ctx }}

@@ -1,4 +1,5 @@
 {{ $config := .Values.keycloak }}
+{{ $domain := .Values.domain }}
 {{ $resourcesSettings := $config.deployment.resources }}
 
 {{ $ctx := dict
@@ -25,7 +26,7 @@ data:
   KC_DB_URL_DATABASE: {{ $config.env.KC_DB_URL_DATABASE }}
   KC_DB_URL_HOST: {{ include "template.svc.name" $dbctx }}
   KC_DB_URL_PORT: "5432"
-  KC_HOSTNAME: {{ $config.service.ingress.host }}
+  KC_HOSTNAME: {{ printf "auth.%s" .Values.domain }}
   KC_HOSTNAME_STRICT_HTTPS: "false"
   KC_HTTP_ENABLED: "true"
   KC_PROXY_HEADERS: forwarded
