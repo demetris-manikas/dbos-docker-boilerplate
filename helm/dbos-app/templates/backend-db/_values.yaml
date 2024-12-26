@@ -8,6 +8,22 @@ backend_db:
   image:
     name: app-backend-db
     version: latest
+  probe:
+    method:
+      exec:
+        command: ["sh", "-c", "pg_isready"]
+    liveness:
+      initialDelaySeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+      periodSeconds: 3
+      timeoutSeconds: 12
+    readiness:
+      initialDelaySeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+      periodSeconds: 1
+      timeoutSeconds: 3
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:
@@ -20,22 +36,6 @@ backend_db:
       limits:
         memory: 1Gi
         cpu: 1
-    probe:
-      method:
-        exec:
-          command: ["sh", "-c", "pg_isready"]
-      liveness:
-        initialDelaySeconds: 10
-        successThreshold: 1
-        failureThreshold: 3
-        periodSeconds: 3
-        timeoutSeconds: 12
-      readiness:
-        initialDelaySeconds: 1
-        successThreshold: 1
-        failureThreshold: 3
-        periodSeconds: 1
-        timeoutSeconds: 3
   volume:
     hostPath: ""
     storage: 1Gi

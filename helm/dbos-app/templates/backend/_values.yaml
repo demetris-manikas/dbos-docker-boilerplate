@@ -10,6 +10,25 @@ backend:
     name: app-backend
     version: latest
 
+  probe:
+    method:
+      httpGet:
+        path: /
+        port: 3000
+        scheme: HTTP
+    liveness:
+      initialDelaySeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+      periodSeconds: 3
+      timeoutSeconds: 12
+    readiness:
+      initialDelaySeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+      periodSeconds: 1
+      timeoutSeconds: 3
+
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:
@@ -22,24 +41,6 @@ backend:
       limits:
         memory: "2Gi"
         cpu: 2
-    probe:
-      method:
-        httpGet:
-          path: /
-          port: 3000
-          scheme: HTTP
-      liveness:
-        initialDelaySeconds: 10
-        successThreshold: 1
-        failureThreshold: 3
-        periodSeconds: 3
-        timeoutSeconds: 12
-      readiness:
-        initialDelaySeconds: 1
-        successThreshold: 1
-        failureThreshold: 3
-        periodSeconds: 1
-        timeoutSeconds: 3
   service:
     ports:
       backend:

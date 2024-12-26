@@ -1,0 +1,66 @@
+{{- define "template.statefulset"}}
+
+{{ $statefulSet := .statefulset }}
+{{ $name := .name }}
+{{ $image := .image }}
+{{ $ports := .ports }}
+{{ $volumes := .volumes }}
+{{ $volumeMounts := .volumeMounts }}
+{{ $volumeClaimTemplates := .volumeClaimTemplates }}
+{{ $storage := $statefulSet.storage}}
+{{ $serviceName := include "template.service.name" $name }}
+{{ $statefulsetName := include "template.statefulset.name" $name }}
+
+{{ $containerCtx := dict
+    "name" $serviceName
+    "probe" $statefulSet.probe
+    "image" $image
+    "ports" $ports
+    "resources" $statefulSet.resources
+    "volumes" $volumes
+    "volumeMounts" $volumeMounts
+    "envFrom" .envFrom
+    "secretsFrom" .secretsFrom
+}}
+
+{{ $container := include "template.container" $containerCtx }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $statefulsetName }}
+spec:
+  selector:
+    matchLabels:
+      service: {{ $serviceName }}
+  serviceName: {{ $serviceName }}
+  replicas: {{ $statefulSet.replicas }}
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        service: {{ $serviceName }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      {{- if .volumes }}
+      volumes:
+      {{- range .volumes }}
+        -
+{{ toYaml . | indent 10 -}}
+      {{ end }}
+      {{- end }}
+
+      containers:
+{{ $container | indent 6 }}
+  volumeClaimTemplates:
+{{- range $volumeClaimTemplates }}
+  - metadata:
+      name: {{ .name }}
+    spec:
+      accessModes:
+        - {{ .accessMode }}
+      storageClassName: {{ .className }}
+      resources:
+        requests:
+          storage: {{ .size }}
+{{- end }}
+{{ end -}}

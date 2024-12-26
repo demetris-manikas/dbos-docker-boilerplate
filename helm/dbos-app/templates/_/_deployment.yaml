@@ -8,7 +8,7 @@
 
 {{ $containerCtx := dict
     "name" $serviceName
-    "probe" .deployment.probe
+    "probe" .probe
     "image" .image
     "ports" .ports
     "resources" .deployment.resources
