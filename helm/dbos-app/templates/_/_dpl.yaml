@@ -1,19 +1,30 @@
 {{- define "template.dpl"}}
-{{ $deplomentName := include "template.dpl.name" . }}
-{{ $serviceName := include "template.svc.name" . }}
-{{ $image := printf "%s/%s:%s" .registry .deployment.image.name .deployment.image.version }}
-{{ $probeMethod := toYaml .deployment.probe.method }}
-{{ $livenessSettings := .deployment.probe.liveness }}
-{{ $readinessSettings := .deployment.probe.readiness }}
-{{ $requestsSettings := .deployment.resources }}
+{{ $deploymentName := include "template.dpl.name" (dict "name" .name) }}
+
+{{ $serviceName := .serviceName }}
+{{ if not $serviceName }}
+  {{ $serviceName = include "template.svc.name" (dict "name" .name) }}
+{{ end }}
+
+{{ $containerCtx := dict
+    "name" $serviceName
+    "probe" .deployment.probe
+    "image" .image
+    "ports" .ports
+    "resources" .deployment.resources
+    "volumeMounts" .volumeMounts
+    "envFrom" .envFrom
+    "secretsFrom" .secretsFrom
+}}
+
+{{ $container := include "template.container" $containerCtx }}
 
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-  name: {{ $deplomentName }}
+  name: {{ $deploymentName }}
 spec:
+  replicas: {{ .deployment.replicas }}
   selector:
     matchLabels:
       service: {{ $serviceName }}
@@ -25,9 +36,24 @@ spec:
   revisionHistoryLimit: {{ .deployment.revisionHistoryLimit }}
   template:
     metadata:
+      creationTimestamp: null
       labels:
         service: {{ $serviceName }}
     spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            service:  {{ $serviceName }}
+      securityContext:
+      {{- if .securityContext }}
+{{ toYaml .securityContext | indent 8 -}}
+      {{- end }}
+        sysctls:
+          - name: "net.ipv4.ip_unprivileged_port_start"
+            value: "0"
       {{- if .volumes }}
       volumes:
       {{- range .volumes }}
@@ -36,45 +62,6 @@ spec:
       {{ end }}
       {{- end }}
       containers:
-        - name: {{ $serviceName }}
-          image: {{ $image }}
-          imagePullPolicy: Always
-          {{- if .volumeMounts }}
-          volumeMounts:
-          {{- range .volumeMounts }}
-            -
-{{ toYaml . | indent 14 -}}
-            {{ end }}
-          {{- end }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "template.configmap.name" . }}
-            - secretRef:
-                name: {{ include "template.secrets.name" . }}
-          resources:
-            requests:
-              memory: {{ $requestsSettings.requests.memory }}
-              cpu: {{ $requestsSettings.requests.cpu }}
-            limits:
-              memory: {{ $requestsSettings.limits.memory }}
-              cpu: {{ $requestsSettings.limits.cpu }}
-          readinessProbe:
-            initialDelaySeconds: {{ $readinessSettings.initialDelaySeconds }}
-            successThreshold: {{ $readinessSettings.successThreshold }}
-            failureThreshold: {{ $readinessSettings.failureThreshold }}
-            periodSeconds: {{ $readinessSettings.periodSeconds }}
-            timeoutSeconds: {{ $readinessSettings.timeoutSeconds }}
-{{$probeMethod | indent 12 }}
-          livenessProbe:
-            initialDelaySeconds: {{ $livenessSettings.initialDelaySeconds }}
-            successThreshold: {{ $livenessSettings.successThreshold }}
-            failureThreshold: {{ $livenessSettings.failureThreshold }}
-            periodSeconds: {{ $livenessSettings.periodSeconds }}
-            timeoutSeconds: {{ $livenessSettings.timeoutSeconds }}
-{{$probeMethod | indent 12 }}
-          ports:
-            - containerPort: {{ .port }}
-      restartPolicy: Always
+{{ $container | indent 8 }}
 status: {}
-
 {{ end -}}

@@ -1,4 +1,5 @@
 {{ $config := .Values.keycloak_db }}
+{{ $imageConfig := $config.image }}
 
 {{ $namesCtx := dict
   "name" $config.name
@@ -20,9 +21,19 @@
 
 {{ $ctx := dict
   "name" $config.name
-  "registry" .Values.registry
   "deployment" $config.deployment
-  "port" $config.service.ports.keycloak_db.port
+  "ports" $config.service.ports
+  "envFrom" (list
+    (include "template.configmap.name" (dict "name" $config.name))
+  )
+  "secretsFrom" (list
+    (include "template.secrets.name" (dict "name" $config.name))
+  )
+  "image" (include "template.image" (dict
+    "registry" .Values.registry
+    "name" $imageConfig.name
+    "tag" $imageConfig.tag
+  ))
   "volumes" (list $persistentVolume)
   "volumeMounts" (list $persistentVolumeMount)
 }}

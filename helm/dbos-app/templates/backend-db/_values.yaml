@@ -5,10 +5,10 @@ backend_db:
       backend_db:
         port: 5432
         targetPort: 5432
+  image:
+    name: app-backend-db
+    version: latest
   deployment:
-    image:
-      name: app-backend-db
-      version: latest
     revisionHistoryLimit: 5
     rollingUpdate:
       maxSurge: 1

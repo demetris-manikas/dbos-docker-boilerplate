@@ -1,0 +1,75 @@
+{{- define "template.container"}}
+{{- $resourcesSettings := .resources -}}
+{{- $probeMethod := "" -}}
+{{- $livenessSettings := "" -}}
+{{- $readinessSettings := "" -}}
+{{- if .probe -}}
+  {{- $probeMethod = toYaml .probe.method -}}
+  {{- $livenessSettings = .probe.liveness -}}
+  {{- $readinessSettings = .probe.readiness -}}
+{{- end -}}
+- name: {{ .name }}
+  image: {{ .image }}
+  {{- if .ports }}
+  ports:
+    {{- range  $k, $v := .ports }}
+    - name: {{ $k | kebabcase }}
+      containerPort: {{ $v.targetPort }}
+      protocol: {{ $v.protocol | default "TCP"}}
+    {{- end }}
+  {{- end }}
+  imagePullPolicy: Always
+  {{- if .command }}
+  command:
+{{ toYaml .command | indent 4}}
+  {{- end }}
+  {{- if $resourcesSettings }}
+  resources:
+    requests:
+      memory: {{ $resourcesSettings.requests.memory | quote }}
+      cpu: {{ $resourcesSettings.requests.cpu | quote }}
+    limits:
+      memory: {{ $resourcesSettings.limits.memory | quote }}
+      cpu: {{ $resourcesSettings.limits.cpu | quote }}
+  {{- end }}
+  {{- if $readinessSettings }}
+  readinessProbe:
+    initialDelaySeconds: {{ $readinessSettings.initialDelaySeconds }}
+    successThreshold: {{ $readinessSettings.successThreshold }}
+    failureThreshold: {{ $readinessSettings.failureThreshold }}
+    periodSeconds: {{ $readinessSettings.periodSeconds }}
+    timeoutSeconds: {{ $readinessSettings.timeoutSeconds }}
+{{$probeMethod | indent 4 }}
+  {{- end }}
+  {{- if $livenessSettings }}
+  livenessProbe:
+    initialDelaySeconds: {{ $livenessSettings.initialDelaySeconds }}
+    successThreshold: {{ $livenessSettings.successThreshold }}
+    failureThreshold: {{ $livenessSettings.failureThreshold }}
+    periodSeconds: {{ $livenessSettings.periodSeconds }}
+    timeoutSeconds: {{ $livenessSettings.timeoutSeconds }}
+{{$probeMethod | indent 4 }}
+  {{- end }}
+  {{- if or .envFrom .secretsFrom }}
+  envFrom:
+    {{- if .envFrom }}
+    {{- range .envFrom }}
+    - configMapRef:
+        name: {{ . }}
+    {{- end }}
+    {{- end }}
+    {{- if .secretsFrom }}
+    {{- range .secretsFrom }}
+    - secretRef:
+        name: {{ . }}
+    {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- if .volumeMounts }}
+  volumeMounts:
+    {{- range .volumeMounts }}
+    -
+{{ toYaml . | indent 6 -}}
+    {{ end }}
+  {{- end }}
+{{ end -}}

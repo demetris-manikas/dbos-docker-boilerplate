@@ -1,11 +1,22 @@
 
 {{ $config := .Values.backend }}
+{{ $imageConfig := $config.image }}
 
 {{ $ctx := dict
   "name" $config.name
-  "registry" .Values.registry
   "deployment" $config.deployment
-  "port" $config.service.ports.backend.port
+  "ports" $config.service.ports
+  "envFrom" (list
+    (include "template.configmap.name" (dict "name" $config.name))
+  )
+  "secretsFrom" (list
+    (include "template.secrets.name" (dict "name" $config.name))
+  )
+  "image" (include "template.image" (dict
+    "registry" .Values.registry
+    "name" $imageConfig.name
+    "tag" $imageConfig.tag
+  ))
 }}
 
 {{ include "template.dpl" $ctx }}

@@ -1,0 +1,15 @@
+{{- define "template.image" }}
+{{- $registry := .registry -}}
+{{- $name := .name -}}
+{{- $tag := .tag -}}
+{{- $image := "" -}}
+{{- if not .tag -}}
+  {{ $tag = "latest" }}
+{{- end -}}
+{{- if $registry -}}
+  {{ $image = printf "%s/%s:%s" $registry $name $tag }}
+{{- else -}}
+  {{ $image = printf "%s:%s" $name $tag }}
+{{- end -}}
+{{- $image | quote -}}
+{{ end -}}

@@ -6,10 +6,11 @@ backend:
         root:
           path: /
           pathType: Prefix
+  image:
+    name: app-backend
+    version: latest
+
   deployment:
-    image:
-      name: app-backend
-      version: latest
     revisionHistoryLimit: 5
     rollingUpdate:
       maxSurge: 1
