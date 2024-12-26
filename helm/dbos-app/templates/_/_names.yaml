@@ -22,6 +22,10 @@
 {{- printf "%s-ingress" . -}}
 {{ end -}}
 
+{{- define "template.configmap.name"}}
+{{- printf "%s-configmap" . -}}
+{{ end -}}
+
 {{- define "template.configmap-env.name"}}
 {{- printf "%s-configmap-env" . -}}
 {{ end -}}
