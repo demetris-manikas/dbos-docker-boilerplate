@@ -1,8 +1,5 @@
-{{ $ctx := dict
-  "name" .Values.backend_db.name
-}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "template.configmap-env.name" $ctx }}
+  name: {{ include "template.configmap-env.name" .Values.backend_db.name }}
 data:

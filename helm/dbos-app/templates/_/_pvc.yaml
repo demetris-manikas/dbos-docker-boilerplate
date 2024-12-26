@@ -4,12 +4,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 
 metadata:
-  name: {{ include "template.pvc.name" . }}
+  name: {{ include "template.pvc.name" .name }}
 spec:
   storageClassName: manual
   accessModes:
     - {{ .volumeClaim.accessMode | quote }}
-  volumeName: {{ include "template.pv.name" . }}
+  volumeName: {{ include "template.pv.name" .name }}
   resources:
     requests:
         storage: {{ .volumeClaim.storage }}

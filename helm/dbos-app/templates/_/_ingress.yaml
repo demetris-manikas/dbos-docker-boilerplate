@@ -4,7 +4,7 @@
 {{ $annotations := .annotations }}
 {{ $configurationSnippet := .configurationSnippet }}
 {{ $serverSnippet := .serverSnippet }}
-{{ $ingressName := include "template.ingress.name" (dict "name" .name) }}
+{{ $ingressName := include "template.ingress.name" .name }}
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress

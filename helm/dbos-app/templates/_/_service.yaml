@@ -5,7 +5,7 @@
 {{ $ports := .ports }}
 
 {{- if not $serviceName }}
-  {{ $serviceName = include "template.service.name" (dict "name" $name) }}
+  {{ $serviceName = include "template.service.name" $name }}
 {{- end }}
 
 {{ $selectorService := $serviceName }}

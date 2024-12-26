@@ -4,6 +4,7 @@
 {{ $name := .name }}
 {{ $image := .image }}
 {{ $ports := .ports }}
+{{ $probe := .probe }}
 {{ $volumes := .volumes }}
 {{ $volumeMounts := .volumeMounts }}
 {{ $volumeClaimTemplates := .volumeClaimTemplates }}

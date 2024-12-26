@@ -2,12 +2,8 @@
 {{ $config := .Values.backend_db }}
 {{ $imageConfig := $config.image }}
 
-{{ $namesCtx := dict
-  "name" $config.name
-}}
-
-{{ $persistentVolumeName := include "template.pv.name" $namesCtx }}
-{{ $pvcName := include "template.pvc.name" $namesCtx }}
+{{ $persistentVolumeName := include "template.pv.name" $config.name }}
+{{ $pvcName := include "template.pvc.name" $config.name }}
 
 {{ $persistentVolume := (dict
   "name" $persistentVolumeName
@@ -23,13 +19,14 @@
 {{ $ctx := dict
   "name" $config.name
   "probe" $config.probe
+  "deployment" $config.deployment
   "resources" $config.deployment.resources
   "ports" $config.service.ports
   "envFrom" (list
-    (include "template.configmap-env.name" (dict "name" $config.name))
+    (include "template.configmap-env.name" $config.name)
   )
   "secretsFrom" (list
-    (include "template.secrets.name" (dict "name" $config.name))
+    (include "template.secrets.name" $config.name)
   )
   "image" (include "template.image" (dict
     "registry" .Values.registry

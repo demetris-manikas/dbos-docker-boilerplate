@@ -1,15 +1,8 @@
 {{ $config := .Values.keycloak }}
 
-{{ $keycloakHeadlessCtx := dict
-  "name" (printf "%s-headless" $config.name)
-}}
-{{ $keycloakHeadlessServiceName := include "template.service.name" $keycloakHeadlessCtx }}
+{{ $keycloakHeadlessServiceName := include "template.service.name" (printf "%s-headless" $config.name) }}
 
-{{ $ctx := dict
-  "name" $config.name
-}}
-
-{{ $keycloakServiceName := include "template.service.name" $ctx }}
+{{ $keycloakServiceName := include "template.service.name" $config.name }}
 
 apiVersion: v1
 kind: Service

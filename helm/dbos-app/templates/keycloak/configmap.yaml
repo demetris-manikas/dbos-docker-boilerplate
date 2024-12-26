@@ -2,29 +2,17 @@
 {{ $domain := .Values.domain }}
 {{ $resourcesSettings := $config.deployment.resources }}
 
-{{ $ctx := dict
-  "name" $config.name
-}}
-
-{{ $dbctx := dict
-  "name" .Values.keycloak_db.name
-}}
-
-{{ $keycloakHeadlessCtx := dict
-  "name" (printf "%s-headless" $config.name)
-}}
-
-{{ $keycloakHeadlessServiceName := include "template.service.name" $keycloakHeadlessCtx }}
+{{ $keycloakHeadlessServiceName := include "template.service.name" (printf "%s-headless" $config.name) }}
 
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "template.configmap-env.name" $ctx }}
+  name: {{ include "template.configmap-env.name" $config.name }}
 data:
   KC_DB: postgres
   KC_DB_SCHEMA: public
   KC_DB_URL_DATABASE: {{ $config.env.KC_DB_URL_DATABASE }}
-  KC_DB_URL_HOST: {{ include "template.service.name" $dbctx }}
+  KC_DB_URL_HOST: {{ include "template.service.name" .Values.keycloak_db.name }}
   KC_DB_URL_PORT: "5432"
   KC_HOSTNAME: {{ printf "auth.%s" .Values.domain }}
   KC_HOSTNAME_STRICT_HTTPS: "false"
