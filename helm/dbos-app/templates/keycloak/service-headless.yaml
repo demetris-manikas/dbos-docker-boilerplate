@@ -3,13 +3,13 @@
 {{ $keycloakHeadlessCtx := dict
   "name" (printf "%s-headless" $config.name)
 }}
-{{ $keycloakHeadlessServiceName := include "template.svc.name" $keycloakHeadlessCtx }}
+{{ $keycloakHeadlessServiceName := include "template.service.name" $keycloakHeadlessCtx }}
 
 {{ $ctx := dict
   "name" $config.name
 }}
 
-{{ $keycloakServiceName := include "template.svc.name" $ctx }}
+{{ $keycloakServiceName := include "template.service.name" $ctx }}
 
 apiVersion: v1
 kind: Service

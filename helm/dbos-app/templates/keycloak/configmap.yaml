@@ -14,7 +14,7 @@
   "name" (printf "%s-headless" $config.name)
 }}
 
-{{ $keycloakHeadlessServiceName := include "template.svc.name" $keycloakHeadlessCtx }}
+{{ $keycloakHeadlessServiceName := include "template.service.name" $keycloakHeadlessCtx }}
 
 apiVersion: v1
 kind: ConfigMap
@@ -24,7 +24,7 @@ data:
   KC_DB: postgres
   KC_DB_SCHEMA: public
   KC_DB_URL_DATABASE: {{ $config.env.KC_DB_URL_DATABASE }}
-  KC_DB_URL_HOST: {{ include "template.svc.name" $dbctx }}
+  KC_DB_URL_HOST: {{ include "template.service.name" $dbctx }}
   KC_DB_URL_PORT: "5432"
   KC_HOSTNAME: {{ printf "auth.%s" .Values.domain }}
   KC_HOSTNAME_STRICT_HTTPS: "false"

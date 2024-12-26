@@ -1,11 +1,11 @@
-{{- define "template.svc" }}
+{{- define "template.service" }}
 
 {{ $name := .name }}
 {{ $serviceName := .serviceName }}
 {{ $ports := .ports }}
 
 {{- if not $serviceName }}
-  {{ $serviceName = include "template.svc.name" (dict "name" $name) }}
+  {{ $serviceName = include "template.service.name" (dict "name" $name) }}
 {{- end }}
 
 {{ $selectorService := $serviceName }}

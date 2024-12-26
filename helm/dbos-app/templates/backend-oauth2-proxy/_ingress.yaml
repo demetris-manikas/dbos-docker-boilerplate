@@ -1,5 +1,5 @@
 {{ $config := .Values.backend_oauth2_proxy }}
-{{ $serviceName := include "template.svc.name" $config.name }}
+{{ $serviceName := include "template.service.name" $config.name }}
 
 {{ $rootPath := dict
   "path" $config.hosts.base.paths.root

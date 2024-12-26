@@ -39,4 +39,4 @@
   "volumeMounts" (list $persistentVolumeMount)
 }}
 
-{{ include "template.dpl" $ctx }}
+{{ include "template.deployment" $ctx }}

@@ -11,5 +11,5 @@ kind: ConfigMap
 metadata:
   name: {{ include "template.configmap.name" $ctx }}
 data:
-  APP_DB_HOSTNAME: {{ include "template.svc.name" $dbctx }}
+  APP_DB_HOSTNAME: {{ include "template.service.name" $dbctx }}
   BROKERS: {{ .Values.backend.config.brokers }}

@@ -1,8 +1,8 @@
-{{- define "template.dpl.name"}}
+{{- define "template.deployment.name"}}
 {{- printf "%s-dpl" .name -}}
 {{ end -}}
 
-{{- define "template.svc.name"}}
+{{- define "template.service.name"}}
 {{- printf "%s-svc" .name -}}
 {{ end -}}
 

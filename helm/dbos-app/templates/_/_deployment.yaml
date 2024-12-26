@@ -1,9 +1,9 @@
-{{- define "template.dpl"}}
-{{ $deploymentName := include "template.dpl.name" (dict "name" .name) }}
+{{- define "template.deployment"}}
+{{ $deploymentName := include "template.deployment.name" (dict "name" .name) }}
 
 {{ $serviceName := .serviceName }}
 {{ if not $serviceName }}
-  {{ $serviceName = include "template.svc.name" (dict "name" .name) }}
+  {{ $serviceName = include "template.service.name" (dict "name" .name) }}
 {{ end }}
 
 {{ $containerCtx := dict

@@ -4,4 +4,4 @@
     "ports" $config.service.ports
 }}
 
-{{ include "template.svc" $ctx }}
+{{ include "template.service" $ctx }}
