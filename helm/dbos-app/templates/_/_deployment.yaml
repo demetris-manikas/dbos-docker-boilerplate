@@ -11,7 +11,7 @@
     "probe" .probe
     "image" .image
     "ports" .ports
-    "resources" .deployment.resources
+    "resources" .resources
     "volumeMounts" .volumeMounts
     "envFrom" .envFrom
     "secretsFrom" .secretsFrom

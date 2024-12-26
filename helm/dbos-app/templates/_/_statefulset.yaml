@@ -7,16 +7,17 @@
 {{ $volumes := .volumes }}
 {{ $volumeMounts := .volumeMounts }}
 {{ $volumeClaimTemplates := .volumeClaimTemplates }}
-{{ $storage := $statefulSet.storage}}
+{{ $resources := .resources }}
+{{ $storage := $statefulSet.storage }}
 {{ $serviceName := include "template.service.name" $name }}
 {{ $statefulsetName := include "template.statefulset.name" $name }}
 
 {{ $containerCtx := dict
     "name" $serviceName
-    "probe" $statefulSet.probe
+    "probe" $probe
     "image" $image
     "ports" $ports
-    "resources" $statefulSet.resources
+    "resources" $resources
     "volumes" $volumes
     "volumeMounts" $volumeMounts
     "envFrom" .envFrom
