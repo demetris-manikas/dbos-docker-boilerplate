@@ -26,7 +26,7 @@
   "resources" $config.deployment.resources
   "ports" $config.service.ports
   "envFrom" (list
-    (include "template.configmap.name" (dict "name" $config.name))
+    (include "template.configmap-env.name" (dict "name" $config.name))
   )
   "secretsFrom" (list
     (include "template.secrets.name" (dict "name" $config.name))
