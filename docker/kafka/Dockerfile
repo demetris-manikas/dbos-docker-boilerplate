@@ -1,1 +1,1 @@
-FROM apache/kafka:latest
+FROM apache/kafka:3.7.2
