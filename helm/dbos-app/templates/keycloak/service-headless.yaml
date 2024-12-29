@@ -1,14 +1,13 @@
 {{ $config := .Values.keycloak }}
 
-{{ $keycloakHeadlessServiceName := include "template.service.name" (printf "%s-headless" $config.name) }}
+{{ $serviceName := include "template.service.name" (printf "%s-headless" $config.name) }}
 
-{{ $keycloakServiceName := include "template.service.name" $config.name }}
+{{ $selectorService := include "template.service.name" $config.name }}
 
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $keycloakHeadlessServiceName }}
-spec:
-  clusterIP: None
-  selector:
-    service: {{ $keycloakServiceName }}
+{{ $ctx := dict
+    "clusterIP" "None"
+    "serviceName" $serviceName
+    "selectorService" $selectorService
+}}
+
+{{ include "template.service" $ctx }}

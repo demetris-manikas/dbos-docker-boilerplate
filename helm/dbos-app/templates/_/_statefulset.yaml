@@ -5,12 +5,18 @@
 {{ $image := .image }}
 {{ $ports := .ports }}
 {{ $probe := .probe }}
+{{ $podManagementPolicy := .podManagementPolicy }}
 {{ $volumes := .volumes }}
 {{ $volumeMounts := .volumeMounts }}
 {{ $volumeClaimTemplates := .volumeClaimTemplates }}
 {{ $resources := .resources }}
 {{ $storage := $statefulSet.storage }}
-{{ $serviceName := include "template.service.name" $name }}
+
+{{ $serviceName := .serviceName }}
+{{ if not $serviceName }}
+  {{ $serviceName = include "template.service.name" .name }}
+{{ end }}
+
 {{ $statefulsetName := include "template.statefulset.name" $name }}
 
 {{ $containerCtx := dict
@@ -19,7 +25,6 @@
     "image" $image
     "ports" $ports
     "resources" $resources
-    "volumes" $volumes
     "volumeMounts" $volumeMounts
     "envFrom" .envFrom
     "secretsFrom" .secretsFrom
@@ -36,6 +41,11 @@ spec:
       service: {{ $serviceName }}
   serviceName: {{ $serviceName }}
   replicas: {{ $statefulSet.replicas }}
+  revisionHistoryLimit: {{ $statefulSet.revisionHistoryLimit | default 10 }}
+  {{- if $podManagementPolicy }}
+    podManagementPolicy: {{ $podManagementPolicy }}
+  {{- end }}
+
   minReadySeconds: 10 # by default is 0
   template:
     metadata:
@@ -43,14 +53,13 @@ spec:
         service: {{ $serviceName }}
     spec:
       terminationGracePeriodSeconds: 10
-      {{- if .volumes }}
+      {{- if $volumes }}
       volumes:
-      {{- range .volumes }}
+      {{- range $volumes }}
         -
 {{ toYaml . | indent 10 -}}
       {{ end }}
       {{- end }}
-
       containers:
 {{ $container | indent 6 }}
   volumeClaimTemplates:

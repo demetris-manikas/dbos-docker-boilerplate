@@ -2,6 +2,8 @@
 
 {{ $name := .name }}
 {{ $serviceName := .serviceName }}
+{{ $clusterIP := .clusterIP }}
+
 {{ $ports := .ports }}
 
 {{- if not $serviceName }}
@@ -19,6 +21,10 @@ metadata:
   labels:
     service: {{ $selectorService }}
 spec:
+  {{- if $clusterIP }}
+  clusterIP: {{ $clusterIP }}
+  {{- end }}
+  {{- if $ports }}
   ports:
     {{- range  $k, $v := $ports }}
     - name: {{ $k | kebabcase }}
@@ -26,6 +32,7 @@ spec:
       targetPort: {{ $v.targetPort }}
       protocol: {{ $v.protocol | default "TCP"}}
     {{- end }}
+  {{- end }}
   selector:
     service: {{ $selectorService }}
 {{ end -}}

@@ -1,6 +1,6 @@
 {
   "name": "dbos-docker-boilerplate",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "scripts": {
     "start": "npx dbos-sdk start",
     "dev": "nodemon --exitcrash",
@@ -15,8 +15,8 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "@dbos-inc/communicator-random": "^1.23.8",
-    "@dbos-inc/dbos-sdk": "^1.23.8",
+    "@dbos-inc/communicator-random": "^1.30.13",
+    "@dbos-inc/dbos-sdk": "^1.30.13",
     "kafkajs": "^2.2.4",
     "knex": "3.1.0"
   }

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: kafka
+    service: kafka
   name: kafka-headless
   namespace: kafka
 spec:
@@ -13,16 +13,16 @@ spec:
   ipFamilies:
   - IPv4
   ipFamilyPolicy: SingleStack
-    ports:
-    - name: tcp-kafka-int
-      port: 9092
-      protocol: TCP
-      targetPort: tcp-kafka-int
-    - name: tcp-kafka-ctrl
-      port: 29093
-      protocol: TCP
-      targetPort: tcp-kafka-ctrl
+  ports:
+  - name: tcp-kafka-int
+    port: 9092
+    protocol: TCP
+    targetPort: tcp-kafka-int
+  - name: tcp-kafka-ctrl
+    port: 29093
+    protocol: TCP
+    targetPort: tcp-kafka-ctrl
   selector:
-    app: kafka
+    service: kafka
   sessionAffinity: None
   type: ClusterIP
