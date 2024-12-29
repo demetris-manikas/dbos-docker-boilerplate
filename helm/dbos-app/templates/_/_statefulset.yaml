@@ -45,8 +45,7 @@ spec:
   {{- if $podManagementPolicy }}
     podManagementPolicy: {{ $podManagementPolicy }}
   {{- end }}
-
-  minReadySeconds: 10 # by default is 0
+  minReadySeconds: 10
   template:
     metadata:
       labels:
@@ -60,10 +59,18 @@ spec:
 {{ toYaml . | indent 10 -}}
       {{ end }}
       {{- end }}
+      {{- if .securityContext }}
+      securityContext:
+{{ toYaml .securityContext | indent 8 -}}
+        sysctls:
+          - name: "net.ipv4.ip_unprivileged_port_start"
+            value: "0"
+      {{- end }}
       containers:
 {{ $container | indent 6 }}
+  {{- if $volumeClaimTemplates }}
   volumeClaimTemplates:
-{{- range $volumeClaimTemplates }}
+  {{- range $volumeClaimTemplates }}
   - metadata:
       name: {{ .name }}
     spec:
@@ -73,5 +80,6 @@ spec:
       resources:
         requests:
           storage: {{ .size }}
-{{- end }}
+  {{- end }}
+  {{- end }}
 {{ end -}}

@@ -1,0 +1,14 @@
+{{ $config := .Values.kafka }}
+
+{{ $serviceName := printf "%s-headless" $config.name }}
+
+{{ $selectorService := include "template.service.name" $config.name }}
+
+{{ $ctx := dict
+    "namespace" $config.name
+    "clusterIP" "None"
+    "serviceName" $serviceName
+    "selectorService" $selectorService
+}}
+
+{{ include "template.service" $ctx }}

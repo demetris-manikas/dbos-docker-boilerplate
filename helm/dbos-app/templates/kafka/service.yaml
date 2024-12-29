@@ -1,28 +1,8 @@
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    service: kafka
-  name: kafka-headless
-  namespace: kafka
-spec:
-  clusterIP: None
-  clusterIPs:
-  - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-  - name: tcp-kafka-int
-    port: 9092
-    protocol: TCP
-    targetPort: tcp-kafka-int
-  - name: tcp-kafka-ctrl
-    port: 29093
-    protocol: TCP
-    targetPort: tcp-kafka-ctrl
-  selector:
-    service: kafka
-  sessionAffinity: None
-  type: ClusterIP
+{{ $config := .Values.kafka }}
+
+{{ $ctx := dict
+    "name" $config.name
+    "ports" .Values.kafka.service.ports
+}}
+
+{{ include "template.service" $ctx }}

@@ -1,44 +1,28 @@
-  kafka:
-    name: kafka
-    service:
-      ports:
-        "tcp-kafka-int":
-          port: 9092
-          targetPort: 9092
-        tcp-kafka-ctrl:
-          port: 29093
-          protocol: TCP
-          targetPort: tcp-kafka-ctrl
-    image:
-      name: docker.io/confluentinc/confluent-local
-      tag: 7.5.0
-    statefulset:
-      probe:
-        method:
-          httpGet:
-            path: /jspui/
-            port: 8080
-        liveness:
-          initialDelaySeconds: 5
-          periodSeconds: 15
-          timeoutSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-      replicas: 3
-      resources:
-          requests:
-            cpu: 250m
-            memory: 512Mi
-          limits:
-            cpu: 1
-            memory: 1400Mi
-      storage:
-        assetstore:
-          name: assetstore
-          mountPath: /dspace/assetstore
-          volumeClaim:
-            className: gp2
-            accessMode: ReadWriteOnce
-            size: 100M
-    secrets:
-    env:
+kafka:
+  name: kafka
+  service:
+    ports:
+      tcp-kafka-int:
+        port: 9092
+        targetPort: 9092
+      tcp-kafka-ctrl:
+        port: 29093
+        targetPort: 29093
+  image:
+    name: apache/kafka
+    tag: 3.7.2
+  resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1400Mi
+  statefulset:
+    replicas: 1
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  secrets:
+  env:

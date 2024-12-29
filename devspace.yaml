@@ -19,7 +19,6 @@ commands:
     kubectl create namespace ${NAMESPACE}
     devspace use namespace ${NAMESPACE}
     kubectl create namespace argocd
-    kubectl create namespace kafka
     kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
     helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
     helm install sealed-secrets -n kube-system sealed-secrets/sealed-secrets

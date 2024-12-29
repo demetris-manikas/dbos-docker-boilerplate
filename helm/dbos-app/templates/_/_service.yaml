@@ -1,6 +1,7 @@
 {{- define "template.service" }}
 
 {{ $name := .name }}
+{{ $namespace := .namespace }}
 {{ $serviceName := .serviceName }}
 {{ $clusterIP := .clusterIP }}
 
@@ -18,6 +19,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $serviceName }}
+  {{- if $namespace }}
+  namespace: {{ $namespace }}
+  {{- end }}
   labels:
     service: {{ $selectorService }}
 spec:

@@ -4,4 +4,4 @@ metadata:
   name: {{ include "template.configmap-env.name" .Values.backend.name }}
 data:
   APP_DB_HOSTNAME: {{ include "template.service.name" .Values.backend_db.name }}
-  BROKERS: {{ .Values.backend.config.brokers }}
+  BROKERS: {{ .Values.backend.env.brokers }}

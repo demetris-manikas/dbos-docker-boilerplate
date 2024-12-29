@@ -3,7 +3,7 @@ images:
     backend:
         imageConfigHash: 345644a5af75c08f6f8be98cda60cea57a12f6f5c3b81dc22ff56da87f96e135
         dockerfileHash: 7e7a543a632619a346c5c606cc1fc5d23ade79281639fe6506b91986def00710
-        contextHash: 790d5bb9b6b0bd53c54ca59aeba4094e61d998fbf035d2b3eb11f46dc2b6f247
+        contextHash: 4741f895c410a7df70f62fa0159809819d7f5eba5a9206aa64e629c429eaeb27
         imageName: localhost:32000/dbos-backend
         tag: latest
     backend-db:

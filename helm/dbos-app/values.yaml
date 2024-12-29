@@ -166,7 +166,7 @@ backend:
     storage: 1Gi
     accessMode: ReadOnlyMany
   config:
-    brokers: 'kafka-headless.kafka.svc.cluster.local:9092'
+    brokers: 'kafka-svc.dbos.svc.cluster.local:9092'
   secrets:
     APP_DB_NAME: app
     APP_DB_USER: app
@@ -176,50 +176,34 @@ container_registry:
   enabled: false
   name: container-registry
 
-  kafka:
-    name: kafka
-    service:
-      ports:
-        "tcp-kafka-int":
-          port: 9092
-          targetPort: 9092
-        tcp-kafka-ctrl:
-          port: 29093
-          protocol: TCP
-          targetPort: tcp-kafka-ctrl
-    image:
-      name: docker.io/confluentinc/confluent-local
-      tag: 7.5.0
-    statefulset:
-      probe:
-        method:
-          httpGet:
-            path: /jspui/
-            port: 8080
-        liveness:
-          initialDelaySeconds: 5
-          periodSeconds: 15
-          timeoutSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-      replicas: 3
-      resources:
-          requests:
-            cpu: 250m
-            memory: 512Mi
-          limits:
-            cpu: 1
-            memory: 1400Mi
-      storage:
-        assetstore:
-          name: assetstore
-          mountPath: /dspace/assetstore
-          volumeClaim:
-            className: gp2
-            accessMode: ReadWriteOnce
-            size: 100M
-    secrets:
-    env:
+kafka:
+  name: kafka
+  service:
+    ports:
+      tcp-kafka-int:
+        port: 9092
+        targetPort: 9092
+      tcp-kafka-ctrl:
+        port: 29093
+        targetPort: 29093
+  image:
+    name: apache/kafka
+    tag: 3.7.2
+  resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1400Mi
+  statefulset:
+    replicas: 1
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  secrets:
+  env:
 
 keycloak_db:
   name: app-keycloak-db
@@ -248,18 +232,19 @@ keycloak_db:
       periodSeconds: 1
       timeoutSeconds: 3
 
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1
+
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    resources:
-      requests:
-        memory: 1Gi
-        cpu: 1
-      limits:
-        memory: 1Gi
-        cpu: 1
   volume:
     hostPath: ""
     storage: 1Gi

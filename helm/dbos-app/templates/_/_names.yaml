@@ -2,6 +2,10 @@
 {{- printf "%s-dpl" . -}}
 {{ end -}}
 
+{{- define "template.statefulset.name"}}
+{{- printf "%s-sfs" . -}}
+{{ end -}}
+
 {{- define "template.service.name"}}
 {{- printf "%s-svc" . -}}
 {{ end -}}

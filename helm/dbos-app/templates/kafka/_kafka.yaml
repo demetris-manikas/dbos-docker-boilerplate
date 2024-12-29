@@ -2,8 +2,6 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  labels:
-    service: kafka
   name: kafka
   namespace: kafka
 spec:
@@ -12,35 +10,31 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      service: kafka
+      service: kafka-svc
   serviceName: kafka-headless
   template:
     metadata:
       labels:
-        service: kafka
+        service: kafka-svc
     spec:
-      serviceAccountName: kafka
       containers:
       - command:
         - sh
         - -exc
         - |
-          export CLUSTER_ID="6PMpHYL9QkeyXRj9Nrp4KA" && \
           export KAFKA_NODE_ID=${HOSTNAME##*-}
-          export KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${POD_NAME}.kafka-headless.kafka.svc.cluster.local:9092
-          export KAFKA_CONTROLLER_QUORUM_VOTERS="0@kafka-0.kafka-headless.kafka.svc.cluster.local:29093,1@kafka-1.kafka-headless.kafka.svc.cluster.local:29093,2@kafka-2.kafka-headless.kafka.svc.cluster.local:29093"
-
+          export KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${HOSTNAME}.kafka-headless.kafka.svc.cluster.local:9092
           exec /etc/confluent/docker/run
         env:
         - name: KAFKA_CONTROLLER_LISTENER_NAMES
           value: "CONTROLLER"
         - name: KAFKA_LISTENERS
           value: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.name
+        - name: CLUSTER_ID
+          value: 6PMpHYL9QkeyXRj9Nrp4KA
+        - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+          value: 0@kafka-0.kafka-headless.kafka.svc.cluster.local:29093,1@kafka-1.kafka-headless.kafka.svc.cluster.local:29093,2@kafka-2.kafka-headless.kafka.svc.cluster.local:29093
+
         name: kafka
         image: docker.io/confluentinc/confluent-local:7.5.0
         imagePullPolicy: IfNotPresent
