@@ -1,4 +1,5 @@
 keycloak:
+  importRealms: "true"
   name: app-keycloak
   hosts:
     base:

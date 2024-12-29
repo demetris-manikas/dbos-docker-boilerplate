@@ -5,6 +5,12 @@
   "name" $config.name
   "deployment" $config.deployment
   "service" $config.service
+  "envFrom" (list
+    (include "template.configmap-env.name" $config.name)
+  )
+  "secretsFrom" (list
+    (include "template.secrets.name" $config.name)
+  )
   "image" (include "template.image" (dict
     "name" $imageConfig.name
     "tag" $imageConfig.tag

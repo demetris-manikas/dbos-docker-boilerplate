@@ -1,0 +1,10 @@
+{{ $config := .Values.keycloak }}
+{{ if eq $config.importRealms "true" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-import-realms-configmap
+data:
+  realm-app.json: |
+{{ .Files.Get "data/keycloak/import/realm-app.json" | indent 4 }}
+{{ end }}

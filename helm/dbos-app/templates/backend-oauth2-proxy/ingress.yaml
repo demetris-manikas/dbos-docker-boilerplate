@@ -1,4 +1,4 @@
-{{ $config := .Values.keycloak }}
+{{ $config := .Values.backend_oauth2_proxy }}
 {{ $serviceName := include "template.service.name" $config.name }}
 
 {{ $rootPath := dict
@@ -6,15 +6,16 @@
   "backend" (dict
     "service" $serviceName
     "port" (dict
-      "number" $config.service.ports.keycloak.port
+      "number" $config.service.ports.oauth2proxy.port
     )
   )
 }}
 
 {{ $ctx := dict
-  "host" (printf "auth.%s" .Values.domain)
-  "name" "auth"
+  "host" (printf "oauth2.%s" .Values.domain)
+  "name" "oauth2"
   "paths" (list $rootPath)
 }}
+
 
 {{ include "template.ingress" $ctx }}

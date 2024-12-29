@@ -3,9 +3,9 @@
 {{ $backendConfig := .Values.backend }}
 {{ $env := $config.env }}
 
-{{ $scheme := .Values.ingress.scheme }}
+{{ $scheme := .Values.scheme }}
 {{ $domain := .Values.domain }}
-{{ $realm := "empower"}}
+{{ $realm := "app"}}
 
 {{ $authRealmUrl := printf "%s://auth.%s/realms/%s" $scheme $domain $realm }}
 
@@ -17,9 +17,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "template.configmap.name" $config.name }}
+  name: {{ include "template.configmap-env.name" $config.name }}
 data:
-  TZ: {{ .Values.TZ }}
   OAUTH2_PROXY_PROVIDER: "oidc"
   OAUTH2_PROXY_PROVIDER_DISPLAY_NAME: "keycloak oidc"
   OAUTH2_PROXY_REAL_CLIENT_IP_HEADER: "X-Forwarded-For"

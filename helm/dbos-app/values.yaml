@@ -257,6 +257,7 @@ keycloak_db:
     KEYCLOAK_DB_PASSWORD: keycloak
 
 keycloak:
+  importRealms: "true"
   name: app-keycloak
   hosts:
     base:

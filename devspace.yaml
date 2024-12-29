@@ -31,7 +31,7 @@ commands:
     kubectl rollout status deployment coredns -n kube-system
     kubectl rollout status deployment container-registry-deployment
 
-  cluster-init: |-
+  cluster-create: |-
     k3d cluster create \
           -v /etc/machine-id:/etc/machine-id \
           --k3s-arg "--disable=traefik@server:0" \
@@ -41,7 +41,7 @@ commands:
           -p "${REGISTRY_PORT}:${REGISTRY_PORT}@loadbalancer" \
           ${CLUSTER_NAME}
 
-  cluster-destroy: |-
+  cluster-delete: |-
     devspace use namespace ${NAMESPACE}
     k3d cluster delete ${CLUSTER_NAME}
 
@@ -109,6 +109,10 @@ deployments:
     kubectl:
       manifests:
         - ${TEMPLATES_DIST}/dbos-app/templates/backend
+  backend-oauth2-proxy:
+    kubectl:
+      manifests:
+        - ${TEMPLATES_DIST}/dbos-app/templates/backend-oauth2-proxy
 
   keycloak:
     kubectl:
