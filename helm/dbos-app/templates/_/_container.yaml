@@ -1,5 +1,6 @@
 {{- define "template.container"}}
 {{- $resourcesSettings := .resources -}}
+{{- $securityContext := .securityContext -}}
 {{- $probeMethod := "" -}}
 {{- $livenessSettings := "" -}}
 {{- $readinessSettings := "" -}}
@@ -10,6 +11,10 @@
 {{- end -}}
 - name: {{ .name }}
   image: {{ .image }}
+  {{- if .securityContext }}
+  securityContext:
+{{ toYaml .securityContext | indent 4 }}
+  {{- end }}
   {{- if .ports }}
   ports:
     {{- range  $k, $v := .ports }}

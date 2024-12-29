@@ -28,6 +28,7 @@
     "volumeMounts" $volumeMounts
     "envFrom" .envFrom
     "secretsFrom" .secretsFrom
+    "securityContext" .securityContext
 }}
 
 {{ $container := include "template.container" $containerCtx }}
@@ -59,13 +60,10 @@ spec:
 {{ toYaml . | indent 10 -}}
       {{ end }}
       {{- end }}
-      {{- if .securityContext }}
       securityContext:
-{{ toYaml .securityContext | indent 8 -}}
         sysctls:
           - name: "net.ipv4.ip_unprivileged_port_start"
             value: "0"
-      {{- end }}
       containers:
 {{ $container | indent 6 }}
   {{- if $volumeClaimTemplates }}

@@ -165,7 +165,7 @@ backend:
     hostPath: ""
     storage: 1Gi
     accessMode: ReadOnlyMany
-  config:
+  env:
     brokers: 'kafka-svc.dbos.svc.cluster.local:9092'
   secrets:
     APP_DB_NAME: app
