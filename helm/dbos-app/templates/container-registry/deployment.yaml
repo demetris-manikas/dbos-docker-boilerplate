@@ -19,18 +19,10 @@ spec:
       labels:
         service: container-registry-service
     spec:
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              service: container-registry-service
       volumes:
         - persistentVolumeClaim:
             claimName: cr-pvc
           name: cr-volume
-
       containers:
         - name: container-registry-service
           image: registry:2

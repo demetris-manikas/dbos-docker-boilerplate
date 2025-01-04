@@ -24,7 +24,6 @@ backend_oauth2_proxy:
     limits:
       memory: 1Gi
       cpu: 500m
-
   deployment:
     replicas: 1
     revisionHistoryLimit: 5
