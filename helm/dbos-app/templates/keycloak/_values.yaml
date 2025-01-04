@@ -23,6 +23,15 @@ keycloak:
       periodSeconds: 30
       timeoutSeconds: 5
       successThreshold: 1
+  resources:
+    requests:
+      java: 400m
+      memory: 512Mi
+      cpu: 1
+    limits:
+      java: 800m
+      memory: 1Gi
+      cpu: 1
   deployment:
     image:
       name: app-keycloak
@@ -31,15 +40,6 @@ keycloak:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    resources:
-      requests:
-        java: 400m
-        memory: 512Mi
-        cpu: 1
-      limits:
-        java: 800m
-        memory: 1Gi
-        cpu: 1
   service:
     ports:
       keycloak:

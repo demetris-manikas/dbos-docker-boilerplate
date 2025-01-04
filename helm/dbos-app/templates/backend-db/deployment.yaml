@@ -20,7 +20,7 @@
   "name" $config.name
   "probe" $config.probe
   "deployment" $config.deployment
-  "resources" $config.deployment.resources
+  "resources" $config.resources
   "ports" $config.service.ports
   "envFrom" (list
     (include "template.configmap-env.name" $config.name)

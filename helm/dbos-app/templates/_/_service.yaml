@@ -2,6 +2,7 @@
 
 {{ $name := .name }}
 {{ $namespace := .namespace }}
+{{ $type := .type }}
 {{ $serviceName := .serviceName }}
 {{ $clusterIP := .clusterIP }}
 
@@ -25,6 +26,9 @@ metadata:
   labels:
     service: {{ $selectorService }}
 spec:
+  {{- if $type }}
+  type: {{ $type }}
+  {{- end }}
   {{- if $clusterIP }}
   clusterIP: {{ $clusterIP }}
   {{- end }}
@@ -35,6 +39,9 @@ spec:
       port: {{ $v.port }}
       targetPort: {{ $v.targetPort }}
       protocol: {{ $v.protocol | default "TCP"}}
+      {{- if $v.nodePort }}
+      nodePort: {{ $v.nodePort }}
+      {{- end }}
     {{- end }}
   {{- end }}
   selector:

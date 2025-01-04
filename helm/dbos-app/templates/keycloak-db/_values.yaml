@@ -24,7 +24,6 @@ keycloak_db:
       failureThreshold: 3
       periodSeconds: 1
       timeoutSeconds: 3
-
   resources:
     requests:
       memory: 1Gi
@@ -32,7 +31,6 @@ keycloak_db:
     limits:
       memory: 1Gi
       cpu: 1
-
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:

@@ -4,6 +4,7 @@
 {{ $ctx := dict
   "name" $config.name
   "deployment" $config.deployment
+  "resources" $config.resources
   "service" $config.service
   "envFrom" (list
     (include "template.configmap-env.name" $config.name)
@@ -15,6 +16,7 @@
     "name" $imageConfig.name
     "tag" $imageConfig.tag
   ))
+
 }}
 
 {{ include "template.deployment" $ctx }}

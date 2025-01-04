@@ -1,18 +1,23 @@
 {{- define "template.statefulset"}}
 
 {{ $statefulSet := .statefulset }}
-{{ $name := .name }}
-{{ $image := .image }}
-{{ $ports := .ports }}
-{{ $probe := .probe }}
-{{ $podManagementPolicy := .podManagementPolicy }}
-{{ $volumes := .volumes }}
-{{ $volumeMounts := .volumeMounts }}
-{{ $volumeClaimTemplates := .volumeClaimTemplates }}
-{{ $resources := .resources }}
 {{ $storage := $statefulSet.storage }}
 
+{{ $name := .name }}
 {{ $serviceName := .serviceName }}
+{{ $podManagementPolicy := .podManagementPolicy }}
+{{ $volumes := .volumes }}
+{{ $volumeClaimTemplates := .volumeClaimTemplates }}
+
+{{ $image := .image }}
+{{ $probe := .probe }}
+{{ $ports := .ports }}
+{{ $resources := .resources }}
+{{ $volumeMounts := .volumeMounts }}
+{{ $envFrom := .envFrom }}
+{{ $secretsFrom := .secretsFrom }}
+{{ $containerSecurityContext := .containerSecurityContext }}
+
 {{ if not $serviceName }}
   {{ $serviceName = include "template.service.name" .name }}
 {{ end }}
@@ -21,14 +26,14 @@
 
 {{ $containerCtx := dict
     "name" $serviceName
-    "probe" $probe
     "image" $image
+    "probe" $probe
     "ports" $ports
     "resources" $resources
     "volumeMounts" $volumeMounts
-    "envFrom" .envFrom
-    "secretsFrom" .secretsFrom
-    "securityContext" .securityContext
+    "envFrom" $envFrom
+    "secretsFrom" $secretsFrom
+    "securityContext" $containerSecurityContext
 }}
 
 {{ $container := include "template.container" $containerCtx }}

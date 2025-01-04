@@ -2,6 +2,8 @@
 {{ $deploymentName := include "template.deployment.name" .name }}
 
 {{ $serviceName := .serviceName }}
+{{ $volumes := .volumes }}
+
 {{ if not $serviceName }}
   {{ $serviceName = include "template.service.name" .name }}
 {{ end }}
@@ -15,7 +17,7 @@
     "volumeMounts" .volumeMounts
     "envFrom" .envFrom
     "secretsFrom" .secretsFrom
-    "securityContext" .securityContext
+    "securityContext" .containersecurityContext
 }}
 
 {{ $container := include "template.container" $containerCtx }}
@@ -52,9 +54,9 @@ spec:
         sysctls:
           - name: "net.ipv4.ip_unprivileged_port_start"
             value: "0"
-      {{- if .volumes }}
+      {{- if $volumes }}
       volumes:
-      {{- range .volumes }}
+      {{- range $volumes }}
         -
 {{ toYaml . | indent 10 -}}
       {{ end }}

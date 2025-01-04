@@ -1,0 +1,25 @@
+nginx_controller:
+  name: nginx-controller
+  namespace: nginx-controller
+  source:
+    targetRevision: 4.11.3
+  values:
+    fullnameOverride: nginx
+    controller:
+      allowSnippetAnnotations: true
+      config:
+        default-type: application/octet-stream
+        access-log: off
+        sendfile: on
+        keepalive-timeout:  65
+        ignore-invalid-headers: on
+        client-header-timeout: 240
+        client-body-timeout: 240
+        send-timeout: 240
+        client-body-buffer-size: 2m
+        client-header-buffer-size: 10k
+        client-max-body-size: 100m
+        large-client-header-buffers: 8 1024k
+        proxy-buffer-size: 128k
+        proxy-buffers: 4 256k
+        proxy-busy-buffers-size: 256k

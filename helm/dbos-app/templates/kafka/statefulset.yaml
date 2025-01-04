@@ -2,14 +2,14 @@
 
 {{ $imageConfig := $config.image }}
 
-{{ $securityContext := fromYaml (.Files.Get "snippets/kafka/securityContext.yaml") }}
+{{ $containerSecurityContext := fromYaml (.Files.Get "snippets/kafka/securityContext.yaml") }}
 
 {{ $ctx := dict
   "name" $config.name
   "probe" $config.probe
   "statefulset" $config.statefulset
   "resources" $config.resources
-  "securityContext" $securityContext
+  "containerSecurityContext" $securityContext
   "ports" $config.service.ports
   "envFrom" (list
     (include "template.configmap-env.name" $config.name)

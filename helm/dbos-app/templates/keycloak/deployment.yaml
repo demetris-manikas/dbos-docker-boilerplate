@@ -6,28 +6,28 @@
 {{ $volumeMounts := list }}
 
 {{ if eq $config.importRealms "true" }}
-{{ $volumeName := "keycloak-import-realms-volume" }}
+  {{ $volumeName := "keycloak-import-realms-volume" }}
 
-{{ $volume := dict
-  "name" $volumeName
-  "configMap" (dict "name" "keycloak-import-realms-configmap")
-}}
+  {{ $volume := dict
+    "name" $volumeName
+    "configMap" (dict "name" "keycloak-import-realms-configmap")
+  }}
 
-{{ $volumes = append $volumes $volume }}
+  {{ $volumes = append $volumes $volume }}
 
-{{ $empowerVolumeMount := dict
-  "name" $volumeName
-  "mountPath" "/opt/keycloak/data/import/realm-app.json"
-  "subPath" "realm-app.json"
-}}
-{{ $volumeMounts = append $volumeMounts $empowerVolumeMount }}
-
+  {{ $realmVolumeMount := dict
+    "name" $volumeName
+    "mountPath" "/opt/keycloak/data/import/realm-app.json"
+    "subPath" "realm-app.json"
+  }}
+  {{ $volumeMounts = append $volumeMounts $empowerVolumeMount }}
 {{ end }}
+
 {{ $ctx := dict
   "name" $config.name
   "probe" $config.probe
   "deployment" $config.deployment
-  "resources" $config.deployment.resources
+  "resources" $config.resources
   "ports" $config.service.ports
   "envFrom" (list
     (include "template.configmap-env.name" $config.name)

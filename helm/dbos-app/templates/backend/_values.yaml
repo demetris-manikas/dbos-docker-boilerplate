@@ -28,19 +28,19 @@ backend:
       failureThreshold: 3
       periodSeconds: 1
       timeoutSeconds: 3
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: 1
+    limits:
+      memory: "2Gi"
+      cpu: 2
 
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: 1
-      limits:
-        memory: "2Gi"
-        cpu: 2
   service:
     ports:
       backend:
