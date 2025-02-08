@@ -1,3 +1,4 @@
 registry: localhost:32000
 domain: dbos-app.localhost
 scheme: http
+ingressClass: ngnix

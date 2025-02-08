@@ -10,3 +10,4 @@ metadata:
 data:
   hosts.override: |
     rewrite name auth.{{ .Values.domain }} {{ $serviceName }}-controller.{{ $namespace }}.svc.cluster.local
+    rewrite name oauth2.{{ .Values.domain }} {{ $serviceName }}-controller.{{ $namespace }}.svc.cluster.local

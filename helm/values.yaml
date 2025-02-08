@@ -6,7 +6,6 @@ backend:
     name: dbos-backend
     version: latest
 
-
 backend_db:
   name: dbos-backend-db
   image:
@@ -20,8 +19,6 @@ keycloak:
   image:
     name: dbos-keycloak
     version: latest
-  volume:
-    hostPath: "/tmp/dbos-app/keycloak"
 
 keycloak_db:
   name: dbos-keycloak-db
@@ -30,6 +27,3 @@ keycloak_db:
     version: latest
   volume:
     hostPath: "/tmp/dbos-app/keycloak-db"
-
-container_registry:
-  enabled: true

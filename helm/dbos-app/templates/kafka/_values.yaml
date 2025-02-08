@@ -12,12 +12,12 @@ kafka:
     name: apache/kafka
     tag: 3.7.2
   resources:
-      requests:
-        cpu: 250m
-        memory: 512Mi
-      limits:
-        cpu: 1
-        memory: 1400Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1400Mi
   statefulset:
     replicas: 1
     revisionHistoryLimit: 5

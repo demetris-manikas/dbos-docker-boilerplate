@@ -47,10 +47,6 @@ backend:
         name: backend
         port: 3000
         targetPort: 3000
-  volume:
-    hostPath: ""
-    storage: 1Gi
-    accessMode: ReadOnlyMany
   env:
     brokers: 'kafka-svc.dbos.svc.cluster.local:9092'
   secrets:

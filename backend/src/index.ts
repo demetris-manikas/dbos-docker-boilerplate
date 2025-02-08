@@ -1,9 +1,8 @@
-import { GetApi, TransactionContext } from "@dbos-inc/dbos-sdk";
-import { Knex } from "knex";
+import { DBOS } from "@dbos-inc/dbos-sdk";
 
 export class Index {
-    @GetApi('/')
-    static async ip(ctxt: TransactionContext<Knex>) {
-        return Promise.resolve(`Welcome to dbos app. Your ip is ${ctxt.request.ip}!`);
+    @DBOS.getApi('/')
+    static async ip() {
+        return Promise.resolve(`Welcome to dbos app. Your ip is ${DBOS.getKoaContext()?.request.ip}!`);
     }
 }

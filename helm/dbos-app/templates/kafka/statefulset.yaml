@@ -9,7 +9,7 @@
   "probe" $config.probe
   "statefulset" $config.statefulset
   "resources" $config.resources
-  "containerSecurityContext" $securityContext
+  "containerSecurityContext" $containerSecurityContext
   "ports" $config.service.ports
   "envFrom" (list
     (include "template.configmap-env.name" $config.name)

@@ -65,7 +65,7 @@ pipelines:
 
   dev:
     run: |-
-      make template
+      devspace run helm
       create_deployments --all
       start_dev --all
 
@@ -73,6 +73,10 @@ images:
   backend:
     image: ${REGISTRY}/dbos-backend:latest
     dockerfile: ./backend/Dockerfile
+    context: ./backend/
+  backend-dev:
+    image: ${REGISTRY}/dbos-backend-dev:latest
+    dockerfile: ./backend/Dockerfile.dev
     context: ./backend/
   backend-db:
     image: ${REGISTRY}/dbos-backend-db:latest
@@ -141,11 +145,11 @@ dev:
   #         - .env
 
   backend:
-    imageSelector: localhost:32000/backend:latest
-    devImage: localhost:32000/backend-dev:latest
+    imageSelector: localhost:32000/dbos-backend:latest
+    devImage: localhost:32000/dbos-backend-dev:latest
     command: ["/home/node/app/start_dev.sh"]
     sync:
-      - path: "../backend:/home/node/app"
+      - path: "./backend:/home/node/app"
         startContainer: true
         uploadExcludePaths:
           - node_modules/

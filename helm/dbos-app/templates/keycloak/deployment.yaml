@@ -20,7 +20,7 @@
     "mountPath" "/opt/keycloak/data/import/realm-app.json"
     "subPath" "realm-app.json"
   }}
-  {{ $volumeMounts = append $volumeMounts $empowerVolumeMount }}
+  {{ $volumeMounts = append $volumeMounts $realmVolumeMount }}
 {{ end }}
 
 {{ $ctx := dict

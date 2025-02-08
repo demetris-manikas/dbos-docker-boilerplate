@@ -3,6 +3,31 @@
 registry: localhost:32000
 domain: dbos-app.localhost
 scheme: http
+ingressClass: ngnix
+
+nginx_controller:
+  name: nginx-controller
+  namespace: nginx-controller
+  source:
+    targetRevision: 4.11.3
+  values:
+    fullnameOverride: nginx
+    controller:
+      allowSnippetAnnotations: true
+      config:
+        default-type: application/octet-stream
+        ignore-invalid-headers: on
+        upstream-keepalive-timeout:  65
+        client-header-timeout: 240
+        client-body-timeout: 240
+        client-body-buffer-size: 2m
+        client-header-buffer-size: 10k
+        large-client-header-buffers: 8 1024k
+        proxy-body-size: 100m
+        proxy-send-timeout: 240
+        proxy-buffer-size: 128k
+        proxy-buffers-number: 8
+        proxy-busy-buffers-size: 256k
 
 backend_db:
   name: app-backend-db
@@ -30,18 +55,19 @@ backend_db:
       failureThreshold: 3
       periodSeconds: 1
       timeoutSeconds: 3
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1
+
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    resources:
-      requests:
-        memory: 1Gi
-        cpu: 1
-      limits:
-        memory: 1Gi
-        cpu: 1
   volume:
     hostPath: ""
     storage: 1Gi
@@ -69,19 +95,19 @@ backend_oauth2_proxy:
         root:
           path: /oauth2
           pathType: Prefix
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: 50m
+    limits:
+      memory: 1Gi
+      cpu: 500m
   deployment:
     replicas: 1
     revisionHistoryLimit: 5
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 25%
-    resources:
-      requests:
-        memory: 100Mi
-        cpu: 50m
-      limits:
-        memory: 1Gi
-        cpu: 500m
     # probe:
     #   method:
     #     httpGet:
@@ -110,7 +136,7 @@ backend_oauth2_proxy:
     OAUTH2_PROXY_CODE_CHALLENGE_METHOD: S256
     OAUTH2_PROXY_SKIP_JWT_BEARER_TOKENS: false
     OAUTH2_PROXY_SCOPE: openid profile email
-    REDIS_DB_INDEX: 4
+    REDIS_DB_INDEX: 1
 
 backend:
   name: app-backend
@@ -142,29 +168,25 @@ backend:
       failureThreshold: 3
       periodSeconds: 1
       timeoutSeconds: 3
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: 1
+    limits:
+      memory: "2Gi"
+      cpu: 2
 
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: 1
-      limits:
-        memory: "2Gi"
-        cpu: 2
   service:
     ports:
       backend:
         name: backend
         port: 3000
         targetPort: 3000
-  volume:
-    hostPath: ""
-    storage: 1Gi
-    accessMode: ReadOnlyMany
   env:
     brokers: 'kafka-svc.dbos.svc.cluster.local:9092'
   secrets:
@@ -173,8 +195,19 @@ backend:
     APP_DB_PASSWORD: app
 
 container_registry:
-  enabled: false
   name: container-registry
+  deployment:
+    revisionHistoryLimit: 5
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "50m"
+    limits:
+      memory: "2Gi"
+      cpu: 2
 
 kafka:
   name: kafka
@@ -190,12 +223,12 @@ kafka:
     name: apache/kafka
     tag: 3.7.2
   resources:
-      requests:
-        cpu: 250m
-        memory: 512Mi
-      limits:
-        cpu: 1
-        memory: 1400Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1400Mi
   statefulset:
     replicas: 1
     revisionHistoryLimit: 5
@@ -231,7 +264,6 @@ keycloak_db:
       failureThreshold: 3
       periodSeconds: 1
       timeoutSeconds: 3
-
   resources:
     requests:
       memory: 1Gi
@@ -239,7 +271,6 @@ keycloak_db:
     limits:
       memory: 1Gi
       cpu: 1
-
   deployment:
     revisionHistoryLimit: 5
     rollingUpdate:
@@ -281,6 +312,15 @@ keycloak:
       periodSeconds: 30
       timeoutSeconds: 5
       successThreshold: 1
+  resources:
+    requests:
+      java: 400m
+      memory: 512Mi
+      cpu: 1
+    limits:
+      java: 800m
+      memory: 1Gi
+      cpu: 1
   deployment:
     image:
       name: app-keycloak
@@ -289,15 +329,6 @@ keycloak:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    resources:
-      requests:
-        java: 400m
-        memory: 512Mi
-        cpu: 1
-      limits:
-        java: 800m
-        memory: 1Gi
-        cpu: 1
   service:
     ports:
       keycloak:

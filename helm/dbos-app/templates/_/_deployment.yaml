@@ -17,7 +17,7 @@
     "volumeMounts" .volumeMounts
     "envFrom" .envFrom
     "secretsFrom" .secretsFrom
-    "securityContext" .containersecurityContext
+    "securityContext" .containerSecurityContext
 }}
 
 {{ $container := include "template.container" $containerCtx }}

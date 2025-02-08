@@ -1,6 +1,6 @@
 {{ $config := .Values.keycloak }}
 {{ $domain := .Values.domain }}
-{{ $resourcesSettings := $config.deployment.resources }}
+{{ $resourcesSettings := $config.resources }}
 
 {{ $keycloakHeadlessServiceName := include "template.service.name" (printf "%s-headless" $config.name) }}
 

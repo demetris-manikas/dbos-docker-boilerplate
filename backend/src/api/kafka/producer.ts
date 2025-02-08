@@ -1,25 +1,18 @@
-import { GetApi, WorkflowContext } from '@dbos-inc/dbos-sdk';
-import { Kafka } from 'kafkajs';
-import { brokers, topic } from '../../defs/kafka';
+import { DBOS } from '@dbos-inc/dbos-sdk';
+import { DefaultKafkaConfig, topic } from '../../defs/kafka';
 
-const kafka = new Kafka({
-    clientId: 'my-app',
-    brokers: brokers,
-});
+import {
+    KafkaProducer,
+} from "@dbos-inc/dbos-confluent-kafka";
 
-export class KafkaProducer {
-    @GetApi('/kafka/producer')
-    static async kafkaProduce(ctx: WorkflowContext) {
-        const producer = kafka.producer();
-        await producer.connect();
-        const res = await producer.send({
-            topic: topic,
-            messages: [
-                { value: 'Hello KafkaJS user!' },
-            ],
-        });
-        ctx.logger.info(res);
-        await producer.disconnect();
+const kafkaProducer = DBOS.configureInstance(KafkaProducer, 'defaultKafka', DefaultKafkaConfig, topic);
+export class KafkaProducerImpl {
+    @DBOS.getApi('/kafka/producer')
+    @DBOS.workflow()
+    static async kafkaProduce() {
+        await kafkaProducer.sendMessage({
+            value: 'Hello KafkaJS user!'
+        })
         return Promise.resolve('Check the console for your message');
     }
 }

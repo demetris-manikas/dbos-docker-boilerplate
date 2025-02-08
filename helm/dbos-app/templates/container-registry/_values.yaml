@@ -1,5 +1,4 @@
 container_registry:
-  enabled: false
   name: container-registry
   deployment:
     revisionHistoryLimit: 5

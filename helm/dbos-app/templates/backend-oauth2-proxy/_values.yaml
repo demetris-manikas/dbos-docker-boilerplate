@@ -58,4 +58,4 @@ backend_oauth2_proxy:
     OAUTH2_PROXY_CODE_CHALLENGE_METHOD: S256
     OAUTH2_PROXY_SKIP_JWT_BEARER_TOKENS: false
     OAUTH2_PROXY_SCOPE: openid profile email
-    REDIS_DB_INDEX: 4
+    REDIS_DB_INDEX: 1

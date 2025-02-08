@@ -1,18 +1,17 @@
-import { KafkaConfig, KafkaMessage} from "kafkajs";
-import { Workflow, WorkflowContext, Kafka, KafkaConsume } from '@dbos-inc/dbos-sdk';
-import { brokers, clientId, topic } from "../defs/kafka";
+import { DBOS } from '@dbos-inc/dbos-sdk';
+import { CKafka, CKafkaConsume } from '@dbos-inc/dbos-confluent-kafka'
+import { DefaultKafkaConfig, topic } from "../defs/kafka";
+import {
+  KafkaJS,
+} from "@confluentinc/kafka-javascript";
 
-const kafkaConfig: KafkaConfig = {
-    brokers: brokers,
-    clientId: clientId,
-};
 
-@Kafka(kafkaConfig)
+@CKafka(DefaultKafkaConfig)
 export class KafkaConsumer {
-  @KafkaConsume(topic)
-  @Workflow()
-  static async kafkaConsumeWorkflow(ctxt: WorkflowContext, topic: string, partition: number, message: KafkaMessage) {
-      ctxt.logger.info(`Message received: ${message.value?.toString()}`);
+  @CKafkaConsume(topic)
+  @DBOS.workflow()
+  static async kafkaConsumeWorkflow(topic: string, partition: number, message: KafkaJS.Message) {
+      console.info(`Message received: ${message.value?.toString()}`);
       return Promise.resolve();
   }
 }

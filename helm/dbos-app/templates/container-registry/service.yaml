@@ -1,4 +1,3 @@
-{{ if eq .Values.container_registry.enabled true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -15,4 +14,3 @@ spec:
       protocol: TCP
   selector:
     service: container-registry-service
-{{ end }}

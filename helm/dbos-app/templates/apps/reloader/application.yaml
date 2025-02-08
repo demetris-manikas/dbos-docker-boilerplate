@@ -1,4 +1,4 @@
-{{ if eq .Values.ingress.class "nginx" }}
+{{ if eq .Values.ingressClass "nginx" }}
 {{ $config := .Values.nginx_controller }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
